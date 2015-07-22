@@ -11,6 +11,8 @@ Gameplay:
     The positions are: Sec. of State, Sec. of Treasury, Sec. of War, Sec. of Commerce, Attorney General, Sec. of the Interior, Sec. of Agriculture, Sec. of Labor, Sec. of Health, Sec. of Housing and Urban Dev., Sec. of Transportation, Sec. of Energy, Sec. of VA, Sec. of Education, Sec. of Homeland Security.
   
   Here's a list of things you can do each turn:
+    - At the beginning of the game you can make an inagural speech which outlines where you want stats to be at by the end of the first term, and in which you can choose from all availiable ideas which you want to use. This advice will be used by the Congressional AI to make decisions about passing laws (your party will aligned with your values and the other will go against them). Every year you must (It's unconstitutional not to!) realign your ideas in a State Of The Union Address. Beware of flip-flopping!
+  
     - Perform a speech to either or both houses of congress. Both houses have committee bill proposals at the floor with known yea and nay votes at most times.
       * Bills are on the floor 2 turns before getting a vote, but talking to the speaker or VP can get it moved forward or back.
       * You may pick maximum 2 each turn to support (you may be forced to support extra if you made a deal)
