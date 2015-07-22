@@ -15,10 +15,35 @@ Gameplay:
       * Bills are on the floor 2 turns before getting a vote, but talking to the speaker or VP can get it moved forward or back.
       * You may pick maximum 2 each turn to support (you may be forced to support extra if you made a deal)
       * You may pick maximum 2 each turn to denounce (and whether you threaten to veto it, which will add nay votes but increase the possibility of an override)
-      * To make a law, a bill must be brought to committee in the House. This can be done automatically or through you. Then it needs to pass in the House. It is brought to the Senate (small chance it doesn't), where it needs to pass. If it passes both houses it gets to you and you can choose whether to sign or veto. If you veto, in the next turn both houses will vote to override, which will happen with a two thirds vote (290/435 and 67/100) and then you will need to sign.
+      * To pass a law, a bill must be brought to committee in the House. This can be done automatically or through you. Then it needs to pass in the House. It is brought to the Senate (small chance it doesn't), where it needs to pass. If it passes both houses it gets to you and you can choose whether to sign or veto. If you veto, in the next turn both houses will vote to override, which will happen with a two thirds vote (290/435 and 67/100) and then you will need to sign.
+      
     - You may pick a bill to send (through a representative) to a committee that you hope will eventually get to you to sign into law. You can create a bill that has up to 3 ideas in it (each could possibly make it more toxic, so be careful).
+    
     - You may talk to all legislators in your party privately to support up to 5 specific ideas (not bills). They may leak the information.
+    
     - You may talk to legislators during a turn, though there is a small chance they will not talk to you. Things you can say:
-      * Make a deal with them. You will support or denounce a bill in front of congress (or endorse them) and they will vote yea or nay on any bill. You will see a list of yay and nay votes by them and bills they have expressed support for.
+      * Make a deal with them. You can support or denounce a bill in front of congress, endorse them, fund their campaign, or cease attack ads, and they will vote yea or nay on any bill. You will see a list of yay and nay votes by them and bills they have expressed support for.
       * If they are campaigning you can endorse them. This will tie you to their voting record and approval rating, but it will also improve their approval rating and they will like you more. This can also be given in a deal.
-      * 
+      * Denounce them. 
+      
+    - As President you are the leader of your political party, and therefore you have influence in your National Committee.
+      * During midterms you can create a plan to give (D/R)NC funds to or to attack specific congrespeople's campaigns for reelection.
+      * During presidential reelection you can choose which states to fund advertisements in.
+      * Here's a nice electoral map that can be used: https://camelsnose.files.wordpress.com/2008/11/electoral-map-large5.jpg
+    
+    - You can interact with the UN by talking to your Ambassador to the UN:
+      * Ask to push for any ideas you give to be acted on by the General Assembly.
+      * Ask the UN Security Council for military action against a nation or economic sanction action. This will be voted on immediately after discussing with each member, and trades will be allowed (good luck with Russia and China!).
+      * Make a speech request (this will be granted or rejected in two turns depending on your stance with the body). In a speech you may talk about one world issue and this will influence international politics on this issue.
+    
+    - You have the powers of the Commander-In-Chief:
+      * Availiable military budget depends on legislation, but you start out with a large yet costly military at your disposal.
+      * Plan a missile or drone strike (with reaction depending on recieving nation and war declaration)
+      * Plan a land invasion with number of troops.
+      * Plan a naval battle.
+      * Congress declares war, not you, and not being at war greatly affects military capability and consequence.
+      * Option to make one speech giving reason for the military action.
+    
+    - Control aspects of the CIA:
+      * Plan assasination of leaders, with limited success rate and range of consequence
+      * Fund rebel groups in different nations
