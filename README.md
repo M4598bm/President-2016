@@ -19,5 +19,6 @@ Gameplay:
     - You may pick a bill to send (through a representative) to a committee that you hope will eventually get to you to sign into law. You can create a bill that has up to 3 ideas in it (each could possibly make it more toxic, so be careful).
     - You may talk to all legislators in your party privately to support up to 5 specific ideas (not bills). They may leak the information.
     - You may talk to legislators during a turn, though there is a small chance they will not talk to you. Things you can say:
-      * Make a deal with them. You will support or denounce a bill in front of congress and they will vote yea or nay on any bill. You will see a list of yay and nay votes by them and bills they have expressed support for.
-      
+      * Make a deal with them. You will support or denounce a bill in front of congress (or endorse them) and they will vote yea or nay on any bill. You will see a list of yay and nay votes by them and bills they have expressed support for.
+      * If they are campaigning you can endorse them. This will tie you to their voting record and approval rating, but it will also improve their approval rating and they will like you more. This can also be given in a deal.
+      * 
