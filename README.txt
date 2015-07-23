@@ -1,5 +1,5 @@
 # President
-A turn based simulation game in Processing: You've just won the 2016 presidential election! Now you have to do the work, new Commander-In-Chief.
+A turn based simulation game in Processing: You've just won the 2016 presidential election! Now you have to do the work, as the 45th Chief Executive.
 
 Initial setup:
 
