@@ -12,7 +12,7 @@ void setup() {
   background(50, 125, 250);
   screen = new Screen();
   approval = 50;
-  int[] dateTemp = {1, 21, 17};
+  int[] dateTemp = {1, 20, 17};
   date = dateTemp;
 }
 
