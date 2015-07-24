@@ -1,4 +1,4 @@
-public class Button {
+class Button {
   color col;
   float x;
   float y;
