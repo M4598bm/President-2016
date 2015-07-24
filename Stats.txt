@@ -1,0 +1,8 @@
+GDP
+GDP growth
+Unemployed rate
+Amt living below poverty line
+Avg low income wage (low 33%)
+Avg medium income wage (middle 33%)
+Avg high income wage (top 33%)
+Crime rates
