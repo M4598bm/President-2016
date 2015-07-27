@@ -13,13 +13,16 @@ class Screen {
       10: House speech
       11: Senate speech
       12: New bill
+      13: Legislators
       
   */
   int currScreen;
   int extra;
   Button[] buttons;
   int scrollX;
+  int chosen;
   String[] ideas;
+  
   
   Screen() {
     currScreen = 0;
@@ -28,7 +31,7 @@ class Screen {
     ideas = new String[4];
     ideas[0] = "This is a great idea";
     ideas[1] = "Raise all of the taxes";
-    ideas[2] = "Kill them all";
+    ideas[2] = "Do something cool";
     ideas[3] = "I love pie";
   }
   void setScreen(int c) {
@@ -83,18 +86,37 @@ class Screen {
       buttons[1].setLabel("The Senate", 14, 255);
       buttons[2] = new Button(width/2-150, height/2-120, 300, 80, color(255, 0, 0), 12);
       buttons[2].setLabel("Introduce New Bill", 14, 255);
-      buttons[3] = new Button(width/2-150, height/2+140, 300, 80, color(255, 0, 0), 12);
+      buttons[3] = new Button(width/2-150, height/2+140, 300, 80, color(255, 0, 0), 13);
       buttons[3].setLabel("Talk to Legislators", 14, 255);
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].scrollCol = color(200, 0, 0);
+    }
+    
+    //-------------------------------------------------
+    //-------------------------------------------------
+    else if (currScreen == 7) {// Calendar
+      buttons = new Button[0];
+    }
+    
+    //-------------------------------------------------
+    //-------------------------------------------------
+    else if (currScreen == 10) {//house speech
+      buttons = new Button[1];
+      buttons[0] = new Button(width/2-150, height-100, 300, 80, color(255, 0, 0), 0);
+      buttons[0].setLabel("Speak", 14, 255);
+      
       for (int i = 0; i < buttons.length; i++)
         buttons[i].scrollCol = color(200, 0, 0);
     }
     //-------------------------------------------------
     //-------------------------------------------------
-    else if (currScreen == 10) {//house speech
+    else if (currScreen == 11) {//senate speech
       buttons = new Button[1];
-      buttons[0] = new Button(width/2-340, height/2+40, 300, 80, color(255, 0, 0), 10);
+      buttons[0] = new Button(width/2-150, height-100, 300, 80, color(255, 0, 0), 0);
       buttons[0].setLabel("Speak", 14, 255);
       
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].scrollCol = color(200, 0, 0);
     }
     //-------------------------------------------------
     //-------------------------------------------------
@@ -128,11 +150,40 @@ class Screen {
       for (int i = 0; i < buttons.length; i++)
         buttons[i].display();
     }
+    
+    if (currScreen == 7) {
+      calendar.display();
+    }
+    
     if (currScreen == 10) {
       textAlign(CENTER, CENTER);
       textSize(20);
       text("Speech to the House of Representatives", width/2, height/8);
+    }
+    if (currScreen == 11) {
+      textAlign(CENTER, CENTER);
+      textSize(20);
+      text("Speech to the Senate", width/2, height/8);
+    }
+    if (currScreen == 10 || currScreen == 11) {
+      text("Bills on the floor:", width/2, height/8+25);
+      fill(255);
+      rect(width/6, height/8+45, width*2/3, height/3);// all bills
       
+      rect(width/6, height/2+65, width/3-40, 50);// to support
+      rect(width/2+40, height/2+65, width/3-40, 50);// to criticize
+      fill(0);
+      text("Bills to Support", width/4, height/2+45);
+      text("Bills to Criticize", width*3/4, height/2+45);
+      line(width/6, height/2+90, width/2-40, height/2+90);
+      line(width/2+40, height/2+90, width*5/6, height/2+90);
+      
+      fill(0, 0, 200);
+      rect(width/6, height/2+115, width/3-40, 50, 5);// add/remove buttons (S)
+      rect(width/2+40, height/2+115, width/3-40, 50, 5);// add/remove buttons (C)
+      
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
     }
     
     if (currScreen == 12) {
@@ -166,13 +217,15 @@ class Screen {
         text(tempBill.name, width/6+namespaceWidth, height/2+10);
         fill(0);
         line(width/6+namespaceWidth+textWidth(tempBill.name), height/2+13, width/6+namespaceWidth+textWidth(tempBill.name), height/2+27);
+        // == This is temporary ==
         tempBill.addIdea(1);
         tempBill.addIdea(12);
         tempBill.addIdea(5);
+        // =======================
         line(width/6, height/2+64, width*5/6, height/2+64);
         line(width/6, height/2+88, width*5/6, height/2+88);
         line(width/6, height/2+112, width*5/6, height/2+112);
-        // This is only for right now
+        // This is temporary
         for (int i = 0; i < 3; i++)
           text(tempBill.ideas[i], width/6, height/2+40+24*i);
         // Here will be put sliders with the amount that the player wants it to go into effect, but I'm lazy
