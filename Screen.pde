@@ -121,9 +121,14 @@ class Screen {
     //-------------------------------------------------
     //-------------------------------------------------
     else if (currScreen == 12) {
-      buttons = new Button[0];
+      buttons = new Button[1];
+      buttons[0] = new Button(width/2-150, height-100, 300, 80, color(255, 0, 0), 0);
+      buttons[0].setLabel("Introduce This Bill", 14, 255);
       scrollX = 0;
       tempBill = new Bill();
+      
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].scrollCol = color(200, 0, 0);
     }
   }
     
