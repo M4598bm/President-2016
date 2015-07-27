@@ -6,6 +6,7 @@ class Bill {
   int billNumber;
   Congressman broughtBy;
   
+  
   int status;//0: Committee, 1: House, 2: Senate, 3: Pres, 4: Veto, 5: Law
   int time;
   boolean isLaw;
