@@ -184,9 +184,10 @@ class Screen {
       /*Richard:
         the above two rectangles need lines between them, and they will be two separate sets of add and remove.
         The bulk of it however is that the bills in the above box with all availiable bills to support or criticize need to
-        be selected (and therefore highlighted) and then the add buttons will add them to the corresponding 2 bill area above,
-        and remove buttons being pressed will remove the bill ONLY from the corresp. box. The clicking thing must be done in
-        void mouseClicked() in President.pde, and use an if (screen.currScreen == 10 || screen.currScreen == 11) {}. Thanks!
+        be selected (and therefore highlighted, use the int chosen) and then the add buttons will add them to the corresponding
+        2 bill area above, and remove buttons being pressed will remove the bill ONLY from the corresp. box. The clicking thing
+        must be done in void mouseClicked() in President.pde, and use an
+        if (screen.currScreen == 10 || screen.currScreen == 11) {}. Thanks!
       
       */
       
@@ -211,7 +212,14 @@ class Screen {
         if (height/6+24*(i+1)+scrollX >= height/6)
           line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
       }
-      
+      /* Richard:
+        This whole section is pretty important and needs the same kind of thing (add/remove button). it only needs one add/remove
+        because it's just picking which things go in the bill. ideas should be ints that correspond to String ideas, but those
+        will be in a separate file that isnt worked out yet. The ideas just need to end up in that box and in the tempBill so
+        that a button can be pressed to move on and introduce the bill.
+        
+        
+        */
       fill(255);
       rect(width/6, height/2+40, width*2/3, height/4);
       float namespaceWidth = textWidth("Bill #" + (bills.size()+1)+":")+5;
@@ -225,11 +233,7 @@ class Screen {
         text(tempBill.name, width/6+namespaceWidth, height/2+10);
         fill(0);
         line(width/6+namespaceWidth+textWidth(tempBill.name), height/2+13, width/6+namespaceWidth+textWidth(tempBill.name), height/2+27);
-        // == This is temporary ==
-        tempBill.addIdea(1);
-        tempBill.addIdea(12);
-        tempBill.addIdea(5);
-        // =======================
+        
         line(width/6, height/2+64, width*5/6, height/2+64);
         line(width/6, height/2+88, width*5/6, height/2+88);
         line(width/6, height/2+112, width*5/6, height/2+112);
@@ -237,8 +241,10 @@ class Screen {
         for (int i = 0; i < 3; i++)
           text(tempBill.ideas[i], width/6, height/2+40+24*i);
         /*
-          Here will be put sliders with the amount that the player wants it to go into effect, but I'm lazy
-          Richard if you want to do that, you can. Use constrain(), from processing reference
+          Here will be put sliders with the amount that the player wants each idea to go into effect
+          
+          Richard if you want to do that, you can. Use constrain(), from processing reference. Dont worry about what they
+          actually change, just have the mouse action done
          */
         
       }
