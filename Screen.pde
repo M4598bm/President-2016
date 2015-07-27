@@ -236,7 +236,10 @@ class Screen {
         // This is temporary
         for (int i = 0; i < 3; i++)
           text(tempBill.ideas[i], width/6, height/2+40+24*i);
-        // Here will be put sliders with the amount that the player wants it to go into effect, but I'm lazy
+        /*
+          Here will be put sliders with the amount that the player wants it to go into effect, but I'm lazy
+          Richard if you want to do that, you can. Use constrain(), from processing reference
+         */
         
       }
       for (int i = 0; i < buttons.length; i++)
