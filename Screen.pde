@@ -179,8 +179,16 @@ class Screen {
       line(width/2+40, height/2+90, width*5/6, height/2+90);
       
       fill(0, 0, 200);
-      rect(width/6, height/2+115, width/3-40, 50, 5);// add/remove buttons (S)
-      rect(width/2+40, height/2+115, width/3-40, 50, 5);// add/remove buttons (C)
+      rect(width/6, height/2+115, width/3-40, 50, 5);// add/remove buttons (Support)
+      rect(width/2+40, height/2+115, width/3-40, 50, 5);// add/remove buttons (Criticize)
+      /*Richard:
+        the above two rectangles need lines between them, and they will be two separate sets of add and remove.
+        The bulk of it however is that the bills in the above box with all availiable bills to support or criticize need to
+        be selected (and therefore highlighted) and then the add buttons will add them to the corresponding 2 bill area above,
+        and remove buttons being pressed will remove the bill ONLY from the corresp. box. The clicking thing must be done in
+        void mouseClicked() in President.pde, and use an if (screen.currScreen == 10 || screen.currScreen == 11) {}. Thanks!
+      
+      */
       
       for (int i = 0; i < buttons.length; i++)
         buttons[i].display();
