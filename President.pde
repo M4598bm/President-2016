@@ -1,6 +1,7 @@
 // Globals:
 String name;
 Screen screen;
+Calendar calendar;
 int turn;
 int[] date;
 int approval;
@@ -10,11 +11,11 @@ ArrayList<Bill> bills;
 ArrayList<Bill> laws;
 Bill tempBill;
 
-
 void setup() {
   size(displayWidth, (int)(displayHeight*.8));//*.8 is temp
   background(50, 125, 250);
   screen = new Screen();
+  calendar = new Calendar();
   approval = 50;
   int[] dateTemp = {1, 20, 17};
   date = dateTemp;
@@ -65,6 +66,8 @@ void mainButton() {
 void mouseClicked() {
   float mX = mouseX;
   float mY = mouseY;
+  
+  // Clicking buttons:
   textSize(16);
   float wordWidth = textWidth("Main Menu")/2;
   if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15)
@@ -76,6 +79,10 @@ void mouseClicked() {
         done = true;
         screen.setScreen(screen.buttons[i].command);
       }
+  }
+  //=======================================================
+  if (screen.currScreen == 10) {
+   
   }
 }
 
