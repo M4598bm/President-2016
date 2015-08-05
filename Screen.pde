@@ -173,10 +173,10 @@ class Screen {
     if (currScreen == 10 || currScreen == 11) {
       text("Bills on the floor:", width/2, height/8+25);
       fill(255);
-      rect(width/6, height/8+45, width*2/3, height/3);// all bills
+      rect(width/6, height/8+45, width*2/3, height/3);// all bills **
       
-      rect(width/6, height/2+65, width/3-40, 50);// to support
-      rect(width/2+40, height/2+65, width/3-40, 50);// to criticize
+      rect(width/6, height/2+65, width/3-40, 50);// to support ***
+      rect(width/2+40, height/2+65, width/3-40, 50);// to criticize ***
       fill(0);
       text("Bills to Support", width/4, height/2+45);
       text("Bills to Criticize", width*3/4, height/2+45);
@@ -184,13 +184,13 @@ class Screen {
       line(width/2+40, height/2+90, width*5/6, height/2+90);
       
       fill(0, 0, 200);
-      rect(width/6, height/2+115, width/3-40, 50, 5);// add/remove buttons (Support)
-      rect(width/2+40, height/2+115, width/3-40, 50, 5);// add/remove buttons (Criticize)
+      rect(width/6, height/2+115, width/3-40, 50, 5);// add/remove buttons (Support) *
+      rect(width/2+40, height/2+115, width/3-40, 50, 5);// add/remove buttons (Criticize) *
       /*Richard:
-        the above two rectangles need lines between them, and they will be two separate sets of add and remove.
-        The bulk of it however is that the bills in the above box with all availiable bills to support or criticize need to
+        the above two rectangles (the add remove buttons with * after) need lines between them, and they will be two separate sets of add and remove.
+        The bulk of it however is that the bills in the above box (labeled "all bills **") with all availiable bills to support or criticize need to
         be selected (and therefore highlighted, use the int chosen) and then the add buttons will add them to the corresponding
-        2 bill area above, and remove buttons being pressed will remove the bill ONLY from the corresp. box. The clicking thing
+        2 bill area above (with ***, each one fits two bills and don't let more be added), and remove buttons being pressed will remove the bill ONLY from the corresp. box. The clicking thing
         must be done in void mouseClicked() in President.pde, and use an
         if (screen.currScreen == 10 || screen.currScreen == 11) {}. Thanks!
       
@@ -249,7 +249,7 @@ class Screen {
           Here will be put sliders with the amount that the player wants each idea to go into effect
           
           Richard if you want to do that, you can. Use constrain(), from processing reference. Dont worry about what they
-          actually change, just have the mouse action done
+          actually change, just have the mouse action done. That code isn't done, but for placement run the code and go to this area.
          */
         
       }
