@@ -1,52 +1,52 @@
-"State","Abbreviation"
-"Alabama","AL"
-"Alaska","AK"
-"Arizona","AZ"
-"Arkansas","AR"
-"California","CA"
-"Colorado","CO"
-"Connecticut","CT"
-"Delaware","DE"
-"District of Columbia","DC"
-"Florida","FL"
-"Georgia","GA"
-"Hawaii","HI"
-"Idaho","ID"
-"Illinois","IL"
-"Indiana","IN"
-"Iowa","IA"
-"Kansas","KS"
-"Kentucky","KY"
-"Louisiana","LA"
-"Maine","ME"
-"Montana","MT"
-"Nebraska","NE"
-"Nevada","NV"
-"New Hampshire","NH"
-"New Jersey","NJ"
-"New Mexico","NM"
-"New York","NY"
-"North Carolina","NC"
-"North Dakota","ND"
-"Ohio","OH"
-"Oklahoma","OK"
-"Oregon","OR"
-"Maryland","MD"
-"Massachusetts","MA"
-"Michigan","MI"
-"Minnesota","MN"
-"Mississippi","MS"
-"Missouri","MO"
-"Pennsylvania","PA"
-"Rhode Island","RI"
-"South Carolina","SC"
-"South Dakota","SD"
-"Tennessee","TN"
-"Texas","TX"
-"Utah","UT"
-"Vermont","VT"
-"Virginia","VA"
-"Washington","WA"
-"West Virginia","WV"
-"Wisconsin","WI"
-"Wyoming","WY"
+"State","Abbreviation","Status 1-5"
+"Alabama","AL",1
+"Alaska","AK",1
+"Arizona","AZ",1
+"Arkansas","AR",1
+"California","CA",5
+"Colorado","CO",3
+"Connecticut","CT",5
+"Delaware","DE",5
+"District of Columbia","DC",5
+"Florida","FL",3
+"Georgia","GA",1
+"Hawaii","HI",5
+"Idaho","ID",1
+"Illinois","IL",5
+"Indiana","IN",2
+"Iowa","IA",4
+"Kansas","KS",1
+"Kentucky","KY",1
+"Louisiana","LA",1
+"Maine","ME",5
+"Montana","MT",1
+"Nebraska","NE",1
+"Nevada","NV",3
+"New Hampshire","NH",4
+"New Jersey","NJ",5
+"New Mexico","NM",4
+"New York","NY",5
+"North Carolina","NC",2
+"North Dakota","ND",,1
+"Ohio","OH",3
+"Oklahoma","OK",1
+"Oregon","OR",5
+"Maryland","MD",5
+"Massachusetts","MA",5
+"Michigan","MI",5
+"Minnesota","MN",5
+"Mississippi","MS",1
+"Missouri","MO",1
+"Pennsylvania","PA",5
+"Rhode Island","RI",5
+"South Carolina","SC",1
+"South Dakota","SD",1
+"Tennessee","TN",1
+"Texas","TX",1
+"Utah","UT",1
+"Vermont","VT",5
+"Virginia","VA",3
+"Washington","WA",5
+"West Virginia","WV",1
+"Wisconsin","WI",5
+"Wyoming","WY",1
