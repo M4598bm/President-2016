@@ -5,6 +5,11 @@ class Button {
   float w;
   float h;
   int command;
+  int extra;
+  boolean visible;
+  boolean clickable;
+  
+  int variance;
   
   color scrollCol;
   boolean scrolled;
@@ -20,6 +25,9 @@ class Button {
     h = hV;
     col = c;
     command = s;
+    visible = true;
+    clickable = true;
+    lSize = 14;
   }
   void setLabel(String l, int lS, color lC) {
     label = l;
@@ -28,15 +36,24 @@ class Button {
   }
   
   void display() {
-    if (scrolled)
-      fill(scrollCol);
-    else
-      fill(col);
-    rect(x, y, w, h, 5);
-    fill(lCol);
-    textSize(lSize);
-    textAlign(CENTER, CENTER);
-    text(label, x+w/2, y+h/2);
+    if (visible) {
+      if (scrolled)
+        fill(scrollCol);
+      else
+        fill(col);
+      if (variance != 1) {
+        rect(x, y, w, h, 5);
+        textAlign(CENTER, CENTER);
+      }
+      else
+        textAlign(LEFT, CENTER);
+      fill(lCol);
+      textSize(lSize);
+      if (variance != 1)
+        text(label, x+w/2, y+h/2);
+      else
+        text(label, x, y);
+    }
   }
   
   boolean isInside(float Mx, float My) {
