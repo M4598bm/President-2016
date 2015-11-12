@@ -23,8 +23,10 @@ class Screen {
    20: New bill step 4 < 19
    21: Finish bill < 16
    22: News < 0
-   23: Legislative deal < 
-   */
+   23: Legislative deal < 13
+   24: Deal result < 23
+   25: 
+  */
   int currScreen;
   int lastScreen;
   int lastButton;
@@ -35,6 +37,7 @@ class Screen {
   int chosen;
 
   ArrayList<String> depIdeas;
+  ArrayList<Congressman> search;
   ArrayList<Integer> d1;
   ArrayList<Integer> d2;
   String input;
@@ -202,7 +205,21 @@ class Screen {
       calendar.year = calendar.cYear;
       calendar.month = calendar.cMonth;
     }
-
+    //-------------------------------------------------
+    //-------------------------------------------------
+    else if (currScreen == 8) {// war
+      buttons = new Button[4];
+      buttons[0] = new Button(width/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);
+      buttons[0].setLabel("Army", 14, 255);
+      buttons[1] = new Button(width/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);
+      buttons[1].setLabel("Navy", 14, 255);
+      buttons[2] = new Button(width/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);// 1/6 
+      buttons[2].setLabel("Marines", 14, 255);
+      buttons[3] = new Button(width*5/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);
+      buttons[3].setLabel("Advisors", 14, 255);
+      
+      
+    }
     //-------------------------------------------------
     //-------------------------------------------------
     else if (currScreen == 10 || currScreen == 11) {//house or senate speech
@@ -284,8 +301,10 @@ class Screen {
     //-------------------------------------------------
     //-------------------------------------------------
     else if (currScreen == 13) {// talk to legislators
-    buttons = new Button[0];
-    input = "";
+      buttons = new Button[1];
+      buttons[0] = new Button(width/2-150, height*5/6+10, 300, height/6-40, color(255, 0, 0), 23);
+      buttons[0].setLabel("Create Deal", 14, 255);
+      input = "";
     /*
       buttons = new Button[2];
       buttons[0] = new Button(width/2-320, height*5/6+20, 300, height/6-40, color(255, 0, 0), 0);
@@ -298,6 +317,8 @@ class Screen {
       * list of people that fit this ^
       * button on the bottom to automatically 'make deal' with each (link to next screen)
 */
+      search = Utils.searchThrough(input, house, senate);
+      input = "";
       for (int i = 0; i < buttons.length; i++)
         buttons[i].scrollCol = color(200, 0, 0);
     }
@@ -475,6 +496,7 @@ class Screen {
     //-------------------------------------------------
     //-------------------------------------------------
     else if (currScreen == 22) {// Show agenda:
+    	 buttons = new Button[0];
     /* Examples of news include:
        * Important events that happened and how you're going to treat them
        * Bills that went on floor this week
@@ -491,9 +513,21 @@ class Screen {
    
     }
     
-    
-    
-    
+    else if (currScreen == 23) {// legislative deals (with multiple people)
+      buttons = new Button[3];
+      buttons[0] = new Button(width/2-100, height*5/6, 200, 60, color(255, 0, 0), 24);
+      buttons[0].setLabel("Suggest Deal", 14, 255);
+      buttons[1] = new Button(width/6, height/2+115, (width/3-40)/2, 50, color(0, 0, 255), 10);
+      buttons[1].setLabel("", 14, 255);
+      buttons[1].clickable = false;
+      buttons[1].extra = 0;
+
+      buttons[2] = new Button(width/2+40+(width/3-40)/2, height/2+115, (width/3-40)/2, 50, color(0, 0, 255), 10);
+      buttons[2].setLabel("", 14, 255);
+      buttons[2].clickable = false;
+      buttons[2].extra = 1;
+
+    }
   }
    
    
@@ -934,7 +968,50 @@ if (currScreen == 21) {
       text("2. "+ideas.names[tempBill.ideas[1]]+" ("+tempBill.percentages[1]+"%)", width/6, height/6+160);
     if (tempBill.ideas[2] != -1)
       text("3. "+ideas.names[tempBill.ideas[2]]+" ("+tempBill.percentages[2]+"%)", width/6, height/6+190);
+      }
+    }
+
+    if (currScreen == 23) {
+      fill(255);
+      rect(width/6, height/6, width*2/3, height/2-height/6);
+      textAlign(CENTER, CENTER);
+      textSize(20);
+      String[] themActions = {"Support a bill (+)", "Denounce a bill (+)", "Vote for a bill (+)", "Vote against a bill (+)", "Endorse President"};
+      String[] youActions = {"Support a bill (+)", "Denounce a bill (+)", "Sign a bill (+)", "Veto a bill (+)", "Promise funding", "Endorse Congressperson"};
+      int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
+      rect(xVal, height/2+30, width-xVal*2, 20*youActions.length);
+      
+      fill(0);
+      text("Them", width/4, height/2+20);
+      text("You", width*3/4, height/2+20);
+      
+      int x = height/2+40;
+      textSize(15);
+      for (int i = 0; i < themActions.length; i++) {
+        textAlign(LEFT, TOP);
+        text(themActions[i], width/6, x);
+        textAlign(RIGHT, TOP);
+        text(youActions[i], width*5/6, x);
+        x += 20;
+      }
+      /*
+          list of things they give and things you give with 'add' and 'remove'
+          
+          * support of a bill
+          * denunciation of a bill
+          * vote for a bill
+          * vote against a bill
+          * promise funding to those in your party
+          * endorse their campaign
+          
+      */
+    }
   }
-}
-}
+  int[] wordWidths(String[] words, int s) {
+    textSize(s);
+    int[] ls = new int[words.length];
+    for (int i = 0; i < words.length; i++)
+      ls[i] = (int)textWidth(words[i]);
+    return ls;
+  }
 }

@@ -1,4 +1,7 @@
 // Globals:
+// this is good:
+// https://www.whitehouse.gov/briefing-room/signed-legislation
+
 String name;
 String presParty;
 
