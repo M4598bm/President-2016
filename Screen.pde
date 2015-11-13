@@ -27,6 +27,8 @@ class Screen {
    24: Deal result < 23
    25: 
   */
+  
+  // Most used variables for basic structure
   int currScreen;
   int lastScreen;
   int lastButton;
@@ -35,13 +37,17 @@ class Screen {
   Slider[] sliders;
   int scrollX;
   int chosen;
-
+  
+  // Variables for specific instances
   ArrayList<String> depIdeas;
   ArrayList<Congressman> search;
   ArrayList<Integer> d1;
   ArrayList<Integer> d2;
   String input;
-
+  String[] themActions = {"Support a bill (+)", "Denounce a bill (+)", "Vote for a bill (+)", "Vote against a bill (+)", "Endorse President"};
+  String[] youActions = {"Support a bill (+)", "Denounce a bill (+)", "Sign a bill (+)", "Veto a bill (+)", "Promise funding", "Endorse Congressperson"};
+  
+  // for a timer functionality
   int time;
 
 
@@ -976,8 +982,6 @@ if (currScreen == 21) {
       rect(width/6, height/6, width*2/3, height/2-height/6);
       textAlign(CENTER, CENTER);
       textSize(20);
-      String[] themActions = {"Support a bill (+)", "Denounce a bill (+)", "Vote for a bill (+)", "Vote against a bill (+)", "Endorse President"};
-      String[] youActions = {"Support a bill (+)", "Denounce a bill (+)", "Sign a bill (+)", "Veto a bill (+)", "Promise funding", "Endorse Congressperson"};
       int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
       rect(xVal, height/2+30, width-xVal*2, 20*youActions.length);
       
