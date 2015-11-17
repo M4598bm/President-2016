@@ -730,7 +730,7 @@ if (currScreen == 13) {
     line(width/6+w+textWidth(input)+1, 65, width/6+w+textWidth(input)+1, 65+20);
  
   fill(255);
-  rect(width/6, height/6, width*2/3, height*4/6);//Congressmen
+  rect(width/6, height/6, width*2/3, height*2/3);//Congressmen
   fill(0);
   textAlign(CENTER, TOP);
   textSize(20);
@@ -755,10 +755,20 @@ if (currScreen == 13) {
     if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
       line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
   }
+  
+  
+  //===============================================================================
+  //===============================================================================
+  // This is the code that represents one scroll bar. The directions for what to do
+  // are in the github issue. Use listLength and space.
   fill(50, 125, 250);
-  int listLength = max(1, 24*list.size());
-  int space = height*2/3+25;// This was a good attempt but needs to be made better
-  rect(width*5/6, height/6-scrollX*space/listLength, 10, 50, 5);
+  int listLength = max(1, 24*list.size());// size of the list in pixels. List.size() is # of items
+  int space = height*2/3;// Space that the text area takes up.
+  rect(width*5/6, height/6-scrollX*space/listLength, 10, 50/* not always 50... what was I writing? */, 5);// This is the problem line.
+  //===============================================================================
+  //===============================================================================
+  //===============================================================================
+
 
   for (int i = 0; i < buttons.length; i++)
     buttons[i].display();
