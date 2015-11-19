@@ -49,48 +49,48 @@ void setup() {
   int hei = (int)(displayHeight*.8);
   size(displayWidth, 640);// 640 is temp bc processing 3 sucks a bit
   println(wid+","+hei);
-  
+
   turn = 0;
-  
+
   presParty = "Democratic";// or "Republican"
-  
+
   you = new NationalCom(presParty);
-  
+
   if (presParty == "Democratic")
     them = new NationalCom("Republican");
   else
     them = new NationalCom("Democratic");
   you.administration = true;
   them.administration = false;
-  
+
   // one of each class things
   screen = new Screen();
   calendar = new Calendar();
   fedBudget = new FedBudget();
   ideas = new Ideas();
-  
+
     // -========================-
   laws = new ArrayList<Bill>();
   house = new Congressman[435];
   senate = new Congressman[100];
   scotus = new SCJustice[9];
-  
+
   // stack the courts here //
-  
+
   cabinet = new Secretary[15];
   Table d = loadTable("majordepartments.csv", "header");
   for (int i = 0; i < cabinet.length; i++)
     cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
-    
+
   // This will be decided in beginning so for now has default
   sBalance = 55;
   hBalance = 55;
-  
+
   // loading images
   eM = new ElectoralMap();
-  
+
   approval = 50;
-  
+
   createCongress();
   bills = new ArrayList<Bill>();
   // This is temporary
@@ -101,12 +101,12 @@ void setup() {
     bills.get(i).status = (int)random(5);
     bills.get(i).addOpinions();
   }
-  
+
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();
   agS = new ArrayList<Integer>();
-  
+
   background(50, 125, 250);
 }
 
@@ -157,7 +157,7 @@ void createCongress() {
     firstNames.add(row.getString(0));
     lastNames.add(row.getString(1));
   }
-  
+
   Table states = loadTable("states.csv", "header");
   //=== Senators ===//
   int partyCount = sBalance;
@@ -169,7 +169,7 @@ void createCongress() {
       senate[x] = new Congressman(n, row.getString(1), 0);
       n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
       senate[x+1] = new Congressman(n, row.getString(1), 0);
- 
+
       //how many democrats
       int val = Utils.convertInt(row.getString(2));
       int dems = Utils.findDems(val, random(5));
@@ -191,8 +191,8 @@ void createCongress() {
       if (dems > 0) {
         //senate[x].setPolitics(
       }
-        
-        
+
+
       x+=2;
     }
   }
@@ -202,7 +202,7 @@ void createCongress() {
       sum++;
       println("Democrats: "+sum+"/"+senate.length);
   //=== Representatives ===//
-  x = 0; 
+  x = 0;
   for (TableRow row : states.rows()) {
     if (!row.getString(1).equals("DC")) {
       for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
@@ -224,13 +224,13 @@ void createCongress() {
 void mouseClicked() {
   float mX = mouseX;
   float mY = mouseY;
-  
+
   // Clicking buttons:
   textSize(16);
   float wordWidth = textWidth("Main Menu")/2;
   if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15)
     screen.setScreen(0);
-    
+
   // ===== Buttons =====
   if (screen.buttons != null) {
     boolean done = false;
@@ -241,7 +241,7 @@ void mouseClicked() {
         screen.setScreen(screen.buttons[i].command);
       }
   }
-  
+
   //=======================================================
   //=======================================================
   if (screen.currScreen == 7) {
@@ -369,7 +369,7 @@ void mousePressed() {
       if (screen.sliders[i].isInside(mouseX, mouseY) && screen.sliders[i].visible)
         currSlider = screen.sliders[i];
   }
-  
+
 }
 void mouseReleased() {
   currSlider = null;
@@ -389,12 +389,12 @@ void keyPressed() {
       if (tempBill.name.length() != 0)
         tempBill.name = tempBill.name.substring(0, tempBill.name.length()-1);
     }
-    
+
     else if (keyCode != ENTER)
       tempBill.name += key;
     //========
   }
-  
+
   if (screen.currScreen == 10 || screen.currScreen == 11 || screen.currScreen == 13 || screen.currScreen == 16 || screen.currScreen == 18) {
     if (keyCode == UP && screen.scrollX != 0)
       screen.scrollX += 20;
@@ -406,11 +406,11 @@ void keyPressed() {
       if (screen.input.length() != 0)
         screen.input = screen.input.substring(0, screen.input.length()-1);
     }
-    
+
     else if (keyCode != ENTER && keyCode != UP && keyCode != DOWN)
       screen.input += key;
   }
-  
+
   if (keyCode == ESC) {// this doesnt currently work...
     key = 0;// making sure it doesnt quit
     screen.setScreen(0);
@@ -428,7 +428,7 @@ void keyPressed() {
 
 void nextTurn() {
   turn++;
-  
+
   for (int i = 0; i < 7; i++) {// this decides how many days is one turn. I don't really know what it should be yet.
     calendar.day++;
     if (calendar.day > daysInMonth[calendar.cMonth-1]) {
@@ -445,19 +445,23 @@ void nextTurn() {
     senate[i].listenToSpeech(suppS, agS);
   for (int i = 0; i < house.length; i++)
     house[i].listenToSpeech(suppH, agH);
-  
-  
+
+
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();
   agS = new ArrayList<Integer>();
   //  for (int i = 0; i < bills.length; i++) {
-  //    if (bills.get(i).status == 1 || bills.get(i).status == 2) 
-      
+  //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
+
  //   }
-  
-  
-  
-  
-  
+
+
+
+
+
+}
+
+static void main() {
+  draw();
 }

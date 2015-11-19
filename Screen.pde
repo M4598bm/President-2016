@@ -25,7 +25,9 @@ class Screen {
    22: News < 0
    23: Legislative deal < 13
    24: Deal result < 23
-   25: 
+   25: GA < 6
+   26: Security Council < 6
+   27: International Treaties < 6
   */
   
   // Most used variables for basic structure
@@ -44,8 +46,8 @@ class Screen {
   ArrayList<Integer> d1;
   ArrayList<Integer> d2;
   String input;
-  String[] themActions = {"Support a bill (+)", "Denounce a bill (+)", "Vote for a bill (+)", "Vote against a bill (+)", "Endorse President"};
-  String[] youActions = {"Support a bill (+)", "Denounce a bill (+)", "Sign a bill (+)", "Veto a bill (+)", "Promise funding", "Endorse Congressperson"};
+  String[] themActions = {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+  String[] youActions = {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "Promise funding ", "Endorse Congressperson "};
   
   // for a timer functionality
   int time;
@@ -203,7 +205,17 @@ class Screen {
       for (int i = 0; i < buttons.length; i++)
         buttons[i].scrollCol = color(200, 0, 0);
     }
-
+    //-------------------------------------------------
+    //-------------------------------------------------
+    else if (currScreen == 6) {// UN
+      buttons = new Button[3];
+      buttons[0] = new Button(width/2-460, height/2-80, 300, 80, color(255, 0, 0), 25);
+      buttons[0].setLabel("General Assembly Resolutions", 14, 255);
+      buttons[1] = new Button(width/2-150, height/2-100, 300, 80, color(255, 0, 0), 26);
+      buttons[1].setLabel("Security Council", 14, 255);
+      buttons[2] = new Button(width/2+160, height/2-100, 300, 80, color(255, 0, 0), 27);
+      buttons[2].setLabel("International Treaties", 14, 255);
+    }
     //-------------------------------------------------
     //-------------------------------------------------
     else if (currScreen == 7) {// Calendar
@@ -540,474 +552,492 @@ class Screen {
    
    
    
-   void display() {
-   background(50, 125, 250);
-   fill(0);
-   //============================
-   if (currScreen == 0) {
-   for (int i = 0; i < buttons.length; i++)
-   buttons[i].display();
-   }
-   if (currScreen == 1) {
-     if (extra == 3) {
-        textSize(30);
-        textAlign(CENTER, TOP);
-        text("Your Bill was successfully submitted to the House of Representatives", width/2, height/6);
-     }
-     for (int i = 0; i < buttons.length; i++)
-     buttons[i].display();
-   }
-   if (currScreen == 2) {
-     fill(255);
-     textSize(14);
-     float end = width*5/6-textWidth("Sec. of Housing and Urban Dev.   ");
-     rect(width/6, 40, min(width*2/3, end), height-150);
-     
-     fill(0);
-     textSize(20);
-     textAlign(CENTER, CENTER);
-     text(cabinet[extra].title, width/2, 55);
-     // shows: bills through this department, amount of funding, is the funding too much or little, statistics that can be fixed through this dept.
-     // ========================================================== //
-     // ========================================================== //
-     textAlign(LEFT, TOP);
-     textSize(20);
-     // budget:
-     text("This department's budget: $"+cabinet[extra].funding+" Billion", width/6, 70);
-     line(width/6, 95, width/6+end, 95);
-     //bills:
-     textSize(24);
-     text("Current Bills in Congress for this department:", width/6, 100);
-     textSize(18);
-     int y = 130;
-     for (int i = 0; i < bills.size(); i++) {
-       Bill bill = bills.get(i);
-       if (bill.committee == extra) {
-         String mes = " • Bill #"+bill.billNumber+": "+bill.name+" (";
-         if (bill.status == 0)
-           mes += "in committee";
-         else if (bill.status == 1)
-           mes += "in the House";
-         else if (bill.status == 2)
-           mes += "in the Senate";
-         else if (bill.status == 3)
-           mes += "on your desk";
-         else if (bill.status == 4)
-           mes += "awaiting veto override";
-         mes += ")";
-         text(mes, width/6, y);
-         y += 20;
-       }
-     }
-   
-   
-    /*  THIS IS CODE FOR A GRID WHICH WAS BAD BUT JUST IN CASE IT'S HERE
-     
-     line(width/6+width*2/9, 40, width/6+width*2/9, height-110);
-     line(width/6+width*4/9, 40, width/6+width*4/9, height-110);
-     for(int i = 1; i < 5; i++)
-     line(width/6, 40+(height-150)*i/5, width*5/6, 40+(height-150)*i/5);
-     */
-
-
-    for (int i = 0; i < buttons.length; i++)
-      buttons[i].display();
-  }
-
-  if (currScreen == 3) {
-    textAlign(CENTER, CENTER);
-    textSize(16);
-    text("Or Make A Speech To...", width/2, height/2);
-    for (int i = 0; i < buttons.length; i++)
-      buttons[i].display();
-  }
-  if (currScreen == 5) {
-    for (int i = 0; i < buttons.length; i++)
-      buttons[i].display();
-  }
-  if (currScreen == 7) {
-    calendar.display();
-  }
-
-if (currScreen == 10) {
-  textAlign(CENTER, CENTER);
-  textSize(20);
-  text("Bills on the House floor:", width/2, height/6-20);
-}
-if (currScreen == 11) {
-  textAlign(CENTER, CENTER);
-  textSize(20);
-  text("Bills on the Senate floor:", width/2, height/6-20);
-}
-if (currScreen == 10 || currScreen == 11) {
-  fill(255);
-  rect(width/6, height/6, width*2/3, height/3);// all bills
-  textAlign(LEFT, TOP);
-  fill(0);
-  for (int i = 0; i < bills.size(); i++) {// 0 is none, 1-2 is support, 3-4 is criticize, so 5 is the first
-    if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
-      if (i == chosen-5) {
-        fill(0, 0, 100);
-        rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
-        fill(0);
+  void display() {
+    background(50, 125, 250);
+    fill(0);
+    //============================
+    if (currScreen == 0) {
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
+    if (currScreen == 1) {
+      if (extra == 3) {
+         textSize(30);
+         textAlign(CENTER, TOP);
+         text("Your Bill was successfully submitted to the House of Representatives", width/2, height/6);
       }
-      text(bills.get(i).name, width/6+5, height/6+24*i+scrollX);
+    for (int i = 0; i < buttons.length; i++)
+      buttons[i].display();
     }
-    if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
-      line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
-  }
-  fill(255);
-  textAlign(CENTER, CENTER);
-  rect(width/6, height/2+65, width/3-40, 50);// to support
-  rect(width/2+40, height/2+65, width/3-40, 50);// to criticize
-  fill(0);
-  text("Bills to Support", width/4, height/2+45);
-  text("Bills to Criticize", width*3/4, height/2+45);
-  line(width/6, height/2+90, width/2-40, height/2+90);
-  line(width/2+40, height/2+90, width*5/6, height/2+90);
-  textAlign(LEFT, TOP);
-  if (d1.size() > 0) {
-    text(d1.get(0), width/6, height/2+65);
-    if (chosen == 1) {
-      fill(0, 0, 100);
-      rect(width/6, height/2+65, width/3-40, 25);
+    if (currScreen == 2) {
+      fill(255);
+      textSize(14);
+      float end = width*5/6-textWidth("Sec. of Housing and Urban Dev.   ");
+      rect(width/6, 40, min(width*2/3, end), height-150);
+      
       fill(0);
-    }
-  }
-  if (d1.size() > 1) {
-    text(d1.get(1), width/6, height/2+90);
-    if (chosen == 2) {
-      fill(0, 0, 100);
-      rect(width/6, height/2+90, width/3-40, 25);
-      fill(0);
-    }
-  }
-  if (d2.size() > 0) {
-    text(d2.get(0), width/2+40, height/2+65);
-    if (chosen == 3) {
-      fill(0, 0, 100);
-      rect(width/2+40, height/2+65, width/3-40, 25);
-      fill(0);
-    }
-  }
-  if (d2.size() > 1) {
-    text(d2.get(1), width/2+40, height/2+90);
-    if (chosen == 4) {
-      fill(0, 0, 100);
-      rect(width/2+40, height/2+90, width/3-40, 25);
-      fill(0);
-    }
-  }
-
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
-
-if (currScreen == 12) {
-  textSize(30);
-  textAlign(CENTER, CENTER);
-  text("Find a department for most of the bill", width/2, height/6+25);
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
-
-if (currScreen == 13) {
-  // search bar for state, name, party, position
-
-  textAlign(CENTER, TOP);
-  textSize(20);
-  text("Make private deals with groups or individuals in Congress", width/2, 35);
-  textAlign(LEFT, TOP);
-  float w = textWidth("Search by state, name, party, or position:")+5;
-  fill(0);
-  text("Search by state, name, party, or position:", width/6, 65);
-  fill(255);
-  rect(width/6+w, 62, width*2/3-w, 26);
-  fill(0);
-  text(input, width/6+w, 65);
-  
-  if ((millis()/1000)%2 == 0)
-    line(width/6+w+textWidth(input)+1, 65, width/6+w+textWidth(input)+1, 65+20);
- 
-  fill(255);
-  rect(width/6, height/6, width*2/3, height*2/3);//Congressmen
-  fill(0);
-  textAlign(CENTER, TOP);
-  textSize(20);
-  text("Congressmen:", width/2, height/6-30);
-  /* Needs to show:
-   - state/party
-   - you approval
-   - approval
-   */
- 
-  ArrayList<Congressman> list = Utils.searchThrough(input, house, senate);
-  textAlign(LEFT, TOP);
-  for (int i = 0; i < list.size(); i++) {
-    if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
-      if (i == chosen) {
-        fill(0, 0, 100);
-        rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
-        fill(0);
+      textSize(20);
+      textAlign(CENTER, CENTER);
+      text(cabinet[extra].title, width/2, 55);
+      // shows: bills through this department, amount of funding, is the funding too much or little, statistics that can be fixed through this dept.
+      // ========================================================== //
+      // ========================================================== //
+      textAlign(LEFT, TOP);
+      textSize(20);
+      // budget:
+      text("This department's budget: $"+cabinet[extra].funding+" Billion", width/6, 70);
+      line(width/6, 95, width/6+end, 95);
+      //bills:
+      textSize(24);
+      text("Current Bills in Congress for this department:", width/6, 100);
+      textSize(18);
+      int y = 130;
+      for (int i = 0; i < bills.size(); i++) {
+        Bill bill = bills.get(i);
+        if (bill.committee == extra) {
+          String mes = " • Bill #"+bill.billNumber+": "+bill.name+" (";
+          if (bill.status == 0)
+            mes += "in committee";
+          else if (bill.status == 1)
+            mes += "in the House";
+          else if (bill.status == 2)
+            mes += "in the Senate";
+          else if (bill.status == 3)
+            mes += "on your desk";
+          else if (bill.status == 4)
+            mes += "awaiting veto override";
+          mes += ")";
+          text(mes, width/6, y);
+          y += 20;
+        }
       }
-      text("Sen. "+list.get(i).name+"  ("+list.get(i).party+", "+list.get(i).state+")", width/6+5, height/6+24*i+scrollX);
+      
+      
+     /*  THIS IS CODE FOR A GRID WHICH WAS BAD BUT JUST IN CASE IT'S HERE
+      
+      line(width/6+width*2/9, 40, width/6+width*2/9, height-110);
+      line(width/6+width*4/9, 40, width/6+width*4/9, height-110);
+      for(int i = 1; i < 5; i++)
+      line(width/6, 40+(height-150)*i/5, width*5/6, 40+(height-150)*i/5);
+      */
+ 
+ 
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
     }
-    if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
-      line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
-  }
-  
-  
-  //===============================================================================
-  //===============================================================================
-  // This is the code that represents one scroll bar. The directions for what to do
-  // are in the github issue. Use listLength and space.
-  fill(50, 125, 250);
-  int listLength = max(1, 24*list.size());// size of the list in pixels. List.size() is # of items
-  int space = height*2/3;// Space that the text area takes up.
-  rect(width*5/6, height/6-scrollX*space/listLength, 10, 50/* not always 50... what was I writing? */, 5);// This is the problem line.
-  //===============================================================================
-  //===============================================================================
-  //===============================================================================
 
-
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
-
-if (currScreen == 14) {
-  you.display();
-
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-  for (int i = 0; i < sliders.length; i++)
-    sliders[i].display();
-}
-
-if (currScreen == 15) {
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-  fill(0);
-  textAlign(CENTER, CENTER);
-  textSize(25);
-
-  if (calendar.cMonth == 1) {
-    text("Federal Budget Proposal For Fiscal Year 20"+calendar.cYear, width/2, 40);
-    /* the sliders will increase the spending for each, and then it overflows the total spending. Other things must
-     be lowered before submitting, or the total spending can be raised 
-     */
-    int y = height/6;
-    int x = width/6;
-    int i = 0;
-    int half = (int)((height*2/3)/(fedBudget.budget.getRowCount()/2));
-    while (i < fedBudget.budget.getRowCount()) {// needs to give room for bottom
-      if (y > height*5/6) {
-        y = height/6;
-        x = width/2;
-      }  
-      textAlign(LEFT, CENTER);
-      textSize(half/2);
-      String name = fedBudget.budget.getRow(i).getString(0);
-      text(name, x, y);
-      sliders[i].display();
-      y += half;
-      i++;
+    if (currScreen == 3) {
+      textAlign(CENTER, CENTER);
+      textSize(16);
+      text("Or Make A Speech To...", width/2, height/2);
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
     }
-    y -= half;
-    textSize((height-y)/3-20);
-    textAlign(LEFT, TOP);
-    fedBudget.updatePropExpense();
-    text("Total Proposed Expense: " + fedBudget.proposedExpense, width/2+20, y+10);
-    text("Projected Income Through Tax: " + fedBudget.income, width/2+20, y+(height-y)/3);
-    text("Projected Deficit: ", width/2+20, y+(height-y)*2/3-10);
-  } else {
-    text(" ", width/2, 40);
-  }
-  strokeWeight(0);
-}
+    
+    if (currScreen == 5) {
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
+  
+    if (currScreen == 7) {
+      calendar.display();
+    }
 
-if (currScreen == 16) {// find rep for bill
-  fill(255);
-  rect(width/6, height/6, width*2/3, height*4/6);//Congressmen
-  fill(0);
-  textAlign(LEFT, TOP);
-  int x = 0;
-  for (int i = 0; i < house.length; i++) {
-    if (house[i].committee == tempBill.committee) {
-      if (height/6+24*x+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6) {
-        if (x == chosen) {
+    if (currScreen == 10) {
+      textAlign(CENTER, CENTER);
+      textSize(20);
+      text("Bills on the House floor:", width/2, height/6-20);
+    }
+    
+    if (currScreen == 11) {
+      textAlign(CENTER, CENTER);
+      textSize(20);
+      text("Bills on the Senate floor:", width/2, height/6-20);
+    }
+    
+    if (currScreen == 10 || currScreen == 11) {
+      fill(255);
+      rect(width/6, height/6, width*2/3, height/3);// all bills
+      textAlign(LEFT, TOP);
+      fill(0);
+      for (int i = 0; i < bills.size(); i++) {// 0 is none, 1-2 is support, 3-4 is criticize, so 5 is the first
+        if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
+          if (i == chosen-5) {
+            fill(0, 0, 100);
+            rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+            fill(0);
+          }
+          text(bills.get(i).name, width/6+5, height/6+24*i+scrollX);
+        }
+        if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
+          line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
+      }
+      fill(255);
+      textAlign(CENTER, CENTER);
+      rect(width/6, height/2+65, width/3-40, 50);// to support
+      rect(width/2+40, height/2+65, width/3-40, 50);// to criticize
+      fill(0);
+      text("Bills to Support", width/4, height/2+45);
+      text("Bills to Criticize", width*3/4, height/2+45);
+      line(width/6, height/2+90, width/2-40, height/2+90);
+      line(width/2+40, height/2+90, width*5/6, height/2+90);
+      textAlign(LEFT, TOP);
+      if (d1.size() > 0) {
+        text(d1.get(0), width/6, height/2+65);
+        if (chosen == 1) {
           fill(0, 0, 100);
-          rect(width/6, height/6+24*x+scrollX, width*4/6, 24);
+          rect(width/6, height/2+65, width/3-40, 25);
           fill(0);
         }
-        text("Rep. "+house[i].name+"  ("+house[i].state+")", width/6+5, height/6+24*x+scrollX);
       }
-      if (height/6+24*(x+1)+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6)
-        line(width/6, height/6+24*(x+1)+scrollX, width*5/6, height/6+24*(x+1)+scrollX);
-      x++;
+      if (d1.size() > 1) {
+        text(d1.get(1), width/6, height/2+90);
+        if (chosen == 2) {
+          fill(0, 0, 100);
+          rect(width/6, height/2+90, width/3-40, 25);
+          fill(0);
+        }
+      }
+      if (d2.size() > 0) {
+        text(d2.get(0), width/2+40, height/2+65);
+        if (chosen == 3) {
+          fill(0, 0, 100);
+          rect(width/2+40, height/2+65, width/3-40, 25);
+          fill(0);
+        }
+      }
+      if (d2.size() > 1) {
+        text(d2.get(1), width/2+40, height/2+90);
+        if (chosen == 4) {
+          fill(0, 0, 100);
+          rect(width/2+40, height/2+90, width/3-40, 25);
+          fill(0);
+        }
+      }
+
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
     }
-  }
-  fill(50, 125, 250);
-  int listLength = 24*house.length;
-  int space = height*2/3+25;// This was a good attempt but needs to be made better
-  rect(width*5/6, height/6-scrollX*space/listLength, 10, 50, 5);
 
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
+    if (currScreen == 12) {
+      textSize(30);
+      textAlign(CENTER, CENTER);
+      text("Find a department for most of the bill", width/2, height/6+25);
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
 
-if (currScreen == 17) {
-  eM.display();
-}
+    if (currScreen == 13) {
+      // search bar for state, name, party, position
+      textAlign(CENTER, TOP);
+      textSize(20);
+      text("Make private deals with groups or individuals in Congress", width/2, 35);
+      textAlign(LEFT, TOP);
+      float w = textWidth("Search by state, name, party, or position:")+5;
+      fill(0);
+      text("Search by state, name, party, or position:", width/6, 65);
+      fill(255);
+      rect(width/6+w, 62, width*2/3-w, 26);
+      fill(0);
+      text(input, width/6+w, 65);
+  
+      if ((millis()/1000)%2 == 0)
+        line(width/6+w+textWidth(input)+1, 65, width/6+w+textWidth(input)+1, 65+20);
+      fill(255);
+      rect(width/6, height/6, width*2/3, height*2/3);//Congressmen
+      fill(0);
+      textAlign(CENTER, TOP);
+      textSize(20);
+      text("Congressmen:", width/2, height/6-30);
+      /* Needs to show:
+         - state/party
+         - you approval
+         - approval
+      */
+ 
+      ArrayList<Congressman> list = Utils.searchThrough(input, house, senate);
+      textAlign(LEFT, TOP);
+      for (int i = 0; i < list.size(); i++) {
+        if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
+          if (i == chosen) {
+            fill(0, 0, 100);
+            rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+            fill(0);
+          }
+          text("Sen. "+list.get(i).name+"  ("+list.get(i).party+", "+list.get(i).state+")", width/6+5, height/6+24*i+scrollX);
+        }
+        if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
+          line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
+      }
+      
+      //===============================================================================
+      //===============================================================================
+      // This is the code that represents one scroll bar. The directions for what to do
+      // are in the github issue. Use listLength and space.
+      fill(50, 125, 250);
+      float listLength = max(1, 24*list.size());// size of the list in pixels. List.size() is # of items
+      float space = height*2/3;// Space that the text area takes up.
+      if (space < listLength) {
+        float scrollLength = space/listLength;
+        rect(width*5/6, height/6-scrollX*space/listLength, 10, 50/* not always 50... what was I writing? */, 5);// This is the problem line.
+      }
+      //===============================================================================
+      //===============================================================================
+      //===============================================================================
 
-if (currScreen == 18) {
-  tempBill.percentages[0] = sliders[0].value;
-  tempBill.percentages[1] = sliders[1].value;
-  textSize(26);
-  textAlign(CENTER, CENTER);
-  fill(0);
-  text("Create a bill with two department policies:", width/2, (height-30)*1/12+30);
-  // Create the ideas box
-  fill(255);
-  rect(width/6, height/6, width*2/3, height-215-height/6);
-  fill(0);
-  textAlign(LEFT, TOP);
-  textSize(20);
-  for (int i = 0; i < depIdeas.size(); i++) {
-    if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1-2 is already there, so 3 is 1
-      if (i == chosen-3) {
+
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
+
+    if (currScreen == 14) {
+      you.display();
+
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+      for (int i = 0; i < sliders.length; i++)
+        sliders[i].display();
+    }
+
+    if (currScreen == 15) {
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+      fill(0);
+      textAlign(CENTER, CENTER);
+      textSize(25);
+
+      if (calendar.cMonth == 1) {
+        text("Federal Budget Proposal For Fiscal Year 20"+calendar.cYear, width/2, 40);
+        /* the sliders will increase the spending for each, and then it overflows the total spending. Other things must
+        be lowered before submitting, or the total spending can be raised 
+        */
+        int y = height/6;
+        int x = width/6;
+        int i = 0;
+        int half = (int)((height*2/3)/(fedBudget.budget.getRowCount()/2));
+        while (i < fedBudget.budget.getRowCount()) {// needs to give room for bottom
+          if (y > height*5/6) {
+            y = height/6;
+            x = width/2;
+          }  
+          textAlign(LEFT, CENTER);
+          textSize(half/2);
+          String name = fedBudget.budget.getRow(i).getString(0);
+          text(name, x, y);
+          sliders[i].display();
+          y += half;
+          i++;
+        }
+        y -= half;
+        textSize((height-y)/3-20);
+        textAlign(LEFT, TOP);
+        fedBudget.updatePropExpense();
+        text("Total Proposed Expense: " + fedBudget.proposedExpense, width/2+20, y+10);
+        text("Projected Income Through Tax: " + fedBudget.income, width/2+20, y+(height-y)/3);
+        text("Projected Deficit: ", width/2+20, y+(height-y)*2/3-10);
+      }
+      else {
+        text(" ", width/2, 40);
+      }
+      strokeWeight(0);
+    }
+
+    if (currScreen == 16) {// find rep for bill
+      fill(255);
+      rect(width/6, height/6, width*2/3, height*4/6);//Congressmen
+      fill(0);
+      textAlign(LEFT, TOP);
+      int x = 0;
+      for (int i = 0; i < house.length; i++) {
+        if (house[i].committee == tempBill.committee) {
+          if (height/6+24*x+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6) {
+            if (x == chosen) {
+              fill(0, 0, 100);
+              rect(width/6, height/6+24*x+scrollX, width*4/6, 24);
+              fill(0);
+            }
+            text("Rep. "+house[i].name+"  ("+house[i].state+")", width/6+5, height/6+24*x+scrollX);
+          }
+          if (height/6+24*(x+1)+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6)
+            line(width/6, height/6+24*(x+1)+scrollX, width*5/6, height/6+24*(x+1)+scrollX);
+            x++;
+        }
+      }
+      fill(50, 125, 250);
+      int listLength = 24*house.length;
+      int space = height*2/3+25;// This was a good attempt but needs to be made better
+      rect(width*5/6, height/6-scrollX*space/listLength, 10, 50, 5);
+ 
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
+
+    if (currScreen == 17) {
+      eM.display();
+    }
+
+    if (currScreen == 18) {
+      tempBill.percentages[0] = sliders[0].value;
+      tempBill.percentages[1] = sliders[1].value;
+      textSize(26);
+      textAlign(CENTER, CENTER);
+      fill(0);
+      text("Create a bill with two department policies:", width/2, (height-30)*1/12+30);
+      // Create the ideas box
+      fill(255);
+      rect(width/6, height/6, width*2/3, height-215-height/6);
+      fill(0);
+      textAlign(LEFT, TOP);
+      textSize(20);
+      for (int i = 0; i < depIdeas.size(); i++) {
+        if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1-2 is already there, so 3 is 1
+          if (i == chosen-3) {
+            fill(0, 0, 100);
+            rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+            fill(0);
+          }
+          text(depIdeas.get(i), width/6+5, height/6+24*i+scrollX);
+        }
+        if (height/6+24*(i+1)+scrollX >= height/6)
+          line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
+      }
+
+      fill(255);
+      rect(width/6, height-208, width*2/3, 68);
+      line(width/6, height-174, width*5/6, height-174);
+      textAlign(LEFT, CENTER);
+      fill(0);
+      if (tempBill.ideas[0] != -1)
+        text(ideas.names[tempBill.ideas[0]], width/6, height-191);
+      if (tempBill.ideas[1] != -1)
+        text(ideas.names[tempBill.ideas[1]], width/6, height-157);
+      fill(0, 0, 100);
+      if (chosen == 1)
+        rect(width/6, height-208, width*4/6, 34);
+      if (chosen == 2)
+        rect(width/6, height-174, width*4/6, 34);
+      fill(0);
+      for (int i = 0; i < sliders.length; i++)
+        sliders[i].display();
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
+
+    if (currScreen == 19) {
+      textSize(30);
+      textAlign(CENTER, CENTER);
+      text("Find a Department for the Rider", width/2, height/6+25);
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
+    }
+
+    if (currScreen == 20) {
+      tempBill.percentages[2] = sliders[0].value;
+      textSize(26);
+      textAlign(CENTER, CENTER);
+      fill(0);
+      text("Pick a rider from this department for your bill:", width/2, (height-30)*1/12+30);
+      // Create the ideas box
+      fill(255);
+      rect(width/6, height/6, width*2/3, height-181-height/6);
+      fill(0);
+      textAlign(LEFT, TOP);
+      textSize(20);
+      for (int i = 0; i < depIdeas.size(); i++) {
+        if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1 is already there, so 2 is 1
+          if (i == chosen-2) {
+            fill(0, 0, 100);
+            rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+            fill(0);
+          }
+          text(depIdeas.get(i), width/6+5, height/6+24*i+scrollX);
+        }
+        if (height/6+24*(i+1)+scrollX >= height/6)
+          line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
+      }
+      fill(255);
+      rect(width/6, height-174, width*2/3, 34);
+      textAlign(LEFT, CENTER);
+      fill(0);
+      if (chosen == 1) {
         fill(0, 0, 100);
-        rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+        rect(width/6, height-174, width*2/3, 34);
         fill(0);
       }
-      text(depIdeas.get(i), width/6+5, height/6+24*i+scrollX);
+      if (tempBill.ideas[2] != -1)
+        text(ideas.names[tempBill.ideas[2]], width/6, height-157);
+      // }
+      for (int i = 0; i < sliders.length; i++)
+        sliders[i].display();
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
     }
-    if (height/6+24*(i+1)+scrollX >= height/6)
-      line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
-  }
 
-  fill(255);
-  rect(width/6, height-208, width*2/3, 68);
-  line(width/6, height-174, width*5/6, height-174);
-  textAlign(LEFT, CENTER);
-  fill(0);
-  if (tempBill.ideas[0] != -1)
-    text(ideas.names[tempBill.ideas[0]], width/6, height-191);
-  if (tempBill.ideas[1] != -1)
-    text(ideas.names[tempBill.ideas[1]], width/6, height-157);
-  fill(0, 0, 100);
-  if (chosen == 1)
-    rect(width/6, height-208, width*4/6, 34);
-  if (chosen == 2)
-    rect(width/6, height-174, width*4/6, 34);
-  fill(0);
-  for (int i = 0; i < sliders.length; i++)
-    sliders[i].display();
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
+    if (currScreen == 21) {
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
 
-if (currScreen == 19) {
-  textSize(30);
-  textAlign(CENTER, CENTER);
-  text("Find a Department for the Rider", width/2, height/6+25);
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
-
-if (currScreen == 20) {
-  tempBill.percentages[2] = sliders[0].value;
-  textSize(26);
-  textAlign(CENTER, CENTER);
-  fill(0);
-  text("Pick a rider from this department for your bill:", width/2, (height-30)*1/12+30);
-  // Create the ideas box
-  fill(255);
-  rect(width/6, height/6, width*2/3, height-181-height/6);
-  fill(0);
-  textAlign(LEFT, TOP);
-  textSize(20);
-  for (int i = 0; i < depIdeas.size(); i++) {
-    if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1 is already there, so 2 is 1
-      if (i == chosen-2) {
-        fill(0, 0, 100);
-        rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+      textAlign(LEFT, TOP);
+      textSize(40);
+      float namespaceWidth = textWidth("Bill #" + (bills.size()+1)+":")+5;
+      rect(width/6+namespaceWidth, height/6, width*2/3-namespaceWidth, 40);
+      fill(255, 0, 0);
+      text("Bill #" + (bills.size()+1)+":", width/6, height/6);
+      fill(0);
+      if (tempBill != null) {
+        textSize(32);
+        if (tempBill.name == "Type name here")
+          fill(150);
+        text(tempBill.name, width/6+namespaceWidth, height/6);
         fill(0);
-      }
-      text(depIdeas.get(i), width/6+5, height/6+24*i+scrollX);
-    }
-    if (height/6+24*(i+1)+scrollX >= height/6)
-      line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
-  }
-  fill(255);
-  rect(width/6, height-174, width*2/3, 34);
-  textAlign(LEFT, CENTER);
-  fill(0);
-  if (chosen == 1) {
-    fill(0, 0, 100);
-    rect(width/6, height-174, width*2/3, 34);
-    fill(0);
-  }
-  if (tempBill.ideas[2] != -1)
-    text(ideas.names[tempBill.ideas[2]], width/6, height-157);
-  // }
-  for (int i = 0; i < sliders.length; i++)
-    sliders[i].display();
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-}
-
-if (currScreen == 21) {
-  for (int i = 0; i < buttons.length; i++)
-    buttons[i].display();
-
-  textAlign(LEFT, TOP);
-  textSize(40);
-  float namespaceWidth = textWidth("Bill #" + (bills.size()+1)+":")+5;
-  rect(width/6+namespaceWidth, height/6, width*2/3-namespaceWidth, 40);
-  fill(255, 0, 0);
-  text("Bill #" + (bills.size()+1)+":", width/6, height/6);
-  fill(0);
-  if (tempBill != null) {
-    textSize(32);
-    if (tempBill.name == "Type name here")
-      fill(150);
-    text(tempBill.name, width/6+namespaceWidth, height/6);
-    fill(0);
-    if ((millis()/1000)%2 == 0)
-      line(width/6+namespaceWidth+textWidth(tempBill.name), height/6+3, width/6+namespaceWidth+textWidth(tempBill.name), height/6+37);
-    fill(0);
-    text("Brought to House committee by Rep. "+tempBill.broughtBy.name+"("+(tempBill.broughtBy.party+"").toUpperCase()+")", width/6, height/6+40);
-    textSize(25);
-    text("Main clauses of this bill:", width/6, height/6+90);
-    text("1. "+ideas.names[tempBill.ideas[0]]+" ("+tempBill.percentages[0]+"%)", width/6, height/6+130);
-    if (tempBill.ideas[1] != -1)
-      text("2. "+ideas.names[tempBill.ideas[1]]+" ("+tempBill.percentages[1]+"%)", width/6, height/6+160);
-    if (tempBill.ideas[2] != -1)
-      text("3. "+ideas.names[tempBill.ideas[2]]+" ("+tempBill.percentages[2]+"%)", width/6, height/6+190);
+        if ((millis()/1000)%2 == 0)
+          line(width/6+namespaceWidth+textWidth(tempBill.name), height/6+3, width/6+namespaceWidth+textWidth(tempBill.name), height/6+37);
+        fill(0);
+        text("Brought to House committee by Rep. "+tempBill.broughtBy.name+"("+(tempBill.broughtBy.party+"").toUpperCase()+")", width/6, height/6+40);
+        textSize(25);
+        text("Main clauses of this bill:", width/6, height/6+90);
+        text("1. "+ideas.names[tempBill.ideas[0]]+" ("+tempBill.percentages[0]+"%)", width/6, height/6+130);
+        if (tempBill.ideas[1] != -1)
+          text("2. "+ideas.names[tempBill.ideas[1]]+" ("+tempBill.percentages[1]+"%)", width/6, height/6+160);
+        if (tempBill.ideas[2] != -1)
+          text("3. "+ideas.names[tempBill.ideas[2]]+" ("+tempBill.percentages[2]+"%)", width/6, height/6+190); 
       }
     }
 
     if (currScreen == 23) {
+      fill(200, 0, 0);
+      rect(width/6, height/2+10, width/6, height*2/6-10, 10);
+      rect(width*2/3, height/2+10, width/6, height*2/6-10, 10);
+      fill(0, 0, 255);
+      rect(width/6, height/2+30, width/6, height*2/6-30);
+      rect(width*2/3, height/2+30, width/6, height*2/6-30);
+      
       fill(255);
       rect(width/6, height/6, width*2/3, height/2-height/6);
       textAlign(CENTER, CENTER);
       textSize(20);
       int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
-      rect(xVal, height/2+30, width-xVal*2, 20*youActions.length);
+      rect(xVal, height/2+30, width-xVal*2, height*2/6-30);
       
       fill(0);
       text("Them", width/4, height/2+20);
       text("You", width*3/4, height/2+20);
+      line(width/2, height/2+30, width/2, height*2/6-30);
       
       int x = height/2+40;
       textSize(15);
       for (int i = 0; i < themActions.length; i++) {
+        for (int j = 0; j < themActions.length; j++) {
+          
+        }
         textAlign(LEFT, TOP);
         text(themActions[i], width/6, x);
         textAlign(RIGHT, TOP);
         text(youActions[i], width*5/6, x);
         x += 20;
       }
+      // The - signs need to signify that the list is expanded, and then the things in the list must actually be expanded
+      
       /*
           list of things they give and things you give with 'add' and 'remove'
           
@@ -1020,7 +1050,7 @@ if (currScreen == 21) {
           
       */
     }
-  }
+  } 
   int[] wordWidths(String[] words, int s) {
     textSize(s);
     int[] ls = new int[words.length];
