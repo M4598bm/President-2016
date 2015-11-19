@@ -380,15 +380,6 @@ void mouseDragged() {
   }
 }
 
-void mouseWheel(MouseEvent event) {
-  float e = event.getCount();
-  if (screen.currScreen == 10 || screen.currScreen == 11 || screen.currScreen == 13 || screen.currScreen == 16 || screen.currScreen == 18) {
-    if (e > 0 && screen.scrollX != 0)
-      screen.scrollX += 20;
-    else if (e < 0)
-      screen.scrollX -= 20;
-  }
-}
 
 
 void keyPressed() {
@@ -407,7 +398,7 @@ void keyPressed() {
   if (screen.currScreen == 10 || screen.currScreen == 11 || screen.currScreen == 13 || screen.currScreen == 16 || screen.currScreen == 18) {
     if (keyCode == UP && screen.scrollX != 0)
       screen.scrollX += 20;
-    else if (keyCode == DOWN)// scrollX,
+    else if (keyCode == DOWN)
       screen.scrollX -= 20;
   }
   if (screen.currScreen == 13) {
@@ -469,4 +460,4 @@ void nextTurn() {
 
 
 
-}
+}  
