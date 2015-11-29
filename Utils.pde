@@ -30,7 +30,15 @@ static class Utils {
   
   static ArrayList<Congressman> searchThrough(String input, Congressman[] house, Congressman[] senate) {
     // +====== Returns an arraylist of congressmen that satisfy String input ======+
-    input = input.toLowerCase();
+    String[] inputs = input.toLowerCase().split(" ");
+    /* Each word of the string will be searched to see if they are:
+        * a state (and if it satisfies the person) 
+        * first 3 or more letters of a first name (and if it is the person's first or last name)
+        * party, 'd', or 'r' (and if it's the person's party)
+        * position (and if it's the person's position)
+    */
+    
+    
     ArrayList<Congressman> r = new ArrayList<Congressman>();
     Congressman[] con = new Congressman[house.length+senate.length];
     for (int i = 0; i < house.length; i++)
@@ -39,57 +47,48 @@ static class Utils {
       con[house.length+i] = senate[i];
       
     for (int i = 0; i < con.length; i++) {
-      boolean done = false;
       
+      boolean done = true;
+      for (String s : inputs) {
+        // Goes through each input and has to find a way to satisfy, otherwise it is out
+        boolean satisf = false;
+        
       // * state search:
-      if (input.indexOf(con[i].state.toLowerCase()) != -1)
-        r.add(con[i]);
-      //Table s = loadTable("states.csv", "header");
-      //for (TableRow r : s.rows())
-      //  if (con[i].state.equals(r.getString(1)))
-      //    if (input.indexOf(r.getString(0).toLowerCase()) != -1)
-      //      r.add(con[i]);
+        if (s.equals(con[i].state.toLowerCase()))
+          satisf = true;
+          //=== Eventually add longer state names ===//
     
       // * name search:
-      for (int j = 2; i < con[i].name.length() && !done; j++) {
-        if (input.indexOf(con[i].name.substring(0, j).toLowerCase()) != -1) {// checking if they have full name in there
-          done = true;
-          r.add(con[i]);
+        if (s.length() > 2) {
+          String[] n = con[i].name.toLowerCase().split(" ");
+          if (s.equals(n[0].substring(0, min(s.length(), n[0].length()))) || s.equals(n[1].substring(0, min(s.length(), n[1].length()))))
+            satisf = true;
         }
-        if (!done && con[i].name.substring(0, j).indexOf(" ") != -1) {// is there a last name? Is that there?
-          if (input.indexOf(con[i].name.substring(con[i].name.indexOf(" ")+1, j).toLowerCase()) != -1) {
-            done = true;
-            r.add(con[i]);
-          }
-        }
-      }
-    
+        
       // * party search:
-      if (!done && con[i].party == 'D' && (input.indexOf("d") != -1 || input.indexOf("democrat") != -1)) {
-        done = true;
-        r.add(con[i]);
-      }
-      if (!done && con[i].party == 'R' && (input.indexOf("r") != -1 || input.indexOf("republican") != -1)) {
-        done = true;
-        r.add(con[i]);
-      }
-    
+        if (s.equals("d") || s.equals("democrat"))
+          if (con[i].party == 'D')
+            satisf = true;
+        if (s.equals("r") || s.equals("republican"))
+          if (con[i].party == 'R')
+            satisf = true;
+      
       // * position search:
-      //   0 is none, 1 is leader, 2 is whip, 3 is speaker. 1 and 2 have majority or minority and senate or house
-      if (!done) {
-        if (input.indexOf("leader") != -1 && con[i].leadership == 1) {
-          done = true;
-          r.add(con[i]);
-        }
-        else if (input.indexOf("whip") != -1 && con[i].leadership == 2) {
-          done = true;
-          r.add(con[i]);
-        }
-        else if (input.indexOf("speaker") != -1 && con[i].leadership == 3) {
-          done = true;
-          r.add(con[i]);
-        }
+        if (s.equals("leader") && con[i].leadership == 1)
+          satisf = true;
+        if (s.equals("whip") && con[i].leadership == 2)
+          satisf = true;
+        if (s.equals("speaker") && con[i].leadership == 1)
+          satisf = true;
+          
+      // 0 is none, 1 is leader, 2 is whip, 3 is speaker. 1 and 2 have majority or minority and senate or house
+
+                  
+        if (!satisf)
+          done = false;
       }
+      if (done)
+        r.add(con[i]);
     }
     return r;
   }

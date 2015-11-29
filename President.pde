@@ -399,7 +399,7 @@ void keyPressed() {
         tempBill.name = tempBill.name.substring(0, tempBill.name.length()-1);
     }
 
-    else if (keyCode != ENTER)
+    else if (keyCode != ENTER && keyCode != SHIFT)
       tempBill.name += key;
     //========
   }
@@ -416,7 +416,7 @@ void keyPressed() {
         screen.input = screen.input.substring(0, screen.input.length()-1);
     }
 
-    else if (keyCode != ENTER && keyCode != UP && keyCode != DOWN)
+    else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN)
       screen.input += key;
   }
 
