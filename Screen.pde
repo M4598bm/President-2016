@@ -1,5 +1,5 @@
 class Screen {
-  /* Different Screens:
+  /* Index of Screens shown:
    0: Main
    1: Stats < 0
    2: Cabinet < 0
@@ -29,31 +29,33 @@ class Screen {
    26: Security Council < 6
    27: International Treaties < 6
   */
-  
+
   // Most used variables for basic structure
-  int currScreen;
-  int lastScreen;
-  int lastButton;
-  int extra;
-  Button[] buttons;
-  Slider[] sliders;
-  int scrollX;
-  int chosen;
-  
+  int currScreen;// the current screen
+  int lastScreen;// screen before this one. Not in use yet but will be good for a back button.
+  // Maybe the above will be an ArrayList or tree so it can go back further?
+  int lastButton;// The last button pressed, I don't remember what it's for
+  int extra;// any extra input that a lot of buttons have
+  Button[] buttons;// All the buttons displayed on the screen
+  Slider[] sliders;// All the sliders displayed on the screen
+  int scrollX;// The xval of what was scrolled
+  int chosen;// a selected value, usually out of a list
+
   // Variables for specific instances
-  ArrayList<String> depIdeas;
-  ArrayList<Congressman> search;
-  ArrayList<Integer> d1;
-  ArrayList<Integer> d2;
-  String input;
+  ArrayList<String> depIdeas;// names of ideas
+  ArrayList<Congressman> search;// the result of a search through congresses
+  ArrayList<Integer> d1;// holds int data (used in speeches as for)
+  ArrayList<Integer> d2;// holds more int data (used in speeches as against)
+  String input;// a string input
   String[] themActions = {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
   String[] youActions = {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "Promise funding ", "Endorse Congressperson "};
-  
-  // for a timer functionality
-  int time;
+
+  int time;// for a timer functionality, for example the blinking cursor
 
 
   Screen() {
+    /* The constructor for string, mostly initializes values
+    */
     setScreen(0);
     d1 = new ArrayList<Integer>();
     d2 = new ArrayList<Integer>();
@@ -61,6 +63,11 @@ class Screen {
 
 
   void setScreen(int c) {
+    /* One of the two major methods in this class
+    It initializes the screen at the beginning, setting up Buttons and Sliders
+    Each instance is defined at the beginning, so when searching through them use
+    the 'if (currScreen == <x>)'
+    */
     currScreen = c;
     if (currScreen == 0) {
       buttons = new Button[10];
@@ -107,14 +114,14 @@ class Screen {
         tempBill = null;
       }
       else if (extra == 4) {// party budget
-      
+
       }
-      
-      
+
+
       else if (extra == 10) {// speechwriting house
         suppH = d1;
         agH = d2;
-      } 
+      }
       else if (extra == 11) {// speechwriting senate
         suppS = d1;
         agS = d2;
@@ -150,7 +157,7 @@ class Screen {
       if (extra == 0)
         buttons[2].visible = false;
 
-      for (int i = 3; i < buttons.length; i++) { 
+      for (int i = 3; i < buttons.length; i++) {
         buttons[i] = new Button(width+10-textWidth("Sec. of Housing and Urban Dev.   "), 40+(i-3)*30, textWidth(cabinet[i-3].title), 30, color(0, 0, 0), 2);
         buttons[i].setLabel(cabinet[i-3].title, 14, color(200, 0, 0));
         buttons[i].extra = i-3;
@@ -162,13 +169,13 @@ class Screen {
       for (int i = 0; i < buttons.length; i++)
         buttons[i].scrollCol = color(200, 0, 0);
       /* How this will work:
-       
+
        See some info from all 15 in boxes, and click on some to enlarge.
        Button for the current status of your bills
        Each may tell about issues that exist with their department and ways to fix them
        Each may ask for more funding
-       
-       
+
+
        */
     }
     //-------------------------------------------------
@@ -231,12 +238,12 @@ class Screen {
       buttons[0].setLabel("Army", 14, 255);
       buttons[1] = new Button(width/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);
       buttons[1].setLabel("Navy", 14, 255);
-      buttons[2] = new Button(width/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);// 1/6 
+      buttons[2] = new Button(width/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);// 1/6
       buttons[2].setLabel("Marines", 14, 255);
       buttons[3] = new Button(width*5/6, height/2-100, width*5/24, 100, color(255, 0, 0), 0);
       buttons[3].setLabel("Advisors", 14, 255);
-      
-      
+
+
     }
     //-------------------------------------------------
     //-------------------------------------------------
@@ -526,11 +533,11 @@ class Screen {
        * Important Supreme Court cases coming up and recent decisions
        * Bills that you can sign or table
      */
-       
-   
-   
+
+
+
     }
-    
+
     else if (currScreen == 23) {// legislative deals (with multiple people)
       buttons = new Button[3];
       buttons[0] = new Button(width/2-100, height*5/6, 200, 60, color(255, 0, 0), 24);
@@ -547,11 +554,11 @@ class Screen {
 
     }
   }
-   
-   
-   
-   
-   
+
+
+
+
+
   void display() {
     background(50, 125, 250);
     fill(0);
@@ -574,7 +581,7 @@ class Screen {
       textSize(14);
       float end = width*5/6-textWidth("Sec. of Housing and Urban Dev.   ");
       rect(width/6, 40, min(width*2/3, end), height-150);
-      
+
       fill(0);
       textSize(20);
       textAlign(CENTER, CENTER);
@@ -611,17 +618,17 @@ class Screen {
           y += 20;
         }
       }
-      
-      
+
+
      /*  THIS IS CODE FOR A GRID WHICH WAS BAD BUT JUST IN CASE IT'S HERE
-      
+
       line(width/6+width*2/9, 40, width/6+width*2/9, height-110);
       line(width/6+width*4/9, 40, width/6+width*4/9, height-110);
       for(int i = 1; i < 5; i++)
       line(width/6, 40+(height-150)*i/5, width*5/6, 40+(height-150)*i/5);
       */
- 
- 
+
+
       for (int i = 0; i < buttons.length; i++)
         buttons[i].display();
     }
@@ -633,12 +640,12 @@ class Screen {
       for (int i = 0; i < buttons.length; i++)
         buttons[i].display();
     }
-    
+
     if (currScreen == 5) {
       for (int i = 0; i < buttons.length; i++)
         buttons[i].display();
     }
-  
+
     if (currScreen == 7) {
       calendar.display();
     }
@@ -648,13 +655,13 @@ class Screen {
       textSize(20);
       text("Bills on the House floor:", width/2, height/6-20);
     }
-    
+
     if (currScreen == 11) {
       textAlign(CENTER, CENTER);
       textSize(20);
       text("Bills on the Senate floor:", width/2, height/6-20);
     }
-    
+
     if (currScreen == 10 || currScreen == 11) {
       fill(255);
       rect(width/6, height/6, width*2/3, height/3);// all bills
@@ -740,7 +747,7 @@ class Screen {
       rect(width/6+w, 62, width*2/3-w, 26);
       fill(0);
       text(input, width/6+w, 65);
-  
+
       if ((millis()/1000)%2 == 0)
         line(width/6+w+textWidth(input)+1, 65, width/6+w+textWidth(input)+1, 65+20);
       fill(255);
@@ -754,7 +761,7 @@ class Screen {
          - you approval
          - approval
       */
- 
+
       ArrayList<Congressman> list = Utils.searchThrough(input, house, senate);
       textAlign(LEFT, TOP);
       for (int i = 0; i < list.size(); i++) {
@@ -769,7 +776,7 @@ class Screen {
         if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
           line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
       }
-      
+
       //===============================================================================
       //===============================================================================
       // This is the code that represents one scroll bar. The directions for what to do
@@ -809,7 +816,7 @@ class Screen {
       if (calendar.cMonth == 1) {
         text("Federal Budget Proposal For Fiscal Year 20"+calendar.cYear, width/2, 40);
         /* the sliders will increase the spending for each, and then it overflows the total spending. Other things must
-        be lowered before submitting, or the total spending can be raised 
+        be lowered before submitting, or the total spending can be raised
         */
         int y = height/6;
         int x = width/6;
@@ -819,7 +826,7 @@ class Screen {
           if (y > height*5/6) {
             y = height/6;
             x = width/2;
-          }  
+          }
           textAlign(LEFT, CENTER);
           textSize(half/2);
           String name = fedBudget.budget.getRow(i).getString(0);
@@ -867,7 +874,7 @@ class Screen {
       int listLength = 24*house.length;
       int space = height*2/3+25;// This was a good attempt but needs to be made better
       rect(width*5/6, height/6-scrollX*space/listLength, 10, 50, 5);
- 
+
       for (int i = 0; i < buttons.length; i++)
         buttons[i].display();
     }
@@ -1000,7 +1007,7 @@ class Screen {
         if (tempBill.ideas[1] != -1)
           text("2. "+ideas.names[tempBill.ideas[1]]+" ("+tempBill.percentages[1]+"%)", width/6, height/6+160);
         if (tempBill.ideas[2] != -1)
-          text("3. "+ideas.names[tempBill.ideas[2]]+" ("+tempBill.percentages[2]+"%)", width/6, height/6+190); 
+          text("3. "+ideas.names[tempBill.ideas[2]]+" ("+tempBill.percentages[2]+"%)", width/6, height/6+190);
       }
     }
 
@@ -1011,24 +1018,24 @@ class Screen {
       fill(0, 0, 255);
       rect(width/6, height/2+30, width/6, height*2/6-30);
       rect(width*2/3, height/2+30, width/6, height*2/6-30);
-      
+
       fill(255);
       rect(width/6, height/6, width*2/3, height/2-height/6);
       textAlign(CENTER, CENTER);
       textSize(20);
       int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
       rect(xVal, height/2+30, width-xVal*2, height*2/6-30);
-      
+
       fill(0);
       text("Them", width/4, height/2+20);
       text("You", width*3/4, height/2+20);
       line(width/2, height/2+30, width/2, height*2/6-30);
-      
+
       int x = height/2+40;
       textSize(15);
       for (int i = 0; i < themActions.length; i++) {
         for (int j = 0; j < themActions.length; j++) {
-          
+
         }
         textAlign(LEFT, TOP);
         text(themActions[i], width/6, x);
@@ -1037,20 +1044,20 @@ class Screen {
         x += 20;
       }
       // The - signs need to signify that the list is expanded, and then the things in the list must actually be expanded
-      
+
       /*
           list of things they give and things you give with 'add' and 'remove'
-          
+
           * support of a bill
           * denunciation of a bill
           * vote for a bill
           * vote against a bill
           * promise funding to those in your party
           * endorse their campaign
-          
+
       */
     }
-  } 
+  }
   int[] wordWidths(String[] words, int s) {
     textSize(s);
     int[] ls = new int[words.length];

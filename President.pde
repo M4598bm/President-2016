@@ -2,60 +2,67 @@
 // this is good:
 // https://www.whitehouse.gov/briefing-room/signed-legislation
 
-String name;
-String presParty;
+String name;// Player name (Set at start later)
+String presParty;// Player party (Set at start later)
 
-Screen screen;
-Calendar calendar;
-FedBudget fedBudget;
-Ideas ideas;
+Screen screen;// Handles most display aspects
+Calendar calendar;// the calendar
+FedBudget fedBudget;// Handles the budget
+Ideas ideas;// Handles the 'ideas', Bills are made of up to 3 of ideas held in this object
 
-NationalCom you;
-NationalCom them;
+NationalCom you;// Your party's national committee
+NationalCom them;// Opposing party's national committee
 
-int turn;
+int turn;// number of turns so far (starting from 0 at setup to 1 at first turn)
 
-int approval;
-boolean houseSpeech;
-boolean senateSpeech;
-ArrayList<Bill> bills;
-ArrayList<Bill> laws;
-Congressman[] house;
-Congressman[] senate;
-Secretary[] cabinet;
-SCJustice[] scotus;
+int approval;// national polling approval of you
+boolean houseSpeech;// have you made a speech to the house this turn?
+boolean senateSpeech;// have you made a speech to the senate this turn?
+ArrayList<Bill> bills;// all bills created at the moment
+ArrayList<Bill> laws;// all laws passed
+Congressman[] house;// array of congressmen in the house
+Congressman[] senate;// array of congressmen in the senate
+Secretary[] cabinet;// array of secretaries in your cabinet
+SCJustice[] scotus;// array of justices in the Supreme Court (will I need this at alL?)
 
-int sBalance;// percent// what is this
-int hBalance;// percent
+// These are tentative and was a stupid way to do this lol
+int sBalance;// percent of Democrats in the senate? Eww
+int hBalance;// percent of Dems in the house, also eww
+// ^ I think Richard gets to fix that algorithm.... ^
 
-Bill tempBill;
-Slider currSlider;
+Bill tempBill;// current bill that you're having drafted (only stored here because it has to be global)
+Slider currSlider;// The slider that was just clicked on and is being dragged
 
 // Images
-ElectoralMap eM;
+ElectoralMap eM;// this is also tentative, it draws an electoral map, handle it later prob
 
 
 // Deals
-int[] mustSpeakFor;//made a deal to vote for these
-int[] mustSpeakAgainst;//made a deal to vote against these
+int[] mustSpeakFor;// you made a deal to speak in favor of these
+int[] mustSpeakAgainst;// you made a deal to speak against these
 
-ArrayList<Integer> suppS;
-ArrayList<Integer> agS;
-ArrayList<Integer> suppH;
-ArrayList<Integer> agH;
+ArrayList<Integer> suppS;// these are slightly complicated and not useful for really anything other than
+ArrayList<Integer> agS;//   what I already wrote anyway, so don't worry about it. But if you want to know
+ArrayList<Integer> suppH;// what these are, they're basically so that each turn the senate and house speeches
+ArrayList<Integer> agH;//   the player made in the turn are processed. It holds those.
 
 void setup() {
-  int wid = displayWidth;
-  int hei = (int)(displayHeight*.8);
+  /*
+    This is valuable for Processing, it's simply what sets up the game when it is initially run.
+    Right now this is developing a Beta so there isn't a nice menu, game setup, and loading games etc.
+    There will be all that stuff and I look forward to it. It will mostly be put here. But for now, this
+    is sort of a silly method that sets default variables that need to be set.
+  */
+  int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
+  int hei = (int)(displayHeight*.8);// Eventually this will just be displayHeight
   size(displayWidth, displayHeight);//640);// 640 is temp bc processing 3 sucks a bit
-  println(wid+","+hei);
+  //println(wid+","+hei);// just for testing
 
   turn = 0;
 
+  // Sets up a default Party, eventually player decides this obv.
   presParty = "Democratic";// or "Republican"
-
   you = new NationalCom(presParty);
-
   if (presParty == "Democratic")
     them = new NationalCom("Republican");
   else
@@ -69,29 +76,6 @@ void setup() {
   fedBudget = new FedBudget();
   ideas = new Ideas();
 
-    // -========================-
-  laws = new ArrayList<Bill>();
-  house = new Congressman[435];
-  senate = new Congressman[100];
-  scotus = new SCJustice[9];
-
-  // stack the courts here //
-
-  cabinet = new Secretary[15];
-  Table d = loadTable("majordepartments.csv", "header");
-  for (int i = 0; i < cabinet.length; i++)
-    cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
-
-  // This will be decided in beginning so for now has default
-  sBalance = 55;
-  hBalance = 55;
-
-  // loading images
-  eM = new ElectoralMap();
-
-  approval = 50;
-
-  createCongress();
   bills = new ArrayList<Bill>();
   // This is temporary
   for (int i = 0; i < 5; i++) {
@@ -101,21 +85,63 @@ void setup() {
     bills.get(i).status = (int)random(5);
     bills.get(i).addOpinions();
   }
+  // ^ Temporary ^ //
+  laws = new ArrayList<Bill>();
+  house = new Congressman[435];
+  senate = new Congressman[100];
+  scotus = new SCJustice[9];
 
+  // ===================== //
+  // stack the courts here //
+  // ===================== //
+
+  // This stacks the Cabinet //
+  cabinet = new Secretary[15];
+  Table d = loadTable("majordepartments.csv", "header");
+  for (int i = 0; i < cabinet.length; i++)
+    cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
+
+  // This stacks Congress, sort of flawed //
+  createCongress();
+
+  // This will be decided in beginning so for now has default
+  sBalance = 55;
+  hBalance = 55;// Remember I told you these things suck? They do, I didn't lie
+
+  // loading images
+  eM = new ElectoralMap();// lol
+  // Eventually all other images will be loaded.
+
+  approval = 50;// Temporary because it needs to start somewhere! Eventually there will be a calculation here.
+
+
+  // Needs to happen somewhere, don't worry about it.
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();
   agS = new ArrayList<Integer>();
 
+  // To decrease runtime, this will eventually happen at key times.
+  // I might have to keep a variable for bgcolor because this is a
+  // random assortment of numbers. We might also want a different
+  // color, this one can be temp, so yea, that's a good idea
   background(50, 125, 250);
 }
 
 
 void draw() {
-  screen.display();
-  topBar();
+  /* Also an essential Processing function!
+     This runs the whole thing. Eventually
+     it will also run a starting screen.
+  */
+  screen.display();// For some reason we do this every loop... that
+  //makes it slow and it doesn't need to happen so I'll work on that later
+  topBar();// That menu at the top is displayed
+
   if (screen.currScreen != 0)
-    mainButton();
+    mainButton();// The button that returns to main screen
+
+  // The following checks if a button is being scrolled over
   if (screen.buttons != null)
     for (int i = 0; i < screen.buttons.length; i++) {
       if (screen.buttons[i].isInside(mouseX, mouseY))
@@ -126,6 +152,10 @@ void draw() {
 }
 
 void topBar() {// Turn # | Date | Approval Rating | Turns until next election
+  /* This method displays a horizontal bar at the top of the screen that
+  displays most of the time.
+  */
+
   fill(255);
   rect(0, -5, width, 35, 3);
   fill(0);
@@ -138,6 +168,8 @@ void topBar() {// Turn # | Date | Approval Rating | Turns until next election
 }
 
 void mainButton() {
+  /* This method creates a button on the top left that brings you back to main screen.
+  */
   strokeWeight(5);
   line(width/10, height/10, width/10+20, height/10-15);
   line(width/10, height/10, width/10+20, height/10+15);
@@ -147,10 +179,14 @@ void mainButton() {
   fill(0);
   text("Main Menu", width/10+10, height/10+30);
 }
-// Names them, gives parties, gives states, gives districts, gives approvals, gives election cycle \\
+
 void createCongress() {
+  /* This method stacks the two arrays that hold Congress.
+     It names congressmen, gives parties, gives states, gives districts (maybe),
+     gives approvals ratings, gives election cycles for senators
+  */
   //=== Names ===//
-  Table names = loadTable("names.csv", "header");
+  Table names = loadTable("names.csv", "header");// A table that has first and last names
   ArrayList<String> firstNames = new ArrayList<String>();
   ArrayList<String> lastNames  = new ArrayList<String>();
   for (TableRow row : names.rows()) {
@@ -158,7 +194,10 @@ void createCongress() {
     lastNames.add(row.getString(1));
   }
 
-  Table states = loadTable("states.csv", "header");
+
+  // This section is a serious mess and needs to be, probably, completely redone.
+
+  Table states = loadTable("states.csv", "header");// a table with states etc.
   //=== Senators ===//
   int partyCount = sBalance;
   int x = 0;
@@ -213,6 +252,9 @@ void createCongress() {
       }
     }
   }
+
+  // This is the end of the above mess. This is eventually necessary to fix because it's terrible...
+
   //for (int i = 0; i < house.length; i++)
   //  println(i + ": " + house[i].name + " (" + house[i].state + ")");
 }
@@ -222,11 +264,13 @@ void createCongress() {
 //================================
 
 void mouseClicked() {
+  /* What to do when the mouse is clicked */
   float mX = mouseX;
   float mY = mouseY;
 
   // Clicking buttons:
   textSize(16);
+  // If the main menu is selected
   float wordWidth = textWidth("Main Menu")/2;
   if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15)
     screen.setScreen(0);
@@ -244,6 +288,8 @@ void mouseClicked() {
 
   //=======================================================
   //=======================================================
+  // This section deals with when there is a calendar up and when
+  // the buttons to change what month is shown are selected.
   if (screen.currScreen == 7) {
     textSize(20);
     if (mY > height/6-70 && mY < height/6-50) {
@@ -254,6 +300,10 @@ void mouseClicked() {
     }
   }
   //=======================================================
+  //=======================================================
+  // This is complicated but basically for when an item of a list in the screen
+  // where a speech is being built is selected. It changes the appearance of
+  // the specific buttons that are associated.
   if (screen.currScreen == 10 || screen.currScreen == 11) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height/2) {
@@ -306,6 +356,8 @@ void mouseClicked() {
   }
   //=======================================================
   if (screen.currScreen == 16) {
+    // This deals with selection from a list in a different screen,
+    // I don't know which one, it's easy to check. It's Screen 16
     // rect(width/6, height/6+24*x+scrollX, width*4/6, 20);
     if (mX > width/6 && mX < width*5/6) {
       if (mX > height/6 && mY < height*5/6) {
@@ -321,6 +373,7 @@ void mouseClicked() {
     }
   }
   //=======================================================
+  // Same as the above, but with Screen 18
   if (screen.currScreen == 18) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height/2) {
@@ -344,6 +397,7 @@ void mouseClicked() {
     }
   }
   //=======================================================
+  // Ditto, Screen 20
   if (screen.currScreen == 20) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height-181) {
@@ -363,6 +417,7 @@ void mouseClicked() {
   }
 }
 void mousePressed() {
+  // This is necessary for sliders, it's when the mouse is pressed and not released
   // ====== Sliders ======
   if (screen.sliders != null) {
     for (int i = 0; i < screen.sliders.length; i++)
@@ -372,15 +427,19 @@ void mousePressed() {
 
 }
 void mouseReleased() {
+  // Speaks for itself, sets currSlider to null
   currSlider = null;
 }
 void mouseDragged() {
+  // If the mouse is held down and moved
   if (currSlider != null) {
-    currSlider.value = (int)constrain(((mouseX+currSlider.boxSize/2-currSlider.x)*currSlider.maxVal/currSlider.len), 0, currSlider.maxVal);
+    currSlider.value = (int)constrain(((
+      mouseX+currSlider.boxSize/2-currSlider.x)*currSlider.maxVal/currSlider.len), 0, currSlider.maxVal);
   }
 }
 
 void mouseWheel(MouseEvent event) {
+  // When the mouse is scrolled. Very useful for replacing the arrow keys
   float e = event.getCount();
   if (screen.currScreen == 10 || screen.currScreen == 11 || screen.currScreen == 13 || screen.currScreen == 16 || screen.currScreen == 18) {
     if (e > 0 && screen.scrollX != 0)
@@ -392,23 +451,22 @@ void mouseWheel(MouseEvent event) {
 
 
 void keyPressed() {
-  //println(screen.scrollX);
+  // In the event that a key is pressed
+
+  // ======================================
+  // === Cases where the user is typing ===
+  // ======================================
   if (screen.currScreen == 21) {
     if (keyCode == BACKSPACE) {
+      // How to delete off of a name, useful for a lot of other things
       if (tempBill.name.length() != 0)
         tempBill.name = tempBill.name.substring(0, tempBill.name.length()-1);
     }
 
     else if (keyCode != ENTER && keyCode != SHIFT)
+      // Typing, avoiding some keys that are not part of this
       tempBill.name += key;
     //========
-  }
-
-  if (screen.currScreen == 10 || screen.currScreen == 11 || screen.currScreen == 13 || screen.currScreen == 16 || screen.currScreen == 18) {
-    if (keyCode == UP && screen.scrollX != 0)
-      screen.scrollX += 20;
-    else if (keyCode == DOWN)// scrollX,
-      screen.scrollX -= 20;
   }
   if (screen.currScreen == 13) {
     if (keyCode == BACKSPACE) {
@@ -420,12 +478,26 @@ void keyPressed() {
       screen.input += key;
   }
 
-  if (keyCode == ESC) {// this doesnt currently work...
+  // All cases where the arrow keys are used to scroll through a list
+  if( screen.currScreen == 10
+    || screen.currScreen == 11
+    || screen.currScreen == 13
+    || screen.currScreen == 16
+    || screen.currScreen == 18 ) {
+    if (keyCode == UP && screen.scrollX != 0)
+      screen.scrollX += 20;
+    else if (keyCode == DOWN)// scrollX,
+      screen.scrollX -= 20;
+  }
+
+  if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
     screen.setScreen(0);
   }
-  if (key == 'q') {// this is temp but it enables a quit method in the future
-    key = 27;
+  if (key == 'q') {
+  // this is temp but it enables a quit method in the future
+  // Probably will link with the menu somehow (like if a button is pressed, key = 27)
+    key = 27;// This is the escape key.
   }
 }
 
@@ -436,9 +508,15 @@ void keyPressed() {
 //===================================================//
 
 void nextTurn() {
+  /* This method progresses the game by setting up the next turn.
+
+  */
   turn++;
 
-  for (int i = 0; i < 7; i++) {// this decides how many days is one turn. I don't really know what it should be yet.
+  int daysPerTurn = 7; // this decides how many days is one turn.
+  // I don't really know what it should be yet, it depends on testing.
+
+  for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
     calendar.day++;
     if (calendar.day > daysInMonth[calendar.cMonth-1]) {
       calendar.day = 1;
@@ -455,11 +533,12 @@ void nextTurn() {
   for (int i = 0; i < house.length; i++)
     house[i].listenToSpeech(suppH, agH);
 
-
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();
   agS = new ArrayList<Integer>();
+
+  // This is the beginnign of code that changes the status of bills
   //  for (int i = 0; i < bills.length; i++) {
   //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
 
