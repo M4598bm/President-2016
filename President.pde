@@ -186,6 +186,7 @@ void createCongress() {
      gives approvals ratings, gives election cycles for senators
   */
   //=== Names ===//
+  // Initializes names of Congressmen, this is fine
   Table names = loadTable("names.csv", "header");// A table that has first and last names
   ArrayList<String> firstNames = new ArrayList<String>();
   ArrayList<String> lastNames  = new ArrayList<String>();
@@ -201,20 +202,36 @@ void createCongress() {
   //=== Senators ===//
   int partyCount = sBalance;
   int x = 0;
-  for (TableRow row : states.rows()) {
+  for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
     if (!row.getString(1).equals("DC")) {
       // Find name:
+
+      // So this initializes congressmen, and it's actually also fine.
       String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
       senate[x] = new Congressman(n, row.getString(1), 0);
       n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
       senate[x+1] = new Congressman(n, row.getString(1), 0);
 
-      //how many democrats
+      // how many democrats. Here's where it gets bad. This may be a teardown.
+
+      // convertInt used below simply takes a string that is actually an int and turns it into an int, dw about that part
       int val = Utils.convertInt(row.getString(2));
+      // val is an int from 0 to 5 inclusive that tells you how likely it is to be a dem (5 is very likely)
+      //    ^    ^    ^    ^    ^    ^    ^    ^
+      // The above is actually useful because it will tell you
+      // how likely it is that it will be a democrat or republican, so don't delete it
+
+      // ==================================================
+      // This part sucks though, ugh
+
+      // Liberalism and socialism (0 to 100 values for each) also need to be set, and you
+      // can do that either separately or at the same time.
+      // The method Congressman.setPolitics(int liberalism, int socialism, char party) works too
       int dems = Utils.findDems(val, random(5));
       if (dems == 0) {
         senate[x].party = 'R';
         senate[x+1].party = 'R';
+        // how it works though is that it takes the amount given and sets the party accordingly
       }
       else if (dems == 1) {
         senate[x].party = 'R';
@@ -228,6 +245,7 @@ void createCongress() {
       //senate[x].party = 'R';
       //senate[x+1].party = 'D';
       if (dems > 0) {
+        // see I started to set lib and soc but it failed sooo do that too
         //senate[x].setPolitics(
       }
 
@@ -235,12 +253,20 @@ void createCongress() {
       x+=2;
     }
   }
+
+  // You may find this useful, it tests the code for senate
   int sum = 0;
   for (Congressman s : senate)
     if (s.party == 'D')
       sum++;
-      println("Democrats: "+sum+"/"+senate.length);
+      println("Democrats in Senate: "+sum+"/"+senate.length);
+
+
   //=== Representatives ===//
+
+  // After the failure of Senate stacking, I didn't even try. They simply start with names.
+
+  // === Names === //
   x = 0;
   for (TableRow row : states.rows()) {
     if (!row.getString(1).equals("DC")) {
@@ -253,11 +279,21 @@ void createCongress() {
     }
   }
 
+  /*
+  Here you can write the code for stacking the house. It's a little more difficult
+  because each state has a different number of representatives. So you can take some aspects
+  of what you write for Senate and put it here, but be sure to edit carefully to take into account.
+  */
+
   // This is the end of the above mess. This is eventually necessary to fix because it's terrible...
 
-  //for (int i = 0; i < house.length; i++)
+  //for (int i = 0; i < house.length; i++) // idk what this is lol
   //  println(i + ": " + house[i].name + " (" + house[i].state + ")");
 }
+
+
+
+
 
 //================================
 //========= Controls =============
