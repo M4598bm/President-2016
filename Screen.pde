@@ -39,6 +39,7 @@ class Screen {
   Button[] buttons;// All the buttons displayed on the screen
   Slider[] sliders;// All the sliders displayed on the screen
   int scrollX;// The xval of what was scrolled
+  int[] scrollsX;// The scrollX for when there are many areas that are scrollable
   int chosen;// a selected value, usually out of a list
 
   // Variables for specific instances
@@ -518,20 +519,17 @@ class Screen {
     //-------------------------------------------------
     else if (currScreen == 22) {// Show agenda:
     	 buttons = new Button[0];
-    /* Examples of news include:
-       * Important events that happened and how you're going to treat them
-       * Bills that went on floor this week
-       * Bills that were denied this week
-       * Nations that request a visit
-       * When the next thing is due
-       * How your next election is going
-       * How the next congressional election is going
-       * Important Supreme Court cases coming up and recent decisions
-       * Bills that you can sign or table
-     */
-
-
-
+       /* Examples of news include:
+        * Important events that happened and how you're going to treat them
+        * Bills that went on floor this week
+        * Bills that were denied this week
+        * Nations that request a visit
+        * When the next thing is due
+        * How your next election is going
+        * How the next congressional election is going
+        * Important Supreme Court cases coming up and recent decisions
+        * Bills that you can sign or table
+        */
     }
 
     else if (currScreen == 23) {// legislative deals (with multiple people)
@@ -547,6 +545,12 @@ class Screen {
       buttons[2].setLabel("", 14, 255);
       buttons[2].clickable = false;
       buttons[2].extra = 1;
+
+      Congressman c = search.get(chosen);
+      search.clear();
+      search.add(c);// The only thing in search should be the chosen congressman
+      chosen = -1;
+      scrollsX = new int[4];// 0: left, 1: center left, 2: center right, 3: right
 
     }
   }
@@ -569,8 +573,8 @@ class Screen {
          textAlign(CENTER, TOP);
          text("Your Bill was successfully submitted to the House of Representatives", width/2, height/6);
       }
-    for (int i = 0; i < buttons.length; i++)
-      buttons[i].display();
+      for (int i = 0; i < buttons.length; i++)
+        buttons[i].display();
     }
     if (currScreen == 2) {
       fill(255);
@@ -1027,8 +1031,39 @@ class Screen {
       text("You", width*3/4, height/6-10);
       line(width/2, height/6, width/2, height*5/6);
 
-      int x = height/6;
+      // This is a long process that I'm using brute force on....
+      // But basically it's the display of the trades
+
+      // themActions = {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+      // youActions =  {"Speak in support of a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "Promise funding ", "Endorse Congressperson "};
+
       textSize(15);
+      int x = height/6-scrollsX[0];
+
+      text(themActions[0], width/6, x);
+      x+= 15;
+      if (themActions[0].contains("(-)")) {
+        if (search.get(0).house == 0)// house of representatives
+          for (int i = 0; i < bills.size(); i++)
+            if (bills.get(i).status == 1) {
+              text(bills.get(i).name, width/6, x);
+              x+= 15;
+            }
+      }
+      text(themActions[1], width/6, x);
+      x+= 15;
+      if (themActions[1].contains("(-)")) {
+        if (search.get(0).house == 0)// house of representatives
+          for (int i = 0; i < bills.size(); i++)
+            if (bills.get(i).status == 1) {
+              text(bills.get(i).name, width/6, x);
+              x+= 15;
+            }
+      }
+
+
+
+      /*
       for (int i = 0; i < themActions.length; i++) {
         for (int j = 0; j < themActions.length; j++) {
 
@@ -1039,6 +1074,8 @@ class Screen {
         text(youActions[i], width*5/6, x);
         x += 20;
       }
+      */
+
       // The - signs need to signify that the list is expanded, and then the things in the list must actually be expanded
 
       /*
