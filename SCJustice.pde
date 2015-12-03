@@ -5,10 +5,12 @@ class SCJustice {
   char party;
   boolean chief;
   
-  SCJustice(int s, int l, char p) {
+  SCJustice(String n,int s, int l, char p,boolean leader) {
     socialism = s;
     liberalism = l;
     party = p;
+    name = n;
+    chief=leader;
   }
   
   
