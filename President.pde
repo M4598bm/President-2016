@@ -77,15 +77,6 @@ void setup() {
   ideas = new Ideas();
 
   bills = new ArrayList<Bill>();
-  // This is temporary
-  for (int i = 0; i < 5; i++) {
-    bills.add(new Bill());
-    bills.get(i).name = "Bill "+(i+1);
-    bills.get(i).committee = i;
-    bills.get(i).status = (int)random(5);
-    bills.get(i).addOpinions();
-  }
-  // ^ Temporary ^ //
   laws = new ArrayList<Bill>();
   house = new Congressman[435];
   senate = new Congressman[100];
@@ -120,6 +111,17 @@ void setup() {
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();
   agS = new ArrayList<Integer>();
+
+  // This is temporary
+  for (int i = 0; i < 5; i++) {
+    bills.add(new Bill());
+    bills.get(i).name = "Bill "+(i+1);
+    bills.get(i).committee = i;
+    bills.get(i).status = (int)random(5);
+    bills.get(i).addOpinions();
+  }
+  // ^ Temporary ^ //
+
 
   // To decrease runtime, this will eventually happen at key times.
   // I might have to keep a variable for bgcolor because this is a
@@ -337,10 +339,10 @@ void mouseClicked() {
   }
   //=======================================================
   //=======================================================
-  // This is complicated but basically for when an item of a list in the screen
-  // where a speech is being built is selected. It changes the appearance of
-  // the specific buttons that are associated.
-  if (screen.currScreen == 10 || screen.currScreen == 11) {
+  else if (screen.currScreen == 10 || screen.currScreen == 11) {
+    // This is complicated but basically for when an item of a list in the screen
+    // where a speech is being built is selected. It changes the appearance of
+    // the specific buttons that are associated.
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height/2) {
         for (int i = 0; i < bills.size(); i++)
@@ -391,7 +393,20 @@ void mouseClicked() {
     }
   }
   //=======================================================
-  if (screen.currScreen == 16) {
+  //=======================================================
+  else if (screen.currScreen == 13) {
+    // it selects what you click on in the list for Screen 13
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height*5/6) {
+        for (int i = 0; i < screen.search.size(); i++)
+          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+            screen.chosen = i;
+          }
+      }
+    }
+  }
+  //=======================================================
+  else if (screen.currScreen == 16) {
     // This deals with selection from a list in a different screen,
     // I don't know which one, it's easy to check. It's Screen 16
     // rect(width/6, height/6+24*x+scrollX, width*4/6, 20);
@@ -409,8 +424,8 @@ void mouseClicked() {
     }
   }
   //=======================================================
-  // Same as the above, but with Screen 18
-  if (screen.currScreen == 18) {
+  else if (screen.currScreen == 18) {
+    // Same as the above, but with Screen 18
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height/2) {
         for (int i = 0; i < screen.depIdeas.size(); i++)
@@ -434,7 +449,7 @@ void mouseClicked() {
   }
   //=======================================================
   // Ditto, Screen 20
-  if (screen.currScreen == 20) {
+  else if (screen.currScreen == 20) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height-181) {
         for (int i = 0; i < screen.depIdeas.size(); i++)

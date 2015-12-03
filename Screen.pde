@@ -47,8 +47,10 @@ class Screen {
   ArrayList<Integer> d1;// holds int data (used in speeches as for)
   ArrayList<Integer> d2;// holds more int data (used in speeches as against)
   String input;// a string input
-  String[] themActions = {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
-  String[] youActions = {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "Promise funding ", "Endorse Congressperson "};
+  String[] themActions =
+  {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+  String[] youActions =
+  {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "Promise funding ", "Endorse Congressperson "};
 
   int time;// for a timer functionality, for example the blinking cursor
 
@@ -330,22 +332,15 @@ class Screen {
       buttons[0] = new Button(width/2-150, height*5/6+10, 300, height/6-40, color(255, 0, 0), 23);
       buttons[0].setLabel("Create Deal", 14, 255);
       input = "";
-    /*
-      buttons = new Button[2];
-      buttons[0] = new Button(width/2-320, height*5/6+20, 300, height/6-40, color(255, 0, 0), 0);
-      buttons[0].setLabel("Suggest Deal", 14, 255);
-      buttons[1] = new Button(width/2+20, height*5/6+20, 300, height/6-40, color(255, 0, 0), 0);
-      buttons[1].setLabel("Speak to Party Members", 14, 255);
-*/
-/*  Things in this screen:
-      * search bar for state, name, party that updates always
-      * list of people that fit this ^
-      * button on the bottom to automatically 'make deal' with each (link to next screen)
-*/
-      search = Utils.searchThrough(input, house, senate);
-      input = "";
+      search = new ArrayList<Congressman>();
+      chosen = -1;
       for (int i = 0; i < buttons.length; i++)
         buttons[i].scrollCol = color(200, 0, 0);
+        /*  Things in this screen:
+            * search bar for state, name, party that updates always
+            * list of people that fit this ^
+            * button on the bottom to automatically 'make deal' with each (link to next screen)
+        */
     }
     //-------------------------------------------------
     //-------------------------------------------------
@@ -406,6 +401,7 @@ class Screen {
     //-------------------------------------------------
     //-------------------------------------------------
     else if (currScreen == 17) {// electoral map
+      buttons = new Button[0];
     }
     //-------------------------------------------------
     //-------------------------------------------------
@@ -762,16 +758,16 @@ class Screen {
          - approval
       */
 
-      ArrayList<Congressman> list = Utils.searchThrough(input, house, senate);
+      search = Utils.searchThrough(input, house, senate);
       textAlign(LEFT, TOP);
-      for (int i = 0; i < list.size(); i++) {
+      for (int i = 0; i < search.size(); i++) {
         if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
           if (i == chosen) {
             fill(0, 0, 100);
             rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
             fill(0);
           }
-          text("Sen. "+list.get(i).name+"  ("+list.get(i).party+", "+list.get(i).state+")", width/6+5, height/6+24*i+scrollX);
+          text("Sen. "+search.get(i).name+"  ("+search.get(i).party+", "+search.get(i).state+")", width/6+5, height/6+24*i+scrollX);
         }
         if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
           line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
@@ -782,7 +778,7 @@ class Screen {
       // This is the code that represents one scroll bar. The directions for what to do
       // are in the github issue. Use listLength and space.
       fill(50, 125, 250);
-      float listLength = max(1, 24*list.size());// size of the list in pixels. List.size() is # of items
+      float listLength = max(1, 24*search.size());// size of the list in pixels. List.size() is # of items
       float space = height*2/3;// Space that the text area takes up.
       if (space < listLength) {
         float scrollLength = space/listLength;
