@@ -1009,25 +1009,25 @@ class Screen {
 
     if (currScreen == 23) {
       fill(200, 0, 0);
-      rect(width/6, height/2+10, width/6, height*2/6-10, 10);
-      rect(width*2/3, height/2+10, width/6, height*2/6-10, 10);
+      rect(width/6, height/6-20, width/6, 30, 10);
+      rect(width*2/3, height/6-20, width/6, 30, 10);
       fill(0, 0, 255);
-      rect(width/6, height/2+30, width/6, height*2/6-30);
-      rect(width*2/3, height/2+30, width/6, height*2/6-30);
+      rect(width/6, height/6, width/6, height*2/3);
+      rect(width*2/3, height/6, width/6, height*2/3);
 
       fill(255);
-      rect(width/6, height/6, width*2/3, height/2-height/6);
+      //rect(width/6, height/6, width*2/3, height*5/6);
       textAlign(CENTER, CENTER);
       textSize(20);
       int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
-      rect(xVal, height/2+30, width-xVal*2, height*2/6-30);
+      rect(xVal, height/6, width-xVal*2, height*2/3);
 
       fill(0);
-      text("Them", width/4, height/2+20);
-      text("You", width*3/4, height/2+20);
-      line(width/2, height/2+30, width/2, height*2/6-30);
+      text("Them", width/4, height/6-10);
+      text("You", width*3/4, height/6-10);
+      line(width/2, height/6, width/2, height*5/6);
 
-      int x = height/2+40;
+      int x = height/6;
       textSize(15);
       for (int i = 0; i < themActions.length; i++) {
         for (int j = 0; j < themActions.length; j++) {
