@@ -51,7 +51,7 @@ class Screen {
   String[] themActions =
   {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
   String[] youActions =
-  {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+)", "Promise funding ", "Endorse Congressperson "};
+  {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
 
   int time;// for a timer functionality, for example the blinking cursor
 
