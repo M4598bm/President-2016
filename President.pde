@@ -466,6 +466,15 @@ void mouseClicked() {
       }
     }
   }
+  //=======================================================
+  else if (screen.currScreen == 23) {
+    if (mX > width/6 && mX < width/6+max(wordWidths(themActions, 15)) {
+      if (mY > height/6 && mY < height*5/6) {
+        for (int i = 0; i < screen.)
+      }
+    }
+
+  }
 }
 void mousePressed() {
   // This is necessary for sliders, it's when the mouse is pressed and not released
