@@ -210,9 +210,9 @@ void createCongress() {
 
       // So this initializes congressmen, and it's actually also fine.
       String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-      senate[x] = new Congressman(n, row.getString(1), 0);
+      senate[x] = new Congressman(n, row.getString(1), 1);// Congressman(name, state, house of congress)
       n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-      senate[x+1] = new Congressman(n, row.getString(1), 0);
+      senate[x+1] = new Congressman(n, row.getString(1), 1);
 
       // how many democrats. Here's where it gets bad. This may be a teardown.
 
