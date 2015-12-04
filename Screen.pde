@@ -782,11 +782,11 @@ class Screen {
       // This is the code that represents one scroll bar. The directions for what to do
       // are in the github issue. Use listLength and space.
       fill(50, 125, 250);
-      float listLength = max(1, 24*search.size());// size of the list in pixels. List.size() is # of items
+      float listLength = max(1, 24*search.size());// listlength is size of the list in pixels. List.size() is # of items
       float space = height*2/3;// Space that the text area takes up.
       if (space < listLength) {
-        float scrollLength = space/listLength;
-        rect(width*5/6, height/6-scrollX*space/listLength, 10, 50/* not always 50... what was I writing? */, 5);// This is the problem line.
+        float scrollLength = space/listLength;// scrolllength is I think what is broken.
+        rect(width*5/6, height/6-scrollX*space/listLength, 10, scrolllength, 5);// This is the problem line.
       }
       //===============================================================================
       //===============================================================================
@@ -1139,32 +1139,8 @@ class Screen {
       text(youActions[6], width*5/6, x);
       x+=15;
 
-      /*
-      for (int i = 0; i < themActions.length; i++) {
-        for (int j = 0; j < themActions.length; j++) {
-
-        }
-        textAlign(LEFT, TOP);
-        text(themActions[i], width/6, x);
-        textAlign(RIGHT, TOP);
-        text(youActions[i], width*5/6, x);
-        x += 20;
-      }
-      */
-
       // The - signs need to signify that the list is expanded, and then the things in the list must actually be expanded
 
-      /*
-          list of things they give and things you give with 'add' and 'remove'
-
-          * support of a bill
-          * denunciation of a bill
-          * vote for a bill
-          * vote against a bill
-          * promise funding to those in your party
-          * endorse their campaign
-
-      */
     }
   }
   int[] wordWidths(String[] words, int s) {
