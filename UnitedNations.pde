@@ -6,6 +6,17 @@ class UnitedNations{
   int relations;//Support of the U.S(-100---100)
   boolean isSecurity;//Is part of security counsel
   ArrayList<String> proidea;//Ideas they have approved of
+  ArrayList<String> conidea;//Ideas they are against
+  UnitedNations(String n,ArrayList<String> r,ArrayList<Integer> a,int m,int rus,boolean sec,ArrayList<String> pro,ArrayList<String> con)
+    {name=n;
+    relationships=r;
+    approval=a;
+    militarism=m;
+    relations=rus;
+    isSecurity=sec;
+    proidea=pro;
+    conidea=con;
+    }
   
 
 

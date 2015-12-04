@@ -10,7 +10,7 @@ class SCJustice {
     liberalism = l;
     party = p;
     name = n;
-    chief=leader;
+    chief = leader;
   }
   
   
