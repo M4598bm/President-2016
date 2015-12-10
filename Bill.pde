@@ -8,12 +8,12 @@ class Bill {
   int committee;
   Congressman broughtBy;
   boolean presBacked;// The president created this bill
-  
-  
+
+
   int status;//0: Committee, 1: House, 2: Senate, 3: Pres, 4: Veto, 5: Law
   int turnsHere;// committee gets infinite turns, house and senate 2 turns, pres 2 turns, veto 2 turns, law 0
   boolean isLaw;
-  
+
   Bill() {
     ideas = new int[3];
     for (int i = 0; i < 3; i++)
@@ -24,14 +24,18 @@ class Bill {
     name = "Type name here";
     broughtBy = new Congressman("", "NY", 0);
   }
-  
+
+  String toString() {
+    return name;
+  }
+
   boolean contains(int idea) {
     for (int i = 0; i < 3; i++)
       if (ideas[i] == idea)
         return true;
     return false;
   }
-  
+
   boolean addIdea(int idea) {// returns if there was room in the bill for idea
     for (int i = 0; i < 3; i++)
       if (ideas[i] == -1 && !contains(idea)) {
@@ -63,7 +67,7 @@ class Bill {
       return false;
     return true;
   }
-  
+
   void addOpinions() {
     for (int i = 0; i < house.length; i++) {
       ArrayList<Integer> op = house[i].opinions;
@@ -75,7 +79,7 @@ class Bill {
         op.set(op.size()-1, op.get(op.size()-1)+(int)(25*house[i].loyalty*.01));// 0 to 25
       else
         op.set(op.size()-1, op.get(op.size()-1)-(int)(25*house[i].loyalty*.01));// 0 to 25
-      
+
       if (presBacked)
         op.set(op.size()-1, op.get(op.size()-1)+(int)((house[i].youApproval-50)*.2));// -10 to +10
       op.set(op.size()-1, constrain(op.get(op.size()-1), 0, 100));
@@ -90,13 +94,13 @@ class Bill {
         op.set(op.size()-1, op.get(op.size()-1)+(int)(25*senate[i].loyalty*.01));// 0 to 25
       else
         op.set(op.size()-1, op.get(op.size()-1)-(int)(25*senate[i].loyalty*.01));// 0 to 25
-      
+
       if (presBacked)
         op.set(op.size()-1, op.get(op.size()-1)+(int)((senate[i].youApproval-50)*.2));// -10 to +10
       op.set(op.size()-1, constrain(op.get(op.size()-1), 0, 100));
     }
   }
-  
+
   void sign() {
     status = 5;
     isLaw = true;

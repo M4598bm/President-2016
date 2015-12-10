@@ -3,6 +3,10 @@ class Interaction {
   String[] themOptions;
   ArrayList<String> currYou;
   ArrayList<String> currThem;
+  ArrayList<String>[] displays;
+  // how displays works is that it holds ArrayLists of titles, and they link with stuff.
+  // displays[i].get(0) is what is always shown, and if it is expanded, what is under it is.
+
 
   Interaction(String[] you, String[] them) {
     yourOptions = you;
@@ -11,7 +15,7 @@ class Interaction {
     currthem = new ArrayList<String>();
   }
 
-  
+
 
   void displayCongressTrade() {
     fill(200, 0, 0);
@@ -22,7 +26,6 @@ class Interaction {
     rect(width*2/3, height/6, width/6, height*2/3);
 
     fill(255);
-    //rect(width/6, height/6, width*2/3, height*5/6);
     textAlign(CENTER, CENTER);
     textSize(20);
     int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
@@ -42,24 +45,50 @@ class Interaction {
     textAlign(LEFT, TOP);
     int x = height/6-scrollsX[0];
 
-    text(themActions[0], width/6, x);
-    x+= 15;
-    if (themActions[0].contains("(-)")) {
-      if (search.get(0).house == 0)// house of representatives
-        for (int i = 0; i < bills.size(); i++) {
-          if (bills.get(i).status == 1) {
-            text(bills.get(i).name, width/6, x);
-            x+= 15;
-          }
+    for (int i = 0; i < themActions.length; i++) {
+      text(displays[i].get(0), width/6, x);
+      x+=15;
+      if (displays[i].get(0).contains("(-)")) {
+        for (int j = 0; i < displays[i].size(); i++) {
+          text(displays[i].get(j), width/6, x);
+          x+=15;
         }
-      else if (search.get(0).house == 1)// house of representatives
-        for (int i = 0; i < bills.size(); i++) {
-          if (bills.get(i).status == 2) {
-            text(bills.get(i).name, width/6, x);
-            x+= 15;
-          }
-        }
+      }
     }
+
+    textAlign(RIGHT, TOP);
+    int x = height/6-scrollsX[0];
+
+    for (int i = themActions.length; i < displays.length; i++) {
+      text(displays[i].get(0), width*5/6, x);
+      x+=15;
+      if (displays[i].get(0).contains("(-)")) {
+        for (int j = 0; i < displays[i].size(); i++) {
+          text(displays[i].get(j), width*5/6, x);
+          x+=15;
+        }
+      }
+    }
+  }
+
+  void setCongressTrade() {
+    displays[] = new ArrayList<String>[themActions.length+YouActions.length];
+
+    displays[0] = new ArrayList<String>();
+    displays[0] = themActions[0];
+    if (search.get(0).house == 0)// house of representatives
+      for (int i = 0; i < bills.size(); i++) {
+        if (bills.get(i).status == 1) {
+          displays[0].add(bills.get(i).name, i+1);
+        }
+      }
+    else if (search.get(0).house == 1)// senate
+      for (int i = 0; i < bills.size(); i++) {
+        if (bills.get(i).status == 2) {
+          text(bills.get(i).name, width/6, x);
+          x+= 15;
+        }
+      }
 
     text(themActions[1], width/6, x);
     x+= 15;
