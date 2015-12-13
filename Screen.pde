@@ -549,6 +549,7 @@ class Screen {
       String[] youActions =
       {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
       trade = new Interaction(youActions, themActions);
+      trade.setCongressTrade();
       search.clear();
       search.add(cman);// The only thing in search should be the chosen congressman
       chosen = -1;
@@ -788,7 +789,7 @@ class Screen {
       float space = height*2/3;// Space that the text area takes up.
       if (space < listLength) {
         float scrollLength = space/listLength;// scrolllength is I think what is broken.
-        rect(width*5/6, height/6-scrollX*space/listLength, 10, scrolllength, 5);// This is the problem line.
+        rect(width*5/6, height/6-scrollX*space/listLength, 10, scrollLength, 5);// This is the problem line.
       }
       //===============================================================================
       //===============================================================================
@@ -1014,7 +1015,7 @@ class Screen {
     }
 
     if (currScreen == 23) {
-
+      trade.displayCongressTrade();
 
     }
   }

@@ -468,9 +468,13 @@ void mouseClicked() {
   }
   //=======================================================
   else if (screen.currScreen == 23) {
-    if (mX > width/6 && mX < width/6+max(wordWidths(themActions, 15)) {
+    if (mX > width/6 && mX < width/6+max(screen.wordWidths(screen.trade.themOptions, 15))) {
       if (mY > height/6 && mY < height*5/6) {
-        //for (int i = 0; i < screen.)
+        int x = 0;
+        for (int i = 0; i < screen.trade.displays.length; i++) {
+          //if ((String)displays.get(i))
+
+        }
       }
     }
 

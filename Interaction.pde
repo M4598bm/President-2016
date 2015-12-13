@@ -3,7 +3,7 @@ class Interaction {
   String[] themOptions;
   ArrayList<String> currYou;
   ArrayList<String> currThem;
-  ArrayList<String>[] displays;
+  ArrayList[] displays;
   // how displays works is that it holds ArrayLists of titles, and they link with stuff.
   // displays[i].get(0) is what is always shown, and if it is expanded, what is under it is.
 
@@ -12,7 +12,7 @@ class Interaction {
     yourOptions = you;
     themOptions = them;
     currYou = new ArrayList<String>();
-    currthem = new ArrayList<String>();
+    currThem = new ArrayList<String>();
   }
 
 
@@ -28,7 +28,7 @@ class Interaction {
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(20);
-    int xVal = width/6+max(max(wordWidths(themActions, 15)), max(wordWidths(youActions, 15)));
+    int xVal = width/6+max(max(screen.wordWidths(themOptions, 15)), max(screen.wordWidths(yourOptions, 15)));
     rect(xVal, height/6, width-xVal*2, height*2/3);
 
     fill(0);
@@ -39,32 +39,32 @@ class Interaction {
     // This is a long process that I'm using brute force on....
     // But basically it's the display of the trades
 
-    // themActions = {" Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+    // themOptions = {" Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
 
     textSize(15);
     textAlign(LEFT, TOP);
-    int x = height/6-scrollsX[0];
+    int x = height/6-screen.scrollsX[0];
 
-    for (int i = 0; i < themActions.length; i++) {
-      text(displays[i].get(0), width/6, x);
+    for (int i = 0; i < themOptions.length; i++) {
+      text((String)displays[i].get(0), width/6, x);
       x+=15;
-      if (displays[i].get(0).contains("(-)")) {
+      if (((String)displays[i].get(0)).contains("(-)")) {
         for (int j = 0; i < displays[i].size(); i++) {
-          text(displays[i].get(j), width/6, x);
+          text((String)displays[i].get(j), width/6, x);
           x+=15;
         }
       }
     }
 
     textAlign(RIGHT, TOP);
-    int x = height/6-scrollsX[0];
+    x = height/6-screen.scrollsX[0];
 
-    for (int i = themActions.length; i < displays.length; i++) {
-      text(displays[i].get(0), width*5/6, x);
+    for (int i = themOptions.length; i < displays.length; i++) {
+      text((String)displays[i].get(0), width*5/6, x);
       x+=15;
-      if (displays[i].get(0).contains("(-)")) {
+      if (((String)displays[i].get(0)).contains("(-)")) {
         for (int j = 0; i < displays[i].size(); i++) {
-          text(displays[i].get(j), width*5/6, x);
+          text((String)displays[i].get(j), width*5/6, x);
           x+=15;
         }
       }
@@ -72,101 +72,87 @@ class Interaction {
   }
 
   void setCongressTrade() {
-    String[] themActions =
+    String[] themOptions =
     {" Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
-    String[] youActions =
+    String[] yourOptions =
     {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
 
-    displays[] = new ArrayList<String>[themActions.length+YouActions.length];
-
-    //{, " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
-    //{"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
+    displays = new ArrayList[themOptions.length+yourOptions.length];
 
     //" Support a bill (+)"
-    displays[0] = new ArrayList<String>();
-    displays[0] = themActions[0];
+    displays[0] = new ArrayList();
+    displays[0].add(themOptions[0]);
     //" Denounce a bill (+)"
-    displays[1] = new ArrayList<String>();
-    displays[1] = themActions[1];
-    if (search.get(0).house == 0)// house of representatives
+    displays[1] = new ArrayList();
+    displays[1].add(themOptions[1]);
+    if (screen.search.get(0).house == 0)// house of representatives
       for (int i = 0; i < bills.size(); i++) {
         if (bills.get(i).status == 1) {
-          displays[0].add(bills.get(i).name, i+1);
-          displays[1].add(bills.get(i).name, i+1);
+          displays[0].add(bills.get(i));
+          displays[1].add(bills.get(i));
         }
       }
-    else if (search.get(0).house == 1)// senate
+    else if (screen.search.get(0).house == 1)// senate
       for (int i = 0; i < bills.size(); i++) {
         if (bills.get(i).status == 2) {
-          displays[0].add(bills.get(i).name, i+1);
-          displays[1].add(bills.get(i).name, i+1);
+          displays[0].add(bills.get(i));
+          displays[1].add(bills.get(i));
         }
       }
-
-    displays[2] = new ArrayList<String>();
-    displays[2] = themActions[2];
-
-    textAlign(RIGHT, TOP);
-    x = height/6-scrollsX[0];
-    // {"Speak in support of a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+)", "Promise funding ", "Endorse Congressperson "};
-
-    text(youActions[0], width*5/6, x);
-    x+= 15;
-    if (youActions[0].contains("(-)"))
-      for (int i = 0; i < bills.size(); i++)
-        if (bills.get(i).status < 3) {
-          text(bills.get(i).name, width*5/6, x);
-          x+= 15;
-        }
-
-    text(youActions[1], width*5/6, x);
-    x+= 15;
-    if (youActions[1].contains("(-)"))
-      for (int i = 0; i < bills.size(); i++)
-        if (bills.get(i).status < 3) {
-          text(bills.get(i).name, width*5/6, x);
-          x+= 15;
-        }
+    // " Endorse President"
+    displays[2] = new ArrayList();
+    displays[2].add(themOptions[2]);
 
 
-    text(youActions[2], width*5/6, x);
-    x+= 15;
-    if (youActions[2].contains("(-)"))
-      for (int i = 0; i < bills.size(); i++)
-        if (bills.get(i).status == 3) {
-          text(bills.get(i).name, width*5/6, x);
-          x+= 15;
-        }
+    // "Speak in support of a bill (+) "
+    displays[3] = new ArrayList();
+    displays[3].add(yourOptions[0]);
+    // "Denounce a bill (+) "
+    displays[4] = new ArrayList();
+    displays[4].add(yourOptions[1]);
 
-    text(youActions[3], width*5/6, x);
-    x+= 15;
-    if (youActions[3].contains("(-)"))
-      for (int i = 0; i < bills.size(); i++)
-        if (bills.get(i).status == 3) {
-          text(bills.get(i).name, width*5/6, x);
-          x+= 15;
-        }
-    text(youActions[4], width*5/6, x);
-    x+= 15;
-    if (youActions[4].contains("(-)")) {
-      text("One month", width*5/6, x);
-      x+= 15;
-      text("Six months", width*5/6, x);
-      x+= 15;
-      text("One year", width*5/6, x);
-      x+= 15;
-      text("Until after next election", width*5/6, x);
-      x+= 15;
-    }
+    for (int i = 0; i < bills.size(); i++)
+      if (bills.get(i).status < 3) {
+        displays[3].add(bills.get(i));
+        displays[4].add(bills.get(i));
+      }
 
-    text(youActions[5], width*5/6, x);
-    x+=15;
-    text(youActions[6], width*5/6, x);
-    x+=15;
 
-    // The - signs need to signify that the list is expanded, and then the things in the list must actually be expanded
+    // "Sign a bill (+) "
+    displays[5] = new ArrayList();
+    displays[5].add(yourOptions[2]);
+    // "Veto a bill (+) "
+    displays[6] = new ArrayList();
+    displays[6].add(yourOptions[3]);
+
+    for (int i = 0; i < bills.size(); i++)
+      if (bills.get(i).status == 3) {
+        displays[5].add(bills.get(i));
+        displays[6].add(bills.get(i));
+      }
+
+    // "No attack ads for... (+) "
+    displays[7] = new ArrayList();
+    displays[7].add(yourOptions[4]);
+
+    displays[7].add("One month");
+    displays[7].add("Six months");
+    displays[7].add("One year");
+    displays[7].add("Until after next election");
+
+    // "Promise funding "
+    displays[8] = new ArrayList();
+    displays[8].add(yourOptions[5]);
+    // "Endorse Congressperson "
+    displays[9] = new ArrayList();
+    displays[9].add(yourOptions[6]);
   }
 
-
+  int dTotalLength() {
+    int count = 0;
+    for (int i = 0; i < displays.length; i++)
+      count += displays[i].size();
+    return count;
+  }
 
 }
