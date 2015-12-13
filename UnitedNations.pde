@@ -8,7 +8,8 @@ class UnitedNations{
   ArrayList<String> proidea;//Ideas they have approved of
   ArrayList<String> conidea;//Ideas they are against
   static ArrayList<String> Security;//Security Council
-  UnitedNations(String n,ArrayList<String> r,ArrayList<Integer> a,int m,int rus,boolean sec,ArrayList<String> pro,ArrayList<String> con)
+
+  UnitedNations(String n, ArrayList<String> r, ArrayList<Integer> a, int m, int rus, boolean sec, ArrayList<String> pro, ArrayList<String> con)
     {
     name=n;
     relationships=r;
@@ -21,9 +22,9 @@ class UnitedNations{
     if (sec=true)
       {Security.add(this);
       }
-  //Constructs the nation and adds the nation to the security council if part of it.  
+  //Constructs the nation and adds the nation to the security council if part of it.
     }
-  
+
 
 
 
