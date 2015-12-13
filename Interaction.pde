@@ -72,49 +72,43 @@ class Interaction {
   }
 
   void setCongressTrade() {
+    String[] themActions =
+    {" Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+    String[] youActions =
+    {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
+
     displays[] = new ArrayList<String>[themActions.length+YouActions.length];
 
+    //{, " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+    //{"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
+
+    //" Support a bill (+)"
     displays[0] = new ArrayList<String>();
     displays[0] = themActions[0];
+    //" Denounce a bill (+)"
+    displays[1] = new ArrayList<String>();
+    displays[1] = themActions[1];
     if (search.get(0).house == 0)// house of representatives
       for (int i = 0; i < bills.size(); i++) {
         if (bills.get(i).status == 1) {
           displays[0].add(bills.get(i).name, i+1);
+          displays[1].add(bills.get(i).name, i+1);
         }
       }
     else if (search.get(0).house == 1)// senate
       for (int i = 0; i < bills.size(); i++) {
         if (bills.get(i).status == 2) {
-          text(bills.get(i).name, width/6, x);
-          x+= 15;
+          displays[0].add(bills.get(i).name, i+1);
+          displays[1].add(bills.get(i).name, i+1);
         }
       }
 
-    text(themActions[1], width/6, x);
-    x+= 15;
-    if (themActions[1].contains("(-)")) {
-      if (search.get(0).house == 0)// house of representatives
-        for (int i = 0; i < bills.size(); i++) {
-          if (bills.get(i).status == 1) {
-            text(bills.get(i).name, width/6, x);
-            x+= 15;
-          }
-        }
-      else if (search.get(0).house == 1)// house of representatives
-        for (int i = 0; i < bills.size(); i++) {
-          if (bills.get(i).status == 2) {
-            text(bills.get(i).name, width/6, x);
-            x+= 15;
-          }
-        }
-    }
-
-    text(themActions[2], width/6, x);
-    x+=15;
+    displays[2] = new ArrayList<String>();
+    displays[2] = themActions[2];
 
     textAlign(RIGHT, TOP);
     x = height/6-scrollsX[0];
-    // youActions =  {"Speak in support of a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+)", "Promise funding ", "Endorse Congressperson "};
+    // {"Speak in support of a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+)", "Promise funding ", "Endorse Congressperson "};
 
     text(youActions[0], width*5/6, x);
     x+= 15;

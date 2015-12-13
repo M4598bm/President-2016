@@ -545,7 +545,7 @@ class Screen {
 
       Congressman cman = search.get(chosen);
       String[] themActions =
-      {" Support a bill (+)", " Denounce a bill (+)", " Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
+      {" Vote for a bill (+)", " Vote against a bill (+)", " Endorse President"};
       String[] youActions =
       {"Support a bill (+) ", "Denounce a bill (+) ", "Sign a bill (+) ", "Veto a bill (+) ", "No attack ads for... (+) ", "Promise funding ", "Endorse Congressperson "};
       trade = new Interaction(youActions, themActions);
