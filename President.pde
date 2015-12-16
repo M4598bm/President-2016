@@ -218,6 +218,8 @@ void createCongress() {
 
       // convertInt used below simply takes a string that is actually an int and turns it into an int, dw about that part
       int val = Utils.convertInt(row.getString(2));
+      int repval = Utils.convertInt(row.getString(3)); //number of represnetatives of each state
+
       // val is an int from 0 to 5 inclusive that tells you how likely it is to be a dem (5 is very likely)
       //    ^    ^    ^    ^    ^    ^    ^    ^
       // The above is actually useful because it will tell you
@@ -229,32 +231,6 @@ void createCongress() {
       // Liberalism and socialism (0 to 100 values for each) also need to be set, and you
       // can do that either separately or at the same time.
       // The method Congressman.setPolitics(int liberalism, int socialism, char party) works too
-      int dems = Utils.findDems(val, random(5));
-      if (dems == 0) {
-        senate[x].party = 'R';
-        senate[x+1].party = 'R';
-        // how it works though is that it takes the amount given and sets the party accordingly
-      }
-      else if (dems == 1) {
-        senate[x].party = 'R';
-        senate[x+1].party = 'D';
-      }
-      else if (dems == 2) {
-        senate[x].party = 'D';
-        senate[x+1].party = 'D';
-      }
-      // Temporary
-      //senate[x].party = 'R';
-      //senate[x+1].party = 'D';
-      if (dems > 0) {
-        // see I started to set lib and soc but it failed sooo do that too
-        //senate[x].setPolitics(
-      }
-
-
-      x+=2;
-    }
-  }
 
   // You may find this useful, it tests the code for senate
   int sum = 0;
@@ -293,6 +269,32 @@ void createCongress() {
   //  println(i + ": " + house[i].name + " (" + house[i].state + ")");
 }
 
+
+void setCongressman(int val) {
+
+        int libview = 50; // liberalism value
+        int socview = 50; // socialism value
+
+        if (house == 1)
+
+        if (random(9) < 4) {
+          libview = random(51) + random(51);
+        }
+        else {
+          libview = val * 15 + random(26);
+        }
+
+        if (random(9) < 4) {
+          socview = random(51) + random(51);
+        }
+        else {
+          socview = val * 15 + random(26);
+        }
+
+        senate[x].liberalism = libview;
+        senate[x].socialism = socview;
+
+}
 
 
 
