@@ -24,6 +24,7 @@ class Screen10 extends Screen {
     if (chosen == 0) {
       d1 = suppH;
       d2 = agH;
+      screens.add(screens.size()-1, null);
     }
     else if (chosen < 3) {
       d1.remove(chosen-1);
@@ -45,6 +46,7 @@ class Screen10 extends Screen {
         chosen = 0;
       }
     }
+    screens.remove(screens.size()-2);
 
     for (int i = 0; i < buttons.length; i++)
       buttons[i].scrollCol = color(0, 0, 200);

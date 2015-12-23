@@ -5,17 +5,17 @@ int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 class Calendar {
   int year;
   int month;
-  
+
   int day;
   int cMonth;
   int cYear;
-  
+
   Calendar() {
     year = cYear = 17;// year is the display year, cYear is game current year
     month = cMonth = 1;
     day = 22;
   }
-  
+
   void changeMonth(int direction) {
     if (direction < 0) {
       if (year != 17 || month != 1) {
@@ -34,7 +34,7 @@ class Calendar {
       }
     }
   }
-  
+
   void display() {
     fill(255);
     rect(width/6, height/6, width*2/3, height*2/3);
@@ -48,7 +48,7 @@ class Calendar {
         line(width/6+width*2/21*i, height/6, width/6+width*2/21*i, height*5/6);
       text(days[i-1], width/6-width/21+width*2/21*i, height/6+height/21);
     }
-    
+
     textAlign(RIGHT);
     String lMonth = "";
     String nMonth = "";
@@ -102,6 +102,14 @@ class Calendar {
     }
     text(dayCount, width/6+width/21+width*2/21*col, height/6+height*2/21+height/21+width/21*row);
   }
-  
-  
+
+  void clickMonth(float mX, float mY) {
+    textSize(20);
+    if (mY > height/6-70 && mY < height/6-50) {
+      if (mX < width/2-40 && mX > width/2-40-textWidth("<   September 2020"))
+        changeMonth(-1);
+      else if (mX > width/2-40 && mX < width/2-40+textWidth("September 2020   >"))
+        changeMonth(1);
+    }
+  }
 }

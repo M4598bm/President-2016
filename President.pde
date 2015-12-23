@@ -26,10 +26,6 @@ Congressman[] senate;// array of congressmen in the senate
 Secretary[] cabinet;// array of secretaries in your cabinet
 SCJustice[] scotus;// array of justices in the Supreme Court (will I need this at alL?)
 
-// These are tentative and was a stupid way to do this lol
-int sBalance;// percent of Democrats in the senate? Eww
-int hBalance;// percent of Dems in the house, also eww
-// ^ I think Richard gets to fix that algorithm.... ^
 
 Bill tempBill;// current bill that you're having drafted (only stored here because it has to be global)
 Slider currSlider;// The slider that was just clicked on and is being dragged
@@ -47,75 +43,29 @@ ArrayList<Integer> agS;//   what I already wrote anyway, so don't worry about it
 ArrayList<Integer> suppH;// what these are, they're basically so that each turn the senate and house speeches
 ArrayList<Integer> agH;//   the player made in the turn are processed. It holds those.
 
+/*
+  This is valuable for Processing, it's simply what sets up the game when it is initially run.
+  Right now this is developing a Beta so there isn't a nice menu, game setup, and loading games etc.
+  There will be all that stuff and I look forward to it. It will mostly be put here. But for now, this
+  is sort of a silly method that sets default variables that need to be set.
+*/
 void setup() {
-  /*
-    This is valuable for Processing, it's simply what sets up the game when it is initially run.
-    Right now this is developing a Beta so there isn't a nice menu, game setup, and loading games etc.
-    There will be all that stuff and I look forward to it. It will mostly be put here. But for now, this
-    is sort of a silly method that sets default variables that need to be set.
-  */
+
   int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
   int hei = (int)(displayHeight*.8);// Eventually this will just be displayHeight
   size(displayWidth, 640);// 640 is temp bc processing 3 sucks a bit
-  //println(wid+","+hei);// just for testing
 
   turn = 0;
-
-  // Sets up a default Party, eventually player decides this obv.
-  presParty = "Democratic";// or "Republican"
-  you = new NationalCom(presParty);
-  if (presParty == "Democratic")
-    them = new NationalCom("Republican");
-  else
-    them = new NationalCom("Democratic");
-  you.administration = true;
-  them.administration = false;
-
-  // one of each class things
-  screen = new Screen0();
-  screen.setScreen();
-  calendar = new Calendar();
-  fedBudget = new FedBudget();
-  ideas = new Ideas();
-
-  bills = new ArrayList<Bill>();
-  laws = new ArrayList<Bill>();
-  house = new Congressman[435];
-  senate = new Congressman[100];
-  scotus = new SCJustice[9];
-
-
-  screens = new ArrayList<Screen>();
-  screens.add(screen);
-  // ===================== //
-  // stack the courts here //
-  // ===================== //
-
-  // This stacks the Cabinet //
-  cabinet = new Secretary[15];
-  Table d = loadTable("majordepartments.csv", "header");
-  for (int i = 0; i < cabinet.length; i++)
-    cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
-
-  // This stacks Congress, sort of flawed //
+  String[] parties = {"Democratic", "Republican"};
+  setPresParty(parties);// Default is that Democrat is the presParty
+  createSingleClasses();
   createCongress();
+  createCabinet();
+  createCourt();
 
-  // This will be decided in beginning so for now has default
-  sBalance = 55;
-  hBalance = 55;// Remember I told you these things suck? They do, I didn't lie
+  loadImages();
 
-  // loading images
-  eM = new ElectoralMap();// lol
-  // Eventually all other images will be loaded.
-
-  approval = 50;// Temporary because it needs to start somewhere! Eventually there will be a calculation here.
-
-
-  // Needs to happen somewhere, don't worry about it.
-  suppH = new ArrayList<Integer>();
-  suppS = new ArrayList<Integer>();
-  agH = new ArrayList<Integer>();
-  agS = new ArrayList<Integer>();
+  calcApproval();
 
   // This is temporary
   for (int i = 0; i < 5; i++) {
@@ -135,6 +85,77 @@ void setup() {
   background(50, 125, 250);
 }
 
+// Sets up the two parties
+// Precondition: parties is a String array with .length == 2 where parties[0] is the
+//    President's party and parties[1] is the opposition (["Democratic", "Republican"])
+// Postcondition: you and them are new national committees for both parties
+void setPresParty(String[] parties) {
+  you = new NationalCom(parties[0]);
+  them = new NationalCom(parties[1]);
+
+  you.administration = true;
+  them.administration = false;
+}
+
+// Sets up any case of one instance of each class
+// Precondition: The variables with the class name created in President.pde
+// Postcondition: The variables are set
+void createSingleClasses() {
+  // one of each class things
+  screen = new Screen0();
+  screen.setScreen();
+  calendar = new Calendar();
+  fedBudget = new FedBudget();
+  ideas = new Ideas();
+
+  bills = new ArrayList<Bill>();
+  laws = new ArrayList<Bill>();
+  house = new Congressman[435];
+  senate = new Congressman[100];
+  scotus = new SCJustice[9];
+
+  screens = new ArrayList<Screen>();
+  screens.add(screen);
+
+  // Needs to happen somewhere, don't worry about it.
+  suppH = new ArrayList<Integer>();
+  suppS = new ArrayList<Integer>();
+  agH = new ArrayList<Integer>();
+  agS = new ArrayList<Integer>();
+}
+
+// Sets up the Cabinet
+// Precondition:
+// Postcondition:
+void createCabinet() {
+  cabinet = new Secretary[15];
+  Table d = loadTable("majordepartments.csv", "header");
+  for (int i = 0; i < cabinet.length; i++)
+    cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
+}
+
+// Sets up the Supreme Court
+// Precondition:
+// Postcondition:
+void createCourt() {
+
+
+}
+
+// Loads all images necessary to the game
+// Precondition: any images needed for the whole game are stored as variables
+// Postcondition: load all images and set the variables to them
+void loadImages() {
+  // The Electoral Map thing only sorta belongs here
+
+  eM = new ElectoralMap();// move this to createSingleClasses()
+
+  // Eventually all other images will be loaded.
+}
+
+void calcApproval() {
+  approval = 50;// Temporary, eventually there will be a calculation here.
+}
 
 void draw() {
   /* Also an essential Processing function!
@@ -207,7 +228,6 @@ void createCongress() {
 
   Table states = loadTable("states.csv", "header");// a table with states etc.
   //=== Senators ===//
-  int partyCount = sBalance;
   int x = 0;
   for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
     if (!row.getString(1).equals("DC")) {
@@ -317,187 +337,32 @@ void mouseClicked() {
   float mX = mouseX;
   float mY = mouseY;
 
-  // Clicking buttons:
-  textSize(16);
-  // If the main menu is selected
-  float wordWidth = textWidth("Main Menu")/2;
-  if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
-    newScreen(new Button(0));
-    screen.setScreen();
-  }
+  clickButton(mX, mY);
 
-  // ===== Buttons =====
-  if (screen.buttons != null) {
-    boolean done = false;
-    for (int i = 0; i < screen.buttons.length && !done; i++)
-      if (screen.buttons[i].isInside(mX, mY) && screen.buttons[i].visible && screen.buttons[i].clickable) {
-        done = true;
-        newScreen(screen.buttons[i]);
-      }
+  if (isCurrScreen(7)) {// Calendar Screen
+    calendar.clickMonth(mX, mY);
   }
-
-  //=======================================================
-  //=======================================================
-  // This section deals with when there is a calendar up and when
-  // the buttons to change what month is shown are selected.
-  if (isCurrScreen(7)) {
-    textSize(20);
-    if (mY > height/6-70 && mY < height/6-50) {
-      if (mX < width/2-40 && mX > width/2-40-textWidth("<   September 2020"))
-        calendar.changeMonth(-1);
-      else if (mX > width/2-40 && mX < width/2-40+textWidth("September 2020   >"))
-        calendar.changeMonth(1);
-    }
+  else if (isCurrScreen(10) || isCurrScreen(11)) {// Speech Screens
+    mouseClicked10and11(mX, mY);
   }
-  //=======================================================
-  //=======================================================
-  else if (isCurrScreen(10) || isCurrScreen(11)) {
-    // This is complicated but basically for when an item of a list in the screen
-    // where a speech is being built is selected. It changes the appearance of
-    // the specific buttons that are associated.
-    if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height/2) {
-        for (int i = 0; i < bills.size(); i++)
-          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-            screen.chosen = i+5;
-            if (screen.d1.size() != 2) {
-              screen.buttons[1].setLabel("Add", 14, 255);
-              screen.buttons[1].clickable = true;
-            }
-            else {
-              screen.buttons[1].setLabel("", 14, 255);
-              screen.buttons[1].clickable = false;
-            }
-            if (screen.d2.size() != 2) {
-              screen.buttons[2].setLabel("Add", 14, 255);
-              screen.buttons[2].clickable = true;
-            }
-            else {
-              screen.buttons[2].setLabel("", 14, 255);
-              screen.buttons[2].clickable = false;
-            }
-          }
-      }
-      else if (mX < width/2-40) {
-        if (screen.d1.size() > 0 && mY > height/2+65 && mY < height/2+90) {
-          screen.chosen = 1;
-          screen.buttons[1].setLabel("Remove", 14, 255);
-          screen.buttons[1].clickable = true;
-        }
-        else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
-          screen.chosen = 2;
-          screen.buttons[1].setLabel("Remove", 14, 255);
-          screen.buttons[1].clickable = true;
-        }
-      }
-      else if (mX > width/2+40) {
-        if (screen.d2.size() > 0 && mY > height/2+65 && mY < height/2+90) {
-          screen.chosen = 3;
-          screen.buttons[2].setLabel("Remove", 14, 255);
-          screen.buttons[2].clickable = true;
-        }
-        else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
-          screen.chosen = 4;
-          screen.buttons[2].setLabel("Remove", 14, 255);
-          screen.buttons[2].clickable = true;
-        }
-      }
-    }
+  else if (isCurrScreen(13)) {// Legislator Deal Choice
+    mouseClicked13(mX, mY);
   }
-  //=======================================================
-  //=======================================================
-  else if (isCurrScreen(13)) {
-    // it selects what you click on in the list for Screen 13
-    if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height*5/6) {
-        for (int i = 0; i < screen.search.size(); i++)
-          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-            screen.chosen = i;
-          }
-      }
-    }
+  else if (isCurrScreen(16)) {// Find a Rep for Bill
+    mouseClicked16(mX, mY);
   }
-  //=======================================================
-  else if (isCurrScreen(16)) {
-    // This deals with selection from a list in a different screen,
-    // I don't know which one, it's easy to check. It's Screen 16
-    // rect(width/6, height/6+24*x+scrollX, width*4/6, 20);
-    if (mX > width/6 && mX < width*5/6) {
-      if (mX > height/6 && mY < height*5/6) {
-        int x = 0;
-        for (int i = 0; i < house.length; i++) {
-          if (house[i].committee == tempBill.committee) {
-            if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24)
-              screen.chosen = x;
-            x++;
-          }
-        }
-      }
-    }
+  else if (isCurrScreen(18)) {// New Bill Step 2
+    mouseClicked18(mX, mY);
   }
-  //=======================================================
-  else if (isCurrScreen(18)) {
-    // Same as the above, but with Screen 18
-    if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height/2) {
-        for (int i = 0; i < screen.depIdeas.size(); i++)
-          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-            screen.chosen = i+3;
-            screen.buttons[1].setLabel("Add", 14, 255);
-            screen.buttons[1].clickable = true;
-            println("HI!");
-          }
-      }
-      else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
-        screen.chosen = 1;
-        screen.buttons[1].setLabel("Remove", 14, 255);
-        screen.buttons[1].clickable = true;
-      }
-      else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
-        screen.chosen = 2;
-        screen.buttons[1].setLabel("Remove", 14, 255);
-        screen.buttons[1].clickable = true;
-      }
-    }
+  else if (isCurrScreen(20)) {// New Bill Step 4
+    mouseClicked20(mX, mY);
   }
-  //=======================================================
-  // Ditto, Screen 20
-  else if (isCurrScreen(20)) {
-    if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height-181) {
-        for (int i = 0; i < screen.depIdeas.size(); i++)
-          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-            screen.chosen = i+2;
-            screen.buttons[1].setLabel("Add", 14, 255);
-            screen.buttons[1].clickable = true;
-          }
-      }
-      else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
-        screen.chosen = 1;
-        screen.buttons[1].setLabel("Remove", 14, 255);
-        screen.buttons[1].clickable = true;
-      }
-    }
-  }
-  //=======================================================
-  else if (isCurrScreen(23)) {
-    if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
-      if (mY > height/6 && mY < height*5/6) {
-        int x = 0;
-        for (int i = 0; i < screen.trade.displays.length; i++) {
-          for (int j = 0; j < screen.trade.displays[i].size(); i++) {
-            if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
-
-            }
-          }
-          //if ((String)displays.get(i))
-          //
-        }
-      }
-    }
-
+  else if (isCurrScreen(23)) {// Legislative Deal
+    mouseClicked23(mX, mY);
   }
 }
+
+
 void mousePressed() {
   // This is necessary for sliders, it's when the mouse is pressed and not released
   // ====== Sliders ======
@@ -508,10 +373,14 @@ void mousePressed() {
   }
 
 }
+
+
 void mouseReleased() {
   // Speaks for itself, sets currSlider to null
   currSlider = null;
 }
+
+
 void mouseDragged() {
   // If the mouse is held down and moved
   if (currSlider != null) {
@@ -520,57 +389,29 @@ void mouseDragged() {
   }
 }
 
+
 void mouseWheel(MouseEvent event) {
   // When the mouse is scrolled. Very useful for replacing the arrow keys
   float e = event.getCount();
-  if (isCurrScreen(10) || isCurrScreen(11) || isCurrScreen(13) || isCurrScreen(16) || isCurrScreen(18)) {
-    if (e > 0 && screen.scrollX != 0)
-      screen.scrollX += 20;
-    else if (e < 0)
-      screen.scrollX -= 20;
+  if (isCurrScreen(10) ||
+      isCurrScreen(11) ||
+      isCurrScreen(13) ||
+      isCurrScreen(16) ||
+      isCurrScreen(18)) {
+    mouseWheelScrollX(e);
   }
 }
 
-
+// Cases where the user is typing
 void keyPressed() {
-  // In the event that a key is pressed
-
-  // ======================================
-  // === Cases where the user is typing ===
-  // ======================================
   if (isCurrScreen(21)) {
-    if (keyCode == BACKSPACE) {
-      // How to delete off of a name, useful for a lot of other things
-      if (tempBill.name.length() != 0)
-        tempBill.name = tempBill.name.substring(0, tempBill.name.length()-1);
-    }
-
-    else if (keyCode != ENTER && keyCode != SHIFT)
-      // Typing, avoiding some keys that are not part of this
-      tempBill.name += key;
-    //========
+    tempBill.name = typeResult(tempBill.name);
   }
   if (isCurrScreen(13)) {
-    if (keyCode == BACKSPACE) {
-      if (screen.input.length() != 0)
-        screen.input = screen.input.substring(0, screen.input.length()-1);
-    }
-
-    else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN)
-      screen.input += key;
+    screen.imput = typeResult(screen.input);
   }
 
-  // All cases where the arrow keys are used to scroll through a list
-  if( isCurrScreen(10)
-    || isCurrScreen(11)
-    || isCurrScreen(13)
-    || isCurrScreen(16)
-    || isCurrScreen(18) ) {
-    if (keyCode == UP && screen.scrollX != 0)
-      screen.scrollX += 20;
-    else if (keyCode == DOWN)// scrollX,
-      screen.scrollX -= 20;
-  }
+  keyPressedScrollX();
 
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
@@ -581,6 +422,228 @@ void keyPressed() {
   // this is temp but it enables a quit method in the future
   // Probably will link with the menu somehow (like if a button is pressed, key = 27)
     key = 27;// This is the escape key.
+  }
+}
+
+
+
+
+//===================================================//
+//===================================================//
+//============ Controls Helper Methods ==============//
+//===================================================//
+//===================================================//
+
+/*
+
+  MouseClicked() Helpers
+
+*/
+void clickButton(float mX, float mY) {
+  // Main Menu Button
+  textSize(16);
+  float wordWidth = textWidth("Main Menu")/2;
+  if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
+    newScreen(new Button(0));
+    screen.setScreen();
+  }
+
+  // Normal buttons:
+  if (screen.buttons != null) {
+    boolean done = false;
+    for (int i = 0; i < screen.buttons.length && !done; i++)
+      if (screen.buttons[i].isInside(mX, mY) && screen.buttons[i].visible && screen.buttons[i].clickable) {
+        done = true;
+        newScreen(screen.buttons[i]);
+      }
+  }
+}
+
+// Screen 10 and 11
+void mouseClicked10and11(float mX, float mY) {
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height/2) {
+      for (int i = 0; i < bills.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+5;
+          if (screen.d1.size() != 2) {
+            screen.buttons[1].setLabel("Add", 14, 255);
+            screen.buttons[1].clickable = true;
+          }
+          else {
+            screen.buttons[1].setLabel("", 14, 255);
+            screen.buttons[1].clickable = false;
+          }
+          if (screen.d2.size() != 2) {
+            screen.buttons[2].setLabel("Add", 14, 255);
+            screen.buttons[2].clickable = true;
+          }
+          else {
+            screen.buttons[2].setLabel("", 14, 255);
+            screen.buttons[2].clickable = false;
+          }
+        }
+    }
+    else if (mX < width/2-40) {
+      if (screen.d1.size() > 0 && mY > height/2+65 && mY < height/2+90) {
+        screen.chosen = 1;
+      }
+      else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
+        screen.chosen = 2;
+      }
+      screen.buttons[1].setLabel("Remove", 14, 255);
+      screen.buttons[1].clickable = true;
+    }
+    else if (mX > width/2+40) {
+      if (screen.d2.size() > 0 && mY > height/2+65 && mY < height/2+90) {
+        screen.chosen = 3;
+      }
+      else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
+        screen.chosen = 4;
+      }
+      screen.buttons[2].setLabel("Remove", 14, 255);
+      screen.buttons[2].clickable = true;
+    }
+  }
+}
+
+// Screen 13
+void mouseClicked13(float mX, float mY) {
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height*5/6) {
+      for (int i = 0; i < screen.search.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i;
+        }
+    }
+  }
+}
+
+// Screen 16
+void mouseClicked16(float mX, float mY) {
+  if (mX > width/6 && mX < width*5/6) {
+    if (mX > height/6 && mY < height*5/6) {
+      int x = 0;
+      for (int i = 0; i < house.length; i++) {
+        if (house[i].committee == tempBill.committee) {
+          if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24)
+            screen.chosen = x;
+          x++;
+        }
+      }
+    }
+  }
+}
+
+// Screen 18
+void mouseClicked18(float mX, float mY) {
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height/2) {
+      for (int i = 0; i < screen.depIdeas.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+3;
+          screen.buttons[1].setLabel("Add", 14, 255);
+          screen.buttons[1].clickable = true;
+        }
+    }
+    else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
+      screen.chosen = 1;
+      screen.buttons[1].setLabel("Remove", 14, 255);
+      screen.buttons[1].clickable = true;
+    }
+    else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
+      screen.chosen = 2;
+      screen.buttons[1].setLabel("Remove", 14, 255);
+      screen.buttons[1].clickable = true;
+    }
+  }
+}
+
+// Screen 20
+void mouseClicked20(float mX, float mY) {
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height-181) {
+      for (int i = 0; i < screen.depIdeas.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+2;
+          screen.buttons[1].setLabel("Add", 14, 255);
+          screen.buttons[1].clickable = true;
+        }
+    }
+    else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
+      screen.chosen = 1;
+      screen.buttons[1].setLabel("Remove", 14, 255);
+      screen.buttons[1].clickable = true;
+    }
+  }
+}
+
+// Screen 23
+void mouseClicked23(float mX, float mY) {
+  if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
+    if (mY > height/6 && mY < height*5/6) {
+      int x = 0;
+      for (int i = 0; i < screen.trade.displays.length; i++) {
+        for (int j = 0; j < screen.trade.displays[i].size(); i++) {
+          if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
+
+          }
+        }
+        //if ((String)displays.get(i))
+        //
+      }
+    }
+  }
+}
+
+
+
+
+/*
+
+  mouseWheel() Helpers
+
+*/
+
+void mouseWheelScrollX(float e) {
+  if (e > 0 && screen.scrollX != 0)
+    screen.scrollX += 20;
+  else if (e < 0)
+    screen.scrollX -= 20;
+}
+
+
+
+/*
+
+  keyPressed() Helpers
+
+*/
+
+// Changes a String through typing
+String typeResult(String s) {
+  if (keyCode == BACKSPACE) {
+    if (s.length() != 0)
+      s = s.substring(0, s.length()-1);
+    }
+
+  else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
+    s += key;
+  }
+  return s;
+}
+
+// All cases where the arrow keys are used to scroll through a list
+void keyPressedScrollX() {
+  if( isCurrScreen(10) ||
+      isCurrScreen(11) ||
+      isCurrScreen(13) ||
+      isCurrScreen(16) ||
+      isCurrScreen(18)) {
+    if (keyCode == UP && screen.scrollX != 0)
+      screen.scrollX += 20;
+    else if (keyCode == DOWN)
+      screen.scrollX -= 20;
   }
 }
 
@@ -705,6 +768,8 @@ void newScreen(Button b) {
   screen.extra = b.extra;
   if (screens.size() > 1) {
     screen.chosen = screens.get(screens.size()-2).chosen;
+    screen.d1 = screens.get(screens.size()-2).d1;
+    screen.d2 = screens.get(screens.size()-2).d2;
   }
   screen.setScreen();
   println(screens);
