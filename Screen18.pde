@@ -28,7 +28,6 @@ class Screen18 extends Screen {
       tempBill = new Bill();
       tempBill.committee = extra;
       tempBill.presBacked = true;
-      println("HELLO WORLD");
     }
     else if (chosen < 3) {
       tempBill.removeIdea(tempBill.ideas[chosen-1]);
@@ -39,7 +38,6 @@ class Screen18 extends Screen {
       tempBill.addIdea(ideas.nameToInd(depIdeas.get(chosen-3)));
       chosen = 0;
       screens.remove(screens.size()-2);
-      println("THIS IS FUN!");
     }
     for (int i = 0; i < sliders.length; i++) {
       sliders[i].value = tempBill.percentages[i];

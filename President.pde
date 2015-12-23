@@ -321,9 +321,10 @@ void mouseClicked() {
   textSize(16);
   // If the main menu is selected
   float wordWidth = textWidth("Main Menu")/2;
-  if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15)
+  if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
     newScreen(new Button(0));
     screen.setScreen();
+  }
 
   // ===== Buttons =====
   if (screen.buttons != null) {

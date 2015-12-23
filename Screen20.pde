@@ -24,10 +24,12 @@ class Screen20 extends Screen {
     else if (chosen == 1) {
       tempBill.removeIdea(tempBill.ideas[2]);
       chosen = 0;
+      screens.remove(screens.size()-2);
     }
     else {
       tempBill.addIdea(ideas.nameToInd(depIdeas.get(chosen-2)));
       chosen = 0;
+      screens.remove(screens.size()-2);
     }
 
     sliders = new Slider[1];
@@ -76,7 +78,7 @@ class Screen20 extends Screen {
     if (tempBill.ideas[2] != -1)
       text(ideas.names[tempBill.ideas[2]], width/6, height-157);
 
-
+    displayButtonsSliders();
   }
 
 }

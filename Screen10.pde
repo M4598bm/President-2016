@@ -1,9 +1,6 @@
 class Screen10 extends Screen {
   // House Speech
 
-  ArrayList<Integer> d1;// holds int data (used in speeches as for)
-  ArrayList<Integer> d2;// holds more int data (used in speeches as against)
-
   String toString() {
     return "10";
   }
