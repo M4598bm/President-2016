@@ -5,6 +5,7 @@
 String name;// Player name (Set at start later)
 String presParty;// Player party (Set at start later)
 
+ArrayList<Screen> screens;
 Screen screen;// Handles most display aspects
 Calendar calendar;// the calendar
 FedBudget fedBudget;// Handles the budget
@@ -71,7 +72,7 @@ void setup() {
   them.administration = false;
 
   // one of each class things
-  screen = new Screen();
+  screen = new Screen0();
   calendar = new Calendar();
   fedBudget = new FedBudget();
   ideas = new Ideas();
@@ -82,6 +83,9 @@ void setup() {
   senate = new Congressman[100];
   scotus = new SCJustice[9];
 
+
+  screens = new ArrayList<Screen>();
+  screens.add(screen);
   // ===================== //
   // stack the courts here //
   // ===================== //
@@ -140,7 +144,7 @@ void draw() {
   //makes it slow and it doesn't need to happen so I'll work on that later
   topBar();// That menu at the top is displayed
 
-  if (screen.currScreen != 0)
+  if (!screen.toString().equals("0"))
     mainButton();// The button that returns to main screen
 
   // The following checks if a button is being scrolled over
@@ -233,7 +237,7 @@ void createCongress() {
       if (dems == 0) {
         senate[x].party = 'R';
         senate[x+1].party = 'R';
-        // how it works though is that it takes the amount given and sets the party accordingly
+        // ===how it works though is that it takes the amount given and sets the party accordingly
       }
       else if (dems == 1) {
         senate[x].party = 'R';
@@ -277,6 +281,12 @@ void createCongress() {
         house[x] = new Congressman(n, row.getString(1), 0);
         house[x].party = 'D';
         x++;
+
+        // Set all the values here
+
+
+
+
       }
     }
   }
@@ -311,7 +321,7 @@ void mouseClicked() {
   // If the main menu is selected
   float wordWidth = textWidth("Main Menu")/2;
   if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15)
-    screen.setScreen(0);
+    newScreen(new Button(0));
 
   // ===== Buttons =====
   if (screen.buttons != null) {
@@ -319,8 +329,7 @@ void mouseClicked() {
     for (int i = 0; i < screen.buttons.length && !done; i++)
       if (screen.buttons[i].isInside(mX, mY) && screen.buttons[i].visible && screen.buttons[i].clickable) {
         done = true;
-        screen.extra = screen.buttons[i].extra;
-        screen.setScreen(screen.buttons[i].command);
+        newScreen(screen.buttons[i]);
       }
   }
 
@@ -328,7 +337,7 @@ void mouseClicked() {
   //=======================================================
   // This section deals with when there is a calendar up and when
   // the buttons to change what month is shown are selected.
-  if (screen.currScreen == 7) {
+  if (isCurrScreen(7)) {
     textSize(20);
     if (mY > height/6-70 && mY < height/6-50) {
       if (mX < width/2-40 && mX > width/2-40-textWidth("<   September 2020"))
@@ -339,7 +348,7 @@ void mouseClicked() {
   }
   //=======================================================
   //=======================================================
-  else if (screen.currScreen == 10 || screen.currScreen == 11) {
+  else if (isCurrScreen(10) || isCurrScreen(11)) {
     // This is complicated but basically for when an item of a list in the screen
     // where a speech is being built is selected. It changes the appearance of
     // the specific buttons that are associated.
@@ -394,7 +403,7 @@ void mouseClicked() {
   }
   //=======================================================
   //=======================================================
-  else if (screen.currScreen == 13) {
+  else if (isCurrScreen(13)) {
     // it selects what you click on in the list for Screen 13
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height*5/6) {
@@ -406,7 +415,7 @@ void mouseClicked() {
     }
   }
   //=======================================================
-  else if (screen.currScreen == 16) {
+  else if (isCurrScreen(16)) {
     // This deals with selection from a list in a different screen,
     // I don't know which one, it's easy to check. It's Screen 16
     // rect(width/6, height/6+24*x+scrollX, width*4/6, 20);
@@ -424,7 +433,7 @@ void mouseClicked() {
     }
   }
   //=======================================================
-  else if (screen.currScreen == 18) {
+  else if (isCurrScreen(18)) {
     // Same as the above, but with Screen 18
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height/2) {
@@ -449,7 +458,7 @@ void mouseClicked() {
   }
   //=======================================================
   // Ditto, Screen 20
-  else if (screen.currScreen == 20) {
+  else if (isCurrScreen(20)) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height-181) {
         for (int i = 0; i < screen.depIdeas.size(); i++)
@@ -467,13 +476,18 @@ void mouseClicked() {
     }
   }
   //=======================================================
-  else if (screen.currScreen == 23) {
-    if (mX > width/6 && mX < width/6+max(screen.wordWidths(screen.trade.themOptions, 15))) {
+  else if (isCurrScreen(23)) {
+    if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
       if (mY > height/6 && mY < height*5/6) {
         int x = 0;
         for (int i = 0; i < screen.trade.displays.length; i++) {
-          //if ((String)displays.get(i))
+          for (int j = 0; j < screen.trade.displays[i].size(); i++) {
+            if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
 
+            }
+          }
+          //if ((String)displays.get(i))
+          //
         }
       }
     }
@@ -505,7 +519,7 @@ void mouseDragged() {
 void mouseWheel(MouseEvent event) {
   // When the mouse is scrolled. Very useful for replacing the arrow keys
   float e = event.getCount();
-  if (screen.currScreen == 10 || screen.currScreen == 11 || screen.currScreen == 13 || screen.currScreen == 16 || screen.currScreen == 18) {
+  if (isCurrScreen(10) || isCurrScreen(11) || isCurrScreen(13) || isCurrScreen(16) || isCurrScreen(18)) {
     if (e > 0 && screen.scrollX != 0)
       screen.scrollX += 20;
     else if (e < 0)
@@ -520,7 +534,7 @@ void keyPressed() {
   // ======================================
   // === Cases where the user is typing ===
   // ======================================
-  if (screen.currScreen == 21) {
+  if (isCurrScreen(21)) {
     if (keyCode == BACKSPACE) {
       // How to delete off of a name, useful for a lot of other things
       if (tempBill.name.length() != 0)
@@ -532,7 +546,7 @@ void keyPressed() {
       tempBill.name += key;
     //========
   }
-  if (screen.currScreen == 13) {
+  if (isCurrScreen(13)) {
     if (keyCode == BACKSPACE) {
       if (screen.input.length() != 0)
         screen.input = screen.input.substring(0, screen.input.length()-1);
@@ -543,11 +557,11 @@ void keyPressed() {
   }
 
   // All cases where the arrow keys are used to scroll through a list
-  if( screen.currScreen == 10
-    || screen.currScreen == 11
-    || screen.currScreen == 13
-    || screen.currScreen == 16
-    || screen.currScreen == 18 ) {
+  if( isCurrScreen(10)
+    || isCurrScreen(11)
+    || isCurrScreen(13)
+    || isCurrScreen(16)
+    || isCurrScreen(18) ) {
     if (keyCode == UP && screen.scrollX != 0)
       screen.scrollX += 20;
     else if (keyCode == DOWN)// scrollX,
@@ -556,7 +570,7 @@ void keyPressed() {
 
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
-    screen.setScreen(0);
+    newScreen(new Button(0));
   }
   if (key == 'q') {
   // this is temp but it enables a quit method in the future
@@ -567,7 +581,117 @@ void keyPressed() {
 
 //===================================================//
 //===================================================//
-//=============== Next Turn Method ==================//
+//================ New Screen Method ================//
+//===================================================//
+//===================================================//
+
+/* New Screen
+    Adds a new screen and makes it the current screen shown
+
+*/
+void newScreen(Button b) {
+  switch (b.command) {
+    case 0:
+      screen = new Screen0();
+      screens = new ArrayList<Screen>();
+      screens.add(screen);
+    case 1:
+      screen = new Screen1();
+      screens.add(screen);
+    case 2:
+      screen = new Screen2();
+      screens.add(screen);
+    case 3:
+      screen = new Screen3();
+      screens.add(screen);
+    case 4:
+      screen = new Screen4();
+      screens.add(screen);
+    case 5:
+      screen = new Screen5();
+      screens.add(screen);
+    case 6:
+      screen = new Screen6();
+      screens.add(screen);
+    case 7:
+      screen = new Screen7();
+      screens.add(screen);
+    case 8:
+      screen = new Screen8();
+      screens.add(screen);
+    case 9:
+      screen = new Screen9();
+      screens.add(screen);
+    case 10:
+      screen = new Screen10();
+      screens.add(screen);
+    case 11:
+      screen = new Screen11();
+      screens.add(screen);
+    case 12:
+      screen = new Screen12();
+      screens.add(screen);
+    case 13:
+      screen = new Screen13();
+      screens.add(screen);
+    case 14:
+      screen = new Screen14();
+      screens.add(screen);
+    case 15:
+      screen = new Screen15();
+      screens.add(screen);
+    case 16:
+      screen = new Screen16();
+      screens.add(screen);
+    case 17:
+      screen = new Screen17();
+      screens.add(screen);
+    case 18:
+      screen = new Screen18();
+      screens.add(screen);
+    case 19:
+      screen = new Screen19();
+      screens.add(screen);
+    case 20:
+      screen = new Screen20();
+      screens.add(screen);
+    case 21:
+      screen = new Screen21();
+      screens.add(screen);
+    case 22:
+      screen = new Screen22();
+      screens.add(screen);
+    case 23:
+      screen = new Screen23();
+      screens.add(screen);
+    case 24:
+      screen = new Screen24();
+      screens.add(screen);
+    case 25:
+      screen = new Screen25();
+      screens.add(screen);
+  }
+  screen.extra = b.extra;
+  screen.setScreen();
+
+}
+
+// Precondition: An int to test if it's the currentScreen
+// Postcondition: A boolean true of false whether it is
+boolean isCurrScreen(int s) {
+  return screen.toString().equals(Utils.convertIntToString(s));
+}
+// Precondition: An array of
+int[] wordWidths(String[] words, int s) {
+  textSize(s);
+  int[] ls = new int[words.length];
+  for (int i = 0; i < words.length; i++)
+    ls[i] = (int)textWidth(words[i]);
+  return ls;
+}
+//===================================================//
+//===================================================//
+//================ Next Turn Method =================//
 //===================================================//
 //===================================================//
 

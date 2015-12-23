@@ -1,8 +1,8 @@
 class Interaction {
   String[] yourOptions;
   String[] themOptions;
-  ArrayList<String> currYou;
-  ArrayList<String> currThem;
+  ArrayList[] currYou;
+  ArrayList[] currThem;
   ArrayList[] displays;
   // how displays works is that it holds ArrayLists of titles, and they link with stuff.
   // displays[i].get(0) is what is always shown, and if it is expanded, what is under it is.
@@ -11,8 +11,8 @@ class Interaction {
   Interaction(String[] you, String[] them) {
     yourOptions = you;
     themOptions = them;
-    currYou = new ArrayList<String>();
-    currThem = new ArrayList<String>();
+    currYou = new ArrayList[you.length];
+    currThem = new ArrayList[them.length];
   }
 
 
@@ -28,7 +28,7 @@ class Interaction {
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(20);
-    int xVal = width/6+max(max(screen.wordWidths(themOptions, 15)), max(screen.wordWidths(yourOptions, 15)));
+    int xVal = width/6+max(max(wordWidths(themOptions, 15)), max(wordWidths(yourOptions, 15)));
     rect(xVal, height/6, width-xVal*2, height*2/3);
 
     fill(0);

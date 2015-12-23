@@ -8,16 +8,16 @@ class Button {
   int extra;
   boolean visible;
   boolean clickable;
-  
+
   int variance;
-  
+
   color scrollCol;
   boolean scrolled;
-  
+
   String label;
   int lSize;
   color lCol;
-  
+
   Button(float xV, float yV, float wV, float hV, color c, int s) {
     x = xV;
     y = yV;
@@ -29,12 +29,17 @@ class Button {
     clickable = true;
     lSize = 14;
   }
+  // This constructor is for when newScreen(this) needs to be called but there is no button yet
+  Button(int s) {
+    command = s;
+  }
+  
   void setLabel(String l, int lS, color lC) {
     label = l;
     lSize = lS;
     lCol = lC;
   }
-  
+
   void display() {
     if (visible) {
       if (scrolled)
@@ -55,7 +60,7 @@ class Button {
         text(label, x, y);
     }
   }
-  
+
   boolean isInside(float Mx, float My) {
     return Mx > x && Mx < x+w && My > y && My < y+h;
   }
