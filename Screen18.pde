@@ -1,8 +1,6 @@
 class Screen18 extends Screen {
   // New Bill Step 2
 
-  ArrayList<String> depIdeas;// names of ideas
-
   String toString() {
     return "18";
   }
@@ -30,12 +28,18 @@ class Screen18 extends Screen {
       tempBill = new Bill();
       tempBill.committee = extra;
       tempBill.presBacked = true;
-    } else if (chosen < 3) {
+      println("HELLO WORLD");
+    }
+    else if (chosen < 3) {
       tempBill.removeIdea(tempBill.ideas[chosen-1]);
       chosen = 0;
-    } else {
+      screens.remove(screens.size()-2);
+    }
+    else {
       tempBill.addIdea(ideas.nameToInd(depIdeas.get(chosen-3)));
       chosen = 0;
+      screens.remove(screens.size()-2);
+      println("THIS IS FUN!");
     }
     for (int i = 0; i < sliders.length; i++) {
       sliders[i].value = tempBill.percentages[i];
@@ -86,5 +90,7 @@ class Screen18 extends Screen {
     if (chosen == 2)
       rect(width/6, height-174, width*4/6, 34);
     fill(0);
+
+    displayButtonsSliders();
   }
 }

@@ -54,7 +54,6 @@ class Screen {
     search = new ArrayList<Congressman>();
     buttons = new Button[0];
     sliders = new Slider[0];
-    setScreen();
   }
 
   String toString() {
@@ -72,12 +71,14 @@ class Screen {
   void display() {
     background(50, 125, 250);
     fill(0);
+    displayButtonsSliders();
+  }
+
+  void displayButtonsSliders() {
     for (int i = 0; i < buttons.length; i++)
       buttons[i].display();
     for (int i = 0; i < sliders.length; i++)
       sliders[i].display();
   }
-
-
 
 }

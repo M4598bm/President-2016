@@ -56,7 +56,7 @@ void setup() {
   */
   int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
   int hei = (int)(displayHeight*.8);// Eventually this will just be displayHeight
-  size(displayWidth, displayHeight);//640);// 640 is temp bc processing 3 sucks a bit
+  size(displayWidth, 640);// 640 is temp bc processing 3 sucks a bit
   //println(wid+","+hei);// just for testing
 
   turn = 0;
@@ -73,6 +73,7 @@ void setup() {
 
   // one of each class things
   screen = new Screen0();
+  screen.setScreen();
   calendar = new Calendar();
   fedBudget = new FedBudget();
   ideas = new Ideas();
@@ -222,8 +223,6 @@ void createCongress() {
 
       // convertInt used below simply takes a string that is actually an int and turns it into an int, dw about that part
       int val = Utils.convertInt(row.getString(2));
-      int repval = Utils.convertInt(row.getString(3)); //number of represnetatives of each state
-
       // val is an int from 0 to 5 inclusive that tells you how likely it is to be a dem (5 is very likely)
       //    ^    ^    ^    ^    ^    ^    ^    ^
       // The above is actually useful because it will tell you
@@ -235,7 +234,6 @@ void createCongress() {
       // Liberalism and socialism (0 to 100 values for each) also need to be set, and you
       // can do that either separately or at the same time.
       // The method Congressman.setPolitics(int liberalism, int socialism, char party) works too
-<<<<<<< HEAD
       int dems = Utils.findDems(val, random(5));
       if (dems == 0) {
         senate[x].party = 'R';
@@ -262,8 +260,6 @@ void createCongress() {
       x+=2;
     }
   }
-=======
->>>>>>> 57db8858608be96a5866dcb868af4442a0cbde75
 
   // You may find this useful, it tests the code for senate
   int sum = 0;
@@ -309,32 +305,6 @@ void createCongress() {
 }
 
 
-void setCongressman(int val) {
-
-        int libview = 50; // liberalism value
-        int socview = 50; // socialism value
-
-        if (house == 1)
-
-        if (random(9) < 4) {
-          libview = random(51) + random(51);
-        }
-        else {
-          libview = val * 15 + random(26);
-        }
-
-        if (random(9) < 4) {
-          socview = random(51) + random(51);
-        }
-        else {
-          socview = val * 15 + random(26);
-        }
-
-        senate[x].liberalism = libview;
-        senate[x].socialism = socview;
-
-}
-
 
 
 
@@ -353,6 +323,7 @@ void mouseClicked() {
   float wordWidth = textWidth("Main Menu")/2;
   if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15)
     newScreen(new Button(0));
+    screen.setScreen();
 
   // ===== Buttons =====
   if (screen.buttons != null) {
@@ -473,6 +444,7 @@ void mouseClicked() {
             screen.chosen = i+3;
             screen.buttons[1].setLabel("Add", 14, 255);
             screen.buttons[1].clickable = true;
+            println("HI!");
           }
       }
       else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
@@ -602,6 +574,7 @@ void keyPressed() {
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
     newScreen(new Button(0));
+    screen.setScreen();
   }
   if (key == 'q') {
   // this is temp but it enables a quit method in the future
@@ -626,84 +599,114 @@ void newScreen(Button b) {
       screen = new Screen0();
       screens = new ArrayList<Screen>();
       screens.add(screen);
+      break;
     case 1:
       screen = new Screen1();
       screens.add(screen);
+      break;
     case 2:
       screen = new Screen2();
       screens.add(screen);
+      break;
     case 3:
       screen = new Screen3();
       screens.add(screen);
+      break;
     case 4:
       screen = new Screen4();
       screens.add(screen);
+      break;
     case 5:
       screen = new Screen5();
       screens.add(screen);
+      break;
     case 6:
       screen = new Screen6();
       screens.add(screen);
+      break;
     case 7:
       screen = new Screen7();
       screens.add(screen);
+      break;
     case 8:
       screen = new Screen8();
       screens.add(screen);
+      break;
     case 9:
       screen = new Screen9();
       screens.add(screen);
+      break;
     case 10:
       screen = new Screen10();
       screens.add(screen);
+      break;
     case 11:
       screen = new Screen11();
       screens.add(screen);
+      break;
     case 12:
       screen = new Screen12();
       screens.add(screen);
+      break;
     case 13:
       screen = new Screen13();
       screens.add(screen);
+      break;
     case 14:
       screen = new Screen14();
       screens.add(screen);
+      break;
     case 15:
       screen = new Screen15();
       screens.add(screen);
+      break;
     case 16:
       screen = new Screen16();
       screens.add(screen);
+      break;
     case 17:
       screen = new Screen17();
       screens.add(screen);
+      break;
     case 18:
       screen = new Screen18();
       screens.add(screen);
+      break;
     case 19:
       screen = new Screen19();
       screens.add(screen);
+      break;
     case 20:
       screen = new Screen20();
       screens.add(screen);
+      break;
     case 21:
       screen = new Screen21();
       screens.add(screen);
+      break;
     case 22:
       screen = new Screen22();
       screens.add(screen);
+      break;
     case 23:
       screen = new Screen23();
       screens.add(screen);
+      break;
     case 24:
       screen = new Screen24();
       screens.add(screen);
+      break;
     case 25:
       screen = new Screen25();
       screens.add(screen);
+      break;
   }
   screen.extra = b.extra;
+  if (screens.size() > 1) {
+    screen.chosen = screens.get(screens.size()-2).chosen;
+  }
   screen.setScreen();
+  println(screens);
 
 }
 
