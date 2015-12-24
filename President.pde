@@ -5,6 +5,8 @@
 String name;// Player name (Set at start later)
 String presParty;// Player party (Set at start later)
 
+boolean menuOpen;// True or false if the Menu is up
+
 ArrayList<Screen> screens;
 Screen screen;// Handles most display aspects
 Calendar calendar;// the calendar
@@ -168,16 +170,8 @@ void draw() {
 
   if (!screen.toString().equals("0"))
     mainButton();// The button that returns to main screen
-
-  // The following checks if a button is being scrolled over
-  if (screen.buttons != null)
-    for (int i = 0; i < screen.buttons.length; i++) {
-      if (screen.buttons[i].isInside(mouseX, mouseY))
-        screen.buttons[i].scrolled = true;
-      else
-        screen.buttons[i].scrolled = false;
-    }
 }
+
 
 void topBar() {// Turn # | Date | Approval Rating | Turns until next election
   /* This method displays a horizontal bar at the top of the screen that
@@ -192,7 +186,7 @@ void topBar() {// Turn # | Date | Approval Rating | Turns until next election
   text("Turn: " + turn, 5, 15);
   text("Date: "+calendar.cMonth+"/"+calendar.day+"/"+calendar.cYear, width/4, 15);
   text("Approval Rating: " + approval + "%", width/2, 15);
-  text("Turns until next election", width*3/4, 15);// This needs to be found
+  text("|| Menu ||", width*3/4, 15);
 }
 
 void mainButton() {
@@ -402,13 +396,18 @@ void mouseWheel(MouseEvent event) {
   }
 }
 
+void mouseMoved() {
+  buttonsScrolled();
+}
+
+
 // Cases where the user is typing
 void keyPressed() {
   if (isCurrScreen(21)) {
     tempBill.name = typeResult(tempBill.name);
   }
   if (isCurrScreen(13)) {
-    screen.imput = typeResult(screen.input);
+    screen.input = typeResult(screen.input);
   }
 
   keyPressedScrollX();
@@ -439,7 +438,9 @@ void keyPressed() {
   MouseClicked() Helpers
 
 */
-void clickButton(float mX, float mY) {
+
+// Checks whether a button is pressed and handles the action associated
+void mouseClickedButton(float mX, float mY) {
   // Main Menu Button
   textSize(16);
   float wordWidth = textWidth("Main Menu")/2;
@@ -456,6 +457,14 @@ void clickButton(float mX, float mY) {
         done = true;
         newScreen(screen.buttons[i]);
       }
+  }
+}
+
+// Checks whether the Menu button was pressed and opens the menu
+void mouseClickedMenu(float mX, float mY) {
+  // text("|| Menu ||", width*3/4, 15);
+  if (mX < width && mX > width*3/4 && mY < 30) {
+    menuOpen = !menuOpen;
   }
 }
 
@@ -612,8 +621,24 @@ void mouseWheelScrollX(float e) {
     screen.scrollX -= 20;
 }
 
+/*
 
+  mouseMoved() Helpers
 
+*/
+
+// Checks if a button is being scrolled over
+// Precondition: The mouse is moved somewhere
+// Postcondition: If the mouse is on a button, the button is set to scrolled == true
+void buttonsScrolled() {
+  if (screen.buttons != null)
+    for (int i = 0; i < screen.buttons.length; i++) {
+      if (screen.buttons[i].isInside(mouseX, mouseY))
+        screen.buttons[i].scrolled = true;
+      else
+        screen.buttons[i].scrolled = false;
+    }
+}
 /*
 
   keyPressed() Helpers
@@ -649,14 +674,13 @@ void keyPressedScrollX() {
 
 //===================================================//
 //===================================================//
-//================ New Screen Method ================//
+//================== Other Methods ==================//
 //===================================================//
 //===================================================//
 
-/* New Screen
-    Adds a new screen and makes it the current screen shown
-
-*/
+// Adds a new screen and makes it the current screen shown
+// Precondition: Button b has just been pressed, uses b.command, the screen it should go to
+// Postcondition: a new Screen is set up and added to the query of past Screens (0 resets)
 void newScreen(Button b) {
   switch (b.command) {
     case 0:
@@ -776,11 +800,13 @@ void newScreen(Button b) {
 
 }
 
+// Returns whether int s is the current screen
 // Precondition: An int to test if it's the currentScreen
 // Postcondition: A boolean true of false whether it is
 boolean isCurrScreen(int s) {
   return screen.toString().equals(Utils.convertIntToString(s));
 }
+
 // Precondition: An array of
 int[] wordWidths(String[] words, int s) {
   textSize(s);
@@ -795,12 +821,34 @@ int[] wordWidths(String[] words, int s) {
 //===================================================//
 //===================================================//
 
+// This method progresses the game by setting up the next turn.
 void nextTurn() {
-  /* This method progresses the game by setting up the next turn.
-
-  */
   turn++;
 
+  setDay();
+
+  // React to speeches
+  for (int i = 0; i < senate.length; i++)
+    senate[i].listenToSpeech(suppS, agS);
+  for (int i = 0; i < house.length; i++)
+    house[i].listenToSpeech(suppH, agH);
+
+  suppH = new ArrayList<Integer>();
+  suppS = new ArrayList<Integer>();
+  agH = new ArrayList<Integer>();
+  agS = new ArrayList<Integer>();
+
+  // This is the beginning of code that changes the status of bills
+  //  for (int i = 0; i < bills.length; i++) {
+  //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
+
+ //   }
+
+}
+// This moves time forward once each turn
+// Precondition: the current date, in calendar is outdated
+// Postcondition: the day, month, and year are up to date and forward daysPerTurn days
+void setDay() {
   int daysPerTurn = 7; // this decides how many days is one turn.
   // I don't really know what it should be yet, it depends on testing.
 
@@ -815,25 +863,4 @@ void nextTurn() {
       }
     }
   }
-  // React to speeches
-  for (int i = 0; i < senate.length; i++)
-    senate[i].listenToSpeech(suppS, agS);
-  for (int i = 0; i < house.length; i++)
-    house[i].listenToSpeech(suppH, agH);
-
-  suppH = new ArrayList<Integer>();
-  suppS = new ArrayList<Integer>();
-  agH = new ArrayList<Integer>();
-  agS = new ArrayList<Integer>();
-
-  // This is the beginnign of code that changes the status of bills
-  //  for (int i = 0; i < bills.length; i++) {
-  //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
-
- //   }
-
-
-
-
-
 }

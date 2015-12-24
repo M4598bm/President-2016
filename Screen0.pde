@@ -38,7 +38,6 @@ class Screen0 extends Screen {
     // ============================
     if (extra == 1) {// new turn
       nextTurn();
-      setScreen();
     }
     else if (extra == 2) {// federal budget
       for (int i = 0; i < sliders.length; i++)

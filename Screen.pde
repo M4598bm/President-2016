@@ -62,7 +62,6 @@ class Screen {
 
   void setScreen() {
 
-
   }
 
 
@@ -80,5 +79,4 @@ class Screen {
     for (int i = 0; i < sliders.length; i++)
       sliders[i].display();
   }
-
 }
