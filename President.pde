@@ -51,6 +51,8 @@ ArrayList<Integer> agH;//   the player made in the turn are processed. It holds 
   There will be all that stuff and I look forward to it. It will mostly be put here. But for now, this
   is sort of a silly method that sets default variables that need to be set.
 */
+// Precondition: No variables are set
+// Postcondition: Variables are set and the game is playable default
 void setup() {
 
   int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
@@ -127,8 +129,8 @@ void createSingleClasses() {
 }
 
 // Sets up the Cabinet
-// Precondition:
-// Postcondition:
+// Precondition: majordepartments.csv lists all of the major departments to have secretaries
+// Postcondition: cabinet is an array of Secretaries with only department set
 void createCabinet() {
   cabinet = new Secretary[15];
   Table d = loadTable("majordepartments.csv", "header");
@@ -143,6 +145,75 @@ void createCourt() {
 
 
 }
+// You can split this into helper functions, but here's the bulk
+// This method stacks the two arrays that hold Congress.
+// Precondition: states.csv has information about states, val is an int with how likely each state is to be Dem.
+void createCongress() {
+  Table states = loadTable("states.csv", "header");// a table with states etc.
+  initCongress(states);
+  int xSenate = 0;
+  int xHouse = 0;
+  for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
+    if (!row.getString(1).equals("DC")) {
+    // val is an int from 0 to 5 inclusive that tells you how likely it is to be a dem (5 is very likely)
+      int val = Utils.convertInt(row.getString(2));// This can be used anywhere you want
+
+      //=== Senators ===//
+
+      // senate[x] and senate[x+1] are Congressman objects to be accessed
+      xSenate+=2;
+
+      //=== Representatives ===//
+      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {// row.getString(3) says how many reps in the state
+        // house[x] is the Congressman to be accessed
+        xHouse++;
+      }
+    }
+  }
+
+  // You may find this useful, it tests the code for senate
+  testCongress();
+}
+
+// Test to check the makeup of congress
+// Precondition: senate and house are arrays of Congressmen that are initialized
+// Postcondition: Prints the makeup of each house of congress
+private void testCongress() {
+
+}
+
+// Initialize Congresspeople
+// Precondition: names.csv lists first and last names; states lists states and state info from states.csv
+// Postcondition: Both houses of congress have Congressmen with names, states, and house set
+void initCongress(Table states) {
+  Table names = loadTable("names.csv", "header");// A table that has first and last names
+  ArrayList<String> firstNames = new ArrayList<String>();
+  ArrayList<String> lastNames  = new ArrayList<String>();
+  for (TableRow row : names.rows()) {
+    firstNames.add(row.getString(0));
+    lastNames.add(row.getString(1));
+  }
+
+  int xSenate = 0;
+  int xHouse = 0;
+  for (TableRow row : states.rows()) {
+    if (!row.getString(1).equals("DC")) {
+      // Initialize Senators
+      String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
+      senate[xSenate] = new Congressman(n, row.getString(1), 1);
+      n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
+      senate[xSenate+1] = new Congressman(n, row.getString(1), 1);
+      xSenate+=2
+      // Initialize Representatives
+      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
+        String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
+        house[xHouse] = new Congressman(n, row.getString(1), 0);
+        house[xHouse].party = 'D';
+        xHouse++;
+      }
+    }
+  }
+}
 
 // Loads all images necessary to the game
 // Precondition: any images needed for the whole game are stored as variables
@@ -155,10 +226,23 @@ void loadImages() {
   // Eventually all other images will be loaded.
 }
 
+// calculates the current presidential approval rate
+// Precondition: This isn't a finished method so I don't really know yet
+// Postcondition: Approval is a percentage between 0 - 100
 void calcApproval() {
   approval = 50;// Temporary, eventually there will be a calculation here.
 }
 
+
+
+
+
+
+
+
+// Loads the screen on loop continuously
+// Precondition: Every aspect that needs to be run has a display type method and this calls each one
+// Postcondition: Each loop the display methods are called and the screen is called
 void draw() {
   /* Also an essential Processing function!
      This runs the whole thing. Eventually
@@ -172,12 +256,10 @@ void draw() {
     mainButton();// The button that returns to main screen
 }
 
-
-void topBar() {// Turn # | Date | Approval Rating | Turns until next election
-  /* This method displays a horizontal bar at the top of the screen that
-  displays most of the time.
-  */
-
+// displays a horizontal bar at the top of the screen most of the time.
+// Precondition:
+// Postcondition: Turn # | Date | Approval Rating | Menu
+void topBar() {
   fill(255);
   rect(0, -5, width, 35, 3);
   fill(0);
@@ -189,9 +271,8 @@ void topBar() {// Turn # | Date | Approval Rating | Turns until next election
   text("|| Menu ||", width*3/4, 15);
 }
 
+// Creates a button on the top left that brings you back to main screen.
 void mainButton() {
-  /* This method creates a button on the top left that brings you back to main screen.
-  */
   strokeWeight(5);
   line(width/10, height/10, width/10+20, height/10-15);
   line(width/10, height/10, width/10+20, height/10+15);
@@ -202,130 +283,14 @@ void mainButton() {
   text("Main Menu", width/10+10, height/10+30);
 }
 
-void createCongress() {
-  /* This method stacks the two arrays that hold Congress.
-     It names congressmen, gives parties, gives states, gives districts (maybe),
-     gives approvals ratings, gives election cycles for senators
-  */
-  //=== Names ===//
-  // Initializes names of Congressmen, this is fine
-  Table names = loadTable("names.csv", "header");// A table that has first and last names
-  ArrayList<String> firstNames = new ArrayList<String>();
-  ArrayList<String> lastNames  = new ArrayList<String>();
-  for (TableRow row : names.rows()) {
-    firstNames.add(row.getString(0));
-    lastNames.add(row.getString(1));
-  }
-
-
-  // This section is a serious mess and needs to be, probably, completely redone.
-
-  Table states = loadTable("states.csv", "header");// a table with states etc.
-  //=== Senators ===//
-  int x = 0;
-  for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
-    if (!row.getString(1).equals("DC")) {
-      // Find name:
-
-      // So this initializes congressmen, and it's actually also fine.
-      String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-      senate[x] = new Congressman(n, row.getString(1), 1);// Congressman(name, state, house of congress)
-      n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-      senate[x+1] = new Congressman(n, row.getString(1), 1);
-
-      // how many democrats. Here's where it gets bad. This may be a teardown.
-
-      // convertInt used below simply takes a string that is actually an int and turns it into an int, dw about that part
-      int val = Utils.convertInt(row.getString(2));
-      // val is an int from 0 to 5 inclusive that tells you how likely it is to be a dem (5 is very likely)
-      //    ^    ^    ^    ^    ^    ^    ^    ^
-      // The above is actually useful because it will tell you
-      // how likely it is that it will be a democrat or republican, so don't delete it
-
-      // ==================================================
-      // This part sucks though, ugh
-
-      // Liberalism and socialism (0 to 100 values for each) also need to be set, and you
-      // can do that either separately or at the same time.
-      // The method Congressman.setPolitics(int liberalism, int socialism, char party) works too
-      int dems = Utils.findDems(val, random(5));
-      if (dems == 0) {
-        senate[x].party = 'R';
-        senate[x+1].party = 'R';
-        // ===how it works though is that it takes the amount given and sets the party accordingly
-      }
-      else if (dems == 1) {
-        senate[x].party = 'R';
-        senate[x+1].party = 'D';
-      }
-      else if (dems == 2) {
-        senate[x].party = 'D';
-        senate[x+1].party = 'D';
-      }
-      // Temporary
-      //senate[x].party = 'R';
-      //senate[x+1].party = 'D';
-      if (dems > 0) {
-        // see I started to set lib and soc but it failed sooo do that too
-        //senate[x].setPolitics(
-      }
-
-
-      x+=2;
-    }
-  }
-
-  // You may find this useful, it tests the code for senate
-  int sum = 0;
-  for (Congressman s : senate)
-    if (s.party == 'D')
-      sum++;
-      println("Democrats in Senate: "+sum+"/"+senate.length);
-
-
-  //=== Representatives ===//
-
-  // After the failure of Senate stacking, I didn't even try. They simply start with names.
-
-  // === Names === //
-  x = 0;
-  for (TableRow row : states.rows()) {
-    if (!row.getString(1).equals("DC")) {
-      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
-        String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-        house[x] = new Congressman(n, row.getString(1), 0);
-        house[x].party = 'D';
-        x++;
-
-        // Set all the values here
-
-
-
-
-      }
-    }
-  }
-
-  /*
-  Here you can write the code for stacking the house. It's a little more difficult
-  because each state has a different number of representatives. So you can take some aspects
-  of what you write for Senate and put it here, but be sure to edit carefully to take into account.
-  */
-
-  // This is the end of the above mess. This is eventually necessary to fix because it's terrible...
-
-  //for (int i = 0; i < house.length; i++) // idk what this is lol
-  //  println(i + ": " + house[i].name + " (" + house[i].state + ")");
-}
-
-
-
-
 
 //================================
 //========= Controls =============
 //================================
 
+// If the mouse is clicked
+// Precondition: Mouse is pressed and released
+// Postcondition: The goal of the mouseclick is fulfilled
 void mouseClicked() {
   /* What to do when the mouse is clicked */
   float mX = mouseX;
@@ -357,6 +322,9 @@ void mouseClicked() {
 }
 
 
+// If the mouse is pressed
+// Precondition: Mouse is pressed
+// Postcondition: The goal of the mouse being pressed is fulfilled
 void mousePressed() {
   // This is necessary for sliders, it's when the mouse is pressed and not released
   // ====== Sliders ======
@@ -369,12 +337,18 @@ void mousePressed() {
 }
 
 
+// If the mouse is released
+// Precondition: Mouse is released from being held
+// Postcondition: The slider is released so currSlider == null
 void mouseReleased() {
   // Speaks for itself, sets currSlider to null
   currSlider = null;
 }
 
 
+// If the mouse is dragged
+// Precondition: Mouse is pressed and dragged
+// Postcondition: The slider's value is changed
 void mouseDragged() {
   // If the mouse is held down and moved
   if (currSlider != null) {
@@ -383,7 +357,9 @@ void mouseDragged() {
   }
 }
 
-
+// If the mousewheel is used
+// Precondition: Mousewheel is used
+// Postcondition: The goal of the mousewheel is fulfilled, usually a scrolling that happened
 void mouseWheel(MouseEvent event) {
   // When the mouse is scrolled. Very useful for replacing the arrow keys
   float e = event.getCount();
@@ -396,12 +372,16 @@ void mouseWheel(MouseEvent event) {
   }
 }
 
+// If the mouse is moved
+// Precondition: Mouse is moved, not necessarily clicked or dragged
+// Postcondition: The buttons recognize if they were scrolled over
 void mouseMoved() {
   buttonsScrolled();
 }
 
-
-// Cases where the user is typing
+// If the keyboard is used
+// Precondition: A key is pressed
+// Postcondition: The goal of the key pressed is fulfilled
 void keyPressed() {
   if (isCurrScreen(21)) {
     tempBill.name = typeResult(tempBill.name);
@@ -440,6 +420,8 @@ void keyPressed() {
 */
 
 // Checks whether a button is pressed and handles the action associated
+// Precondition: The mouse is clicked
+// Postcondition: The command of the button is fulfilled and a new screen is created
 void mouseClickedButton(float mX, float mY) {
   // Main Menu Button
   textSize(16);
@@ -461,6 +443,8 @@ void mouseClickedButton(float mX, float mY) {
 }
 
 // Checks whether the Menu button was pressed and opens the menu
+// Precondition: The mouse is clicked
+// Postcondition: The menu is opened
 void mouseClickedMenu(float mX, float mY) {
   // text("|| Menu ||", width*3/4, 15);
   if (mX < width && mX > width*3/4 && mY < 30) {
@@ -469,6 +453,8 @@ void mouseClickedMenu(float mX, float mY) {
 }
 
 // Screen 10 and 11
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked10and11(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
     if (mY > height/6 && mY < height/2) {
@@ -517,6 +503,8 @@ void mouseClicked10and11(float mX, float mY) {
 }
 
 // Screen 13
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
 void mouseClicked13(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
     if (mY > height/6 && mY < height*5/6) {
@@ -529,6 +517,8 @@ void mouseClicked13(float mX, float mY) {
 }
 
 // Screen 16
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked16(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
     if (mX > height/6 && mY < height*5/6) {
@@ -545,6 +535,8 @@ void mouseClicked16(float mX, float mY) {
 }
 
 // Screen 18
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
 void mouseClicked18(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
     if (mY > height/6 && mY < height/2) {
@@ -569,6 +561,8 @@ void mouseClicked18(float mX, float mY) {
 }
 
 // Screen 20
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
 void mouseClicked20(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
     if (mY > height/6 && mY < height-181) {
@@ -588,6 +582,8 @@ void mouseClicked20(float mX, float mY) {
 }
 
 // Screen 23
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked23(float mX, float mY) {
   if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
     if (mY > height/6 && mY < height*5/6) {
@@ -614,6 +610,9 @@ void mouseClicked23(float mX, float mY) {
 
 */
 
+// The mousewheel is used to scroll
+// Precondition: The mousewheel is scrolled
+// Postcondition: The info displayed is shifted up or down depending on the scroll direction
 void mouseWheelScrollX(float e) {
   if (e > 0 && screen.scrollX != 0)
     screen.scrollX += 20;
@@ -646,6 +645,8 @@ void buttonsScrolled() {
 */
 
 // Changes a String through typing
+// Precondition: The keyboard letters are typed, it is an appropriate screen
+// Postcondition: The String s is changed in the way the keyboard has requested
 String typeResult(String s) {
   if (keyCode == BACKSPACE) {
     if (s.length() != 0)
@@ -659,6 +660,8 @@ String typeResult(String s) {
 }
 
 // All cases where the arrow keys are used to scroll through a list
+// Precondition: The keyboard arrow keys are used
+// Postcondition: The info displayed is shifted up or down depending on the arrow keys used
 void keyPressedScrollX() {
   if( isCurrScreen(10) ||
       isCurrScreen(11) ||
@@ -807,7 +810,9 @@ boolean isCurrScreen(int s) {
   return screen.toString().equals(Utils.convertIntToString(s));
 }
 
-// Precondition: An array of
+// Returns an array with the widths of words in String[] words
+// Precondition: String[] words is an array of words, and int s is the textSize
+// Postcondition: returns a parallel array with the lengths of each word in String[] words
 int[] wordWidths(String[] words, int s) {
   textSize(s);
   int[] ls = new int[words.length];
@@ -822,6 +827,8 @@ int[] wordWidths(String[] words, int s) {
 //===================================================//
 
 // This method progresses the game by setting up the next turn.
+// Precondition: The Next Turn button has been pressed, and values need to be reset
+// Postcondition: Values are reset and the events of the turn are set
 void nextTurn() {
   turn++;
 
