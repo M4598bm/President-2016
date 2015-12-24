@@ -9,6 +9,7 @@ boolean menuOpen;// True or false if the Menu is up
 
 ArrayList<Screen> screens;
 Screen screen;// Handles most display aspects
+MenuScreen menuScreen;// Displays if menuOpen
 Calendar calendar;// the calendar
 FedBudget fedBudget;// Handles the budget
 Ideas ideas;// Handles the 'ideas', Bills are made of up to 3 of ideas held in this object
@@ -108,6 +109,7 @@ void createSingleClasses() {
   // one of each class things
   screen = new Screen0();
   screen.setScreen();
+  menuScreen = new MenuScreen();
   calendar = new Calendar();
   fedBudget = new FedBudget();
   ideas = new Ideas();
@@ -148,6 +150,7 @@ void createCourt() {
 // You can split this into helper functions, but here's the bulk
 // This method stacks the two arrays that hold Congress.
 // Precondition: states.csv has information about states, val is an int with how likely each state is to be Dem.
+// Postcondition: senate and house are arrays of Congressmen fully initialized
 void createCongress() {
   Table states = loadTable("states.csv", "header");// a table with states etc.
   initCongress(states);
@@ -203,10 +206,10 @@ void initCongress(Table states) {
       senate[xSenate] = new Congressman(n, row.getString(1), 1);
       n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
       senate[xSenate+1] = new Congressman(n, row.getString(1), 1);
-      xSenate+=2
+      xSenate+=2;
       // Initialize Representatives
       for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
-        String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
+        n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
         house[xHouse] = new Congressman(n, row.getString(1), 0);
         house[xHouse].party = 'D';
         xHouse++;
@@ -252,6 +255,9 @@ void draw() {
   //makes it slow and it doesn't need to happen so I'll work on that later
   topBar();// That menu at the top is displayed
 
+  if (menuOpen)
+    menuScreen.display();
+
   if (!screen.toString().equals("0"))
     mainButton();// The button that returns to main screen
 }
@@ -296,28 +302,32 @@ void mouseClicked() {
   float mX = mouseX;
   float mY = mouseY;
 
-  clickButton(mX, mY);
+  mouseClickedMenu(mX, mY);
 
-  if (isCurrScreen(7)) {// Calendar Screen
-    calendar.clickMonth(mX, mY);
-  }
-  else if (isCurrScreen(10) || isCurrScreen(11)) {// Speech Screens
-    mouseClicked10and11(mX, mY);
-  }
-  else if (isCurrScreen(13)) {// Legislator Deal Choice
-    mouseClicked13(mX, mY);
-  }
-  else if (isCurrScreen(16)) {// Find a Rep for Bill
-    mouseClicked16(mX, mY);
-  }
-  else if (isCurrScreen(18)) {// New Bill Step 2
-    mouseClicked18(mX, mY);
-  }
-  else if (isCurrScreen(20)) {// New Bill Step 4
-    mouseClicked20(mX, mY);
-  }
-  else if (isCurrScreen(23)) {// Legislative Deal
-    mouseClicked23(mX, mY);
+  if (!menuOpen) {
+    mouseClickedButton(mX, mY);
+
+    if (isCurrScreen(7)) {// Calendar Screen
+      calendar.clickMonth(mX, mY);
+    }
+    else if (isCurrScreen(10) || isCurrScreen(11)) {// Speech Screens
+      mouseClicked10and11(mX, mY);
+    }
+    else if (isCurrScreen(13)) {// Legislator Deal Choice
+      mouseClicked13(mX, mY);
+    }
+    else if (isCurrScreen(16)) {// Find a Rep for Bill
+      mouseClicked16(mX, mY);
+    }
+    else if (isCurrScreen(18)) {// New Bill Step 2
+      mouseClicked18(mX, mY);
+    }
+    else if (isCurrScreen(20)) {// New Bill Step 4
+      mouseClicked20(mX, mY);
+    }
+    else if (isCurrScreen(23)) {// Legislative Deal
+      mouseClicked23(mX, mY);
+    }
   }
 }
 
@@ -449,6 +459,7 @@ void mouseClickedMenu(float mX, float mY) {
   // text("|| Menu ||", width*3/4, 15);
   if (mX < width && mX > width*3/4 && mY < 30) {
     menuOpen = !menuOpen;
+    println(menuOpen);
   }
 }
 
