@@ -393,15 +393,6 @@ void mouseMoved() {
 // Precondition: A key is pressed
 // Postcondition: The goal of the key pressed is fulfilled
 void keyPressed() {
-  if (isCurrScreen(21)) {
-    tempBill.name = typeResult(tempBill.name);
-  }
-  if (isCurrScreen(13)) {
-    screen.input = typeResult(screen.input);
-  }
-
-  keyPressedScrollX();
-
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
     if (!isCurrScreen(0)) {
@@ -412,6 +403,16 @@ void keyPressed() {
       menuOpen = !menuOpen;
     }
   }
+  else if (isCurrScreen(21)) {
+    tempBill.name = typeResult(tempBill.name);
+  }
+  else if (isCurrScreen(13)) {
+    screen.input = typeResult(screen.input);
+  }
+
+  keyPressedScrollX();
+
+
 }
 
 

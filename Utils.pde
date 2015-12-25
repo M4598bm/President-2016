@@ -18,6 +18,8 @@ static class Utils {
       s += num%10;
       num /= 10;
     }
+    if (num == 0)
+      s = "0";
     return reverseString(s);
   }
   // reverses a String
