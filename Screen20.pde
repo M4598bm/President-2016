@@ -33,7 +33,7 @@ class Screen20 extends Screen {
   // Does the extra actions
   // Precondition: extra is an int from the last Screen
   // Postcondition: actions are taken according to the int extra
-  extraActions() {
+  void extraActions() {
     depIdeas = ideas.departmentNames(extra);
     if (chosen == 0) {
     }

@@ -34,7 +34,7 @@ class Screen18 extends Screen {
   // Does the extra actions
   // Precondition: extra is an int from the last Screen
   // Postcondition: actions are taken according to the int extra
-  extraActions() {
+  void extraActions() {
     if (chosen == 0) {
       tempBill = new Bill();
       tempBill.committee = extra;

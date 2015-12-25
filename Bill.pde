@@ -110,7 +110,7 @@ class Bill {
   // set the opinion held of this bill for house members
   // Precondition: senate is an array of Congressmen, socialism and liberalism are values of this class
   // Postcondition: every senator has an opinion, 0-100, on this bill parallel to this in bills
-  void addHouseOpinions() {
+  void addSenateOpinions() {
     for (int i = 0; i < senate.length; i++) {
       ArrayList<Integer> op = senate[i].opinions;
       int initial = 100;
