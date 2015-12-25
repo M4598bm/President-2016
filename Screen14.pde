@@ -5,6 +5,9 @@ class Screen14 extends Screen {
     return "14";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[2];
     buttons[0] = new Button(width/2-320, height*5/6+20, 300, height/6-40, color(255, 0, 0), 0);
@@ -19,6 +22,9 @@ class Screen14 extends Screen {
     sliders[0].units = "Million";
   }
 
+    // Displays the screen
+    // Precondition: setScreen has been called for this screen, this is the current Screen
+    // Postcondition: this screen is displayed
   void display() {
     super.display();
 

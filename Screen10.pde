@@ -5,6 +5,9 @@ class Screen10 extends Screen {
     return "10";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[3];
     buttons[0] = new Button(width/2-150, height-100, 300, 80, color(255, 0, 0), 0);
@@ -21,6 +24,16 @@ class Screen10 extends Screen {
     buttons[2].clickable = false;
     buttons[2].extra = 1;
 
+    extraActions();
+    for (int i = 0; i < buttons.length; i++)
+      buttons[i].scrollCol = color(0, 0, 200);
+    buttons[0].scrollCol = color(200, 0, 0);
+  }
+
+  // Does the extra actions
+  // Precondition: extra is an int from the last Screen
+  // Postcondition: actions are taken according to the int extra
+  void extraActions() {
     if (chosen == 0) {
       d1 = suppH;
       d2 = agH;
@@ -47,12 +60,11 @@ class Screen10 extends Screen {
       }
     }
     screens.remove(screens.size()-2);
-
-    for (int i = 0; i < buttons.length; i++)
-      buttons[i].scrollCol = color(0, 0, 200);
-    buttons[0].scrollCol = color(200, 0, 0);
   }
 
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     super.display();
 

@@ -8,6 +8,9 @@ class MenuScreen extends Screen {
     setScreen();
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[5];
     buttons[0] = new Button(width/2-100, 70+(height-70)*0/5, 200, (height-65)/10, color(255, 0, 0), 100);
@@ -38,6 +41,9 @@ class MenuScreen extends Screen {
   }
 
 
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     fill(255);
     rect(width/4, 30, width/2, height-30);

@@ -7,6 +7,9 @@ class Screen2 extends Screen {
     return "2";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     textSize(14);
     buttons = new Button[18];
@@ -45,6 +48,9 @@ class Screen2 extends Screen {
      */
   }
 
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     super.display();
 

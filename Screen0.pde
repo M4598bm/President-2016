@@ -6,6 +6,9 @@ class Screen0 extends Screen {
     return "0";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[10];
     buttons[0] = new Button(width/2-320, height/2-110, 200, 60, color(255, 0, 0), 2);
@@ -33,9 +36,12 @@ class Screen0 extends Screen {
     buttons[9].scrollCol = color(0, 0, 200);
     buttons[9].extra = 1;
 
-    // ============================
-    // ==== Completing actions ====
-    // ============================
+    extraActions();
+  }
+  // Does the extra actions
+  // Precondition: extra is an int from the last Screen
+  // Postcondition: actions are taken according to the int extra
+  void extraActions() {
     if (extra == 1) {// new turn
       nextTurn();
     }
@@ -69,10 +75,9 @@ class Screen0 extends Screen {
     chosen = 0;
   }
 
-
-
-
-
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     super.display();
     if (extra == 3) {

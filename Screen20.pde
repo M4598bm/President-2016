@@ -5,6 +5,9 @@ class Screen20 extends Screen {
     return "20";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[2];
     buttons[0] = new Button(width/6, height-80, 300, 60, color(255, 0, 0), 16);
@@ -17,7 +20,20 @@ class Screen20 extends Screen {
 
     for (int i = 0; i < buttons.length; i++)
       buttons[i].scrollCol = color(200, 0, 0);
+    sliders = new Slider[1];
 
+    sliders[0] = new Slider(width*5/6-(210+textWidth("100")), height-157, 100, 200);
+    sliders[0].value = tempBill.percentages[2];
+    if (tempBill != null && tempBill.ideas[2] == -1)
+      sliders[0].visible = false;
+
+    extraActions();
+  }
+
+  // Does the extra actions
+  // Precondition: extra is an int from the last Screen
+  // Postcondition: actions are taken according to the int extra
+  extraActions() {
     depIdeas = ideas.departmentNames(extra);
     if (chosen == 0) {
     }
@@ -31,15 +47,12 @@ class Screen20 extends Screen {
       chosen = 0;
       screens.remove(screens.size()-2);
     }
-
-    sliders = new Slider[1];
-
-    sliders[0] = new Slider(width*5/6-(210+textWidth("100")), height-157, 100, 200);
-    sliders[0].value = tempBill.percentages[2];
-    if (tempBill != null && tempBill.ideas[2] == -1)
-      sliders[0].visible = false;
   }
 
+
+    // Displays the screen
+    // Precondition: setScreen has been called for this screen, this is the current Screen
+    // Postcondition: this screen is displayed
   void display() {
     super.display();
 

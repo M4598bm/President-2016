@@ -60,19 +60,27 @@ class Screen {
     return "-1";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
 
   }
 
 
 
-
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     background(50, 125, 250);
     fill(0);
     displayButtonsSliders();
   }
 
+  // Displays all buttons and sliders
+  // Precondition: buttons and sliders are arrays that are either empty or filled
+  // Postcondition: these two arrays are displayed
   void displayButtonsSliders() {
     for (int i = 0; i < buttons.length; i++)
       buttons[i].display();

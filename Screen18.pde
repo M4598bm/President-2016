@@ -5,6 +5,9 @@ class Screen18 extends Screen {
     return "18";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[2];
     buttons[0] = new Button(width/6, height-80, 300, 60, color(255, 0, 0), 19);
@@ -24,6 +27,14 @@ class Screen18 extends Screen {
     sliders[1] = new Slider(width*5/6-(210+textWidth("100")), height-157, 100, 200);
 
     depIdeas = ideas.departmentNames(extra);
+
+    extraActions();
+  }
+
+  // Does the extra actions
+  // Precondition: extra is an int from the last Screen
+  // Postcondition: actions are taken according to the int extra
+  extraActions() {
     if (chosen == 0) {
       tempBill = new Bill();
       tempBill.committee = extra;
@@ -46,6 +57,9 @@ class Screen18 extends Screen {
     }
   }
 
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     super.display();
 

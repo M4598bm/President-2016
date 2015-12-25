@@ -5,6 +5,9 @@ class Screen12 extends Screen {
     return "12";
   }
 
+  // Sets the screen when it is first created
+  // Precondition: This is the current Screen, buttons and sliders are arrays
+  // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     Table t = loadTable("majordepartments.csv", "header");
     buttons = new Button[16];
@@ -29,6 +32,9 @@ class Screen12 extends Screen {
     buttons[15].scrollCol = color(0, 0, 200);
   }
 
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     super.display();
 
