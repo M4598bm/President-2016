@@ -253,10 +253,10 @@ void draw() {
   */
   screen.display();// For some reason we do this every loop... that
   //makes it slow and it doesn't need to happen so I'll work on that later
-  topBar();// That menu at the top is displayed
-
   if (menuOpen)
     menuScreen.display();
+  topBar();// That menu at the top is displayed
+
 
   if (!screen.toString().equals("0"))
     mainButton();// The button that returns to main screen
@@ -404,13 +404,13 @@ void keyPressed() {
 
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
-    newScreen(new Button(0));
-    screen.setScreen();
-  }
-  if (key == 'q') {
-  // this is temp but it enables a quit method in the future
-  // Probably will link with the menu somehow (like if a button is pressed, key = 27)
-    key = 27;// This is the escape key.
+    if (!isCurrScreen(0)) {
+      newScreen(new Button(0));
+      screen.setScreen();
+    }
+    else {
+      menuOpen = !menuOpen;
+    }
   }
 }
 
@@ -459,7 +459,14 @@ void mouseClickedMenu(float mX, float mY) {
   // text("|| Menu ||", width*3/4, 15);
   if (mX < width && mX > width*3/4 && mY < 30) {
     menuOpen = !menuOpen;
-    println(menuOpen);
+  }
+  if (menuOpen) {
+    boolean done = false;
+    for (int i = 0; i < menuScreen.buttons.length && !done; i++)
+      if (menuScreen.buttons[i].isInside(mX, mY) && menuScreen.buttons[i].visible && menuScreen.buttons[i].clickable) {
+        done = true;
+        newScreen(menuScreen.buttons[i]);
+      }
   }
 }
 
@@ -641,13 +648,24 @@ void mouseWheelScrollX(float e) {
 // Precondition: The mouse is moved somewhere
 // Postcondition: If the mouse is on a button, the button is set to scrolled == true
 void buttonsScrolled() {
-  if (screen.buttons != null)
-    for (int i = 0; i < screen.buttons.length; i++) {
-      if (screen.buttons[i].isInside(mouseX, mouseY))
-        screen.buttons[i].scrolled = true;
-      else
-        screen.buttons[i].scrolled = false;
-    }
+  if (!menuOpen) {
+    if (screen.buttons != null)
+      for (int i = 0; i < screen.buttons.length; i++) {
+        if (screen.buttons[i].isInside(mouseX, mouseY))
+          screen.buttons[i].scrolled = true;
+        else
+          screen.buttons[i].scrolled = false;
+      }
+  }
+  else {
+    if (menuScreen.buttons != null)
+      for (int i = 0; i < menuScreen.buttons.length; i++) {
+        if (menuScreen.buttons[i].isInside(mouseX, mouseY))
+          menuScreen.buttons[i].scrolled = true;
+        else
+          menuScreen.buttons[i].scrolled = false;
+      }
+  }
 }
 /*
 
@@ -802,6 +820,27 @@ void newScreen(Button b) {
       screen = new Screen25();
       screens.add(screen);
       break;
+    // MenuScreen Cases
+    case 100:
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 0;
+      break;
+    case 101:
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 1;
+      break;
+    case 102:
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 2;
+      break;
+    case 103:
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 3;
+      break;
+    case 104:
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 4;
+      break;
   }
   screen.extra = b.extra;
   if (screens.size() > 1) {
@@ -809,7 +848,10 @@ void newScreen(Button b) {
     screen.d1 = screens.get(screens.size()-2).d1;
     screen.d2 = screens.get(screens.size()-2).d2;
   }
-  screen.setScreen();
+  if (!menuOpen)
+    screen.setScreen();
+  else
+    menuScreen.setScreen();
   println(screens);
 
 }
