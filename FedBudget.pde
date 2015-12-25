@@ -7,7 +7,7 @@ class FedBudget {
   Table budget;
   int[] funding;
   int[] proposedFunding;
-  
+
   FedBudget() {
     budget = loadTable("startingbudget.csv", "header");
     expense = 0;
@@ -20,7 +20,7 @@ class FedBudget {
     for (TableRow row : budget.rows())
       expense += Utils.convertInt(row.getString(1));
   }
-  
+
   /* I needed a place to put info on this and stuff, it's good to separate all of it.
      How it goes:
        - Pres submits a budget between first Monday of September and first Monday of February
@@ -29,12 +29,16 @@ class FedBudget {
        - Appropriations bills happen occasionally and will be put in 'ideas', and military appropriations can only be yearly
        - Budget goes into effect October 1st, or gov shutdown.
   */
+
+  // updates the expenses of the budget
+  // Precondition: proposedFunding is an array of all of the expenses of departments updated, proposedExpense is total
+  // Postcondition: proposedExpense is the new total of the proposedFunding
   void updatePropExpense() {
     proposedExpense = 0;
     for (int i = 0; i < proposedFunding.length; i++)
       proposedExpense += proposedFunding[i];
   }
-  
-  
-  
+
+
+
 }

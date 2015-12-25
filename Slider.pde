@@ -8,7 +8,7 @@ class Slider {
   float boxX;
   float boxY;
   boolean visible;
-  
+
   String units;
 
   Slider(float xVal, float yVal, int max, float leng) {
@@ -19,6 +19,9 @@ class Slider {
     visible = true;
   }
 
+  // Displays this slider
+  // Precondition: all variables are set
+  // Postcondition: the slider is displayed with updates sometimes
   void display() {
     if (visible) {
       fill(0);
@@ -37,7 +40,11 @@ class Slider {
       text(value, x+value*len/maxVal, y);
     }
   }
-  
+
+
+  // returns if the mouse is inside the slider box
+  // Precondition: mX and mY are most likely the x and y of the mouse, theoretically any x or y
+  // Postcondition: returns if mX and mY are inside of the slider box's coords
   boolean isInside(float mX, float mY) {
     return mX > x+value*len/maxVal-boxSize/2 && mX < x+value*len/maxVal+boxSize/2 && mY > y-boxSize/2 && mY < y+boxSize/2;
   }

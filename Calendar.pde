@@ -16,6 +16,7 @@ class Calendar {
     day = 22;
   }
 
+  //
   void changeMonth(int direction) {
     if (direction < 0) {
       if (year != 17 || month != 1) {
@@ -36,18 +37,7 @@ class Calendar {
   }
 
   void display() {
-    fill(255);
-    rect(width/6, height/6, width*2/3, height*2/3);
-    fill(0);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    for (int i = 1; i <= 6; i++)
-      line(width/6, height/6+height*2/21*i, width*5/6, height/6+height*2/21*i);
-    for (int i = 1; i <= 7; i++) {
-      if (i != 7)
-        line(width/6+width*2/21*i, height/6, width/6+width*2/21*i, height*5/6);
-      text(days[i-1], width/6-width/21+width*2/21*i, height/6+height/21);
-    }
+    displayBackground();
 
     textAlign(RIGHT);
     String lMonth = "";
@@ -70,6 +60,33 @@ class Calendar {
       nMonth = months[month];
       lYear = nYear = year;
     }
+    
+    displayDays(lMonth, nMonth, lYear, nYear);
+  }
+
+
+  // creates the background for the Calendar
+  // Precondition: There is an empty screen and the boxes need to be 6*7
+  // Postcondition: There are boxes to put the days and weekday names on top
+  void displayBackground() {
+    fill(255);
+    rect(width/6, height/6, width*2/3, height*2/3);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    for (int i = 1; i <= 6; i++)
+      line(width/6, height/6+height*2/21*i, width*5/6, height/6+height*2/21*i);
+    for (int i = 1; i <= 7; i++) {
+      if (i != 7)
+        line(width/6+width*2/21*i, height/6, width/6+width*2/21*i, height*5/6);
+      text(days[i-1], width/6-width/21+width*2/21*i, height/6+height/21);
+    }
+  }
+
+  // Displays the days of the current month
+  // Precondition: lMonth = last month, nMonth = next month, lYear = last month year, nYear = next month year
+  // Postcondition: The days of the current month are displayed
+  void displayDays(String lMonth, String nMonth, int lYear, int nYear) {
     text("<   "+lMonth+" 20"+(lYear), width/2-40, height/6-50);
     textAlign(LEFT);
     text(nMonth+" 20"+(nYear)+"   >", width/2+40, height/6-50);
@@ -103,6 +120,9 @@ class Calendar {
     text(dayCount, width/6+width/21+width*2/21*col, height/6+height*2/21+height/21+width/21*row);
   }
 
+  // Change the month if the buttons are clicked
+  // Precondition: The button at the top exists and the longest it could be is sept.
+  // Postcondition: The month is either forward or backward
   void clickMonth(float mX, float mY) {
     textSize(20);
     if (mY > height/6-70 && mY < height/6-50) {

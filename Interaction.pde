@@ -15,7 +15,7 @@ class Interaction {
     currThem = new ArrayList[them.length];
   }
 
-
+// I think I'm going to scrap this class so ignore it
 
   void displayCongressTrade() {
     fill(200, 0, 0);

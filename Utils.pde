@@ -53,6 +53,9 @@ static class Utils {
     return dems;
   }
 
+  // Find congressmen in the house and senate who satisfy the input
+  // Precondition: String input is a search separated by spaces, house and senate are Congressman[] from President.pde
+  // Postcondition: Returns ArrayList of Congressman objects that satisfy the search input
   static ArrayList<Congressman> searchThrough(String input, Congressman[] house, Congressman[] senate) {
     // +====== Returns an arraylist of congressmen that satisfy String input ======+
     String[] inputs = input.toLowerCase().split(" ");

@@ -33,13 +33,19 @@ class Button {
   Button(int s) {
     command = s;
   }
-  
+
+  // sets the label on the button
+  // Precondition: each button has a label with these three parameters
+  // Postcondition: the button label is set
   void setLabel(String l, int lS, color lC) {
     label = l;
     lSize = lS;
     lCol = lC;
   }
 
+  // displays the button
+  // Precondition: the variables are all set to be used here
+  // Postcondition: a button is shown on the screen
   void display() {
     if (visible) {
       if (scrolled)
@@ -60,8 +66,10 @@ class Button {
         text(label, x, y);
     }
   }
-
-  boolean isInside(float Mx, float My) {
-    return Mx > x && Mx < x+w && My > y && My < y+h;
+  // returns if the mouse is inside the button
+  // Precondition: mX and mY are most likely the x and y of the mouse, theoretically any x or y
+  // Postcondition: returns if mX and mY are inside of the button's coords
+  boolean isInside(float mX, float mY) {
+    return mX > x && mX < x+w && mY > y && mY < y+h;
   }
 }

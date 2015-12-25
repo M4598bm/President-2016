@@ -31,11 +31,12 @@ class MenuScreen extends Screen {
 
     }
     else if (extra == 3) {
-      exit();
+      exit();// Exit the game! Fun! Save first when that exists
     }
     for (int i = 0; i < buttons.length; i++)
       buttons[i].scrollCol = color(200, 0, 0);
   }
+
 
   void display() {
     fill(255);

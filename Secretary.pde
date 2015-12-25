@@ -5,13 +5,16 @@ class Secretary {
   int[] events;// events having to do with this dept
   int happiness;// current state of the dept (does it have the capital to be efficient?)
   int funding;
-  
+
   Secretary(String d, String t) {
     dep = d;
     title = t;
     happiness = 90;
   }
-  
+
+  // Sets funding variable from all budget matters of this dep
+  // Precondition: startingbudget.csv is the budget at the beginning of the Game
+  // Postcondition: funding is the sum of funding in all of this department
   void findFunding() {
     funding = 0;
     Table t = loadTable("startingbudget.csv", "header");
