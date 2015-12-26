@@ -13,13 +13,13 @@ static class Utils {
   // precondition: an int num
   // postcondition: returns a String version of int num
   static String convertIntToString(int num) {
+    if (num == 0)
+      return "0";
     String s = "";
     while (num > 0) {
       s += num%10;
       num /= 10;
     }
-    if (num == 0)
-      s = "0";
     return reverseString(s);
   }
   // reverses a String

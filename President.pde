@@ -251,13 +251,23 @@ void draw() {
      This runs the whole thing. Eventually
      it will also run a starting screen.
   */
-  screen.display();// For some reason we do this every loop... that
+  //screen.display();// For some reason we do this every loop... that
   //makes it slow and it doesn't need to happen so I'll work on that later
-  if (menuOpen)
-    menuScreen.display();
-  topBar();// That menu at the top is displayed
+  //if (menuOpen)
+  //  menuScreen.display();
+  //topBar();// That menu at the top is displayed
 
 
+  //if (!screen.toString().equals("0"))
+  //  mainButton();// The button that returns to main screen
+}
+
+// Displays everything
+// Precondition: The topbar and menu button as well as screen exist
+// Postcondition: the topbar and menu button and either screen or menu are displayed
+void displayAll() {
+  screen.display();
+  topBar();
   if (!screen.toString().equals("0"))
     mainButton();// The button that returns to main screen
 }
@@ -306,7 +316,9 @@ void mouseClicked() {
 
   if (!menuOpen) {
     mouseClickedButton(mX, mY);
-
+    println(isCurrScreen(10));
+    println(screen);
+    println(Utils.convertIntToString(10));
     if (isCurrScreen(7)) {// Calendar Screen
       calendar.clickMonth(mX, mY);
     }
@@ -364,6 +376,7 @@ void mouseDragged() {
   if (currSlider != null) {
     currSlider.value = (int)constrain(((
       mouseX+currSlider.boxSize/2-currSlider.x)*currSlider.maxVal/currSlider.len), 0, currSlider.maxVal);
+    displayAll();
   }
 }
 
@@ -398,16 +411,20 @@ void keyPressed() {
     if (!isCurrScreen(0)) {
       newScreen(new Button(0));
       screen.setScreen();
+      displayAll();
     }
     else {
       menuOpen = !menuOpen;
+      menuScreen.display();
     }
   }
   else if (isCurrScreen(21)) {
     tempBill.name = typeResult(tempBill.name);
+    displayAll();
   }
   else if (isCurrScreen(13)) {
     screen.input = typeResult(screen.input);
+    displayAll();
   }
 
   keyPressedScrollX();
@@ -439,7 +456,8 @@ void mouseClickedButton(float mX, float mY) {
   float wordWidth = textWidth("Main Menu")/2;
   if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
     newScreen(new Button(0));
-    screen.setScreen();
+    //screen.setScreen();
+    displayAll();
   }
 
   // Normal buttons:
@@ -449,6 +467,7 @@ void mouseClickedButton(float mX, float mY) {
       if (screen.buttons[i].isInside(mX, mY) && screen.buttons[i].visible && screen.buttons[i].clickable) {
         done = true;
         newScreen(screen.buttons[i]);
+        displayAll();
       }
   }
 }
@@ -460,13 +479,16 @@ void mouseClickedMenu(float mX, float mY) {
   // text("|| Menu ||", width*3/4, 15);
   if (mX < width && mX > width*3/4 && mY < 30) {
     menuOpen = !menuOpen;
+    menuScreen.display();
   }
+  // If menu buttons are clicked
   if (menuOpen) {
     boolean done = false;
     for (int i = 0; i < menuScreen.buttons.length && !done; i++)
       if (menuScreen.buttons[i].isInside(mX, mY) && menuScreen.buttons[i].visible && menuScreen.buttons[i].clickable) {
         done = true;
         newScreen(menuScreen.buttons[i]);
+        // Do I need to display the menuScreen here?
       }
   }
 }
@@ -476,6 +498,7 @@ void mouseClickedMenu(float mX, float mY) {
 // Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked10and11(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
+    println("Hello");
     if (mY > height/6 && mY < height/2) {
       for (int i = 0; i < bills.size(); i++)
         if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
@@ -497,6 +520,7 @@ void mouseClicked10and11(float mX, float mY) {
             screen.buttons[2].clickable = false;
           }
         }
+      displayAll();
     }
     else if (mX < width/2-40) {
       if (screen.d1.size() > 0 && mY > height/2+65 && mY < height/2+90) {
@@ -507,6 +531,7 @@ void mouseClicked10and11(float mX, float mY) {
       }
       screen.buttons[1].setLabel("Remove", 14, 255);
       screen.buttons[1].clickable = true;
+      displayAll();
     }
     else if (mX > width/2+40) {
       if (screen.d2.size() > 0 && mY > height/2+65 && mY < height/2+90) {
@@ -517,6 +542,7 @@ void mouseClicked10and11(float mX, float mY) {
       }
       screen.buttons[2].setLabel("Remove", 14, 255);
       screen.buttons[2].clickable = true;
+      displayAll();
     }
   }
 }
@@ -530,6 +556,7 @@ void mouseClicked13(float mX, float mY) {
       for (int i = 0; i < screen.search.size(); i++)
         if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
           screen.chosen = i;
+          displayAll();
         }
     }
   }
@@ -544,8 +571,10 @@ void mouseClicked16(float mX, float mY) {
       int x = 0;
       for (int i = 0; i < house.length; i++) {
         if (house[i].committee == tempBill.committee) {
-          if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24)
+          if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
             screen.chosen = x;
+            displayAll();
+          }
           x++;
         }
       }
@@ -564,17 +593,20 @@ void mouseClicked18(float mX, float mY) {
           screen.chosen = i+3;
           screen.buttons[1].setLabel("Add", 14, 255);
           screen.buttons[1].clickable = true;
+          displayAll();
         }
     }
     else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
       screen.chosen = 1;
       screen.buttons[1].setLabel("Remove", 14, 255);
       screen.buttons[1].clickable = true;
+      displayAll();
     }
     else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
       screen.chosen = 2;
       screen.buttons[1].setLabel("Remove", 14, 255);
       screen.buttons[1].clickable = true;
+      displayAll();
     }
   }
 }
@@ -590,12 +622,14 @@ void mouseClicked20(float mX, float mY) {
           screen.chosen = i+2;
           screen.buttons[1].setLabel("Add", 14, 255);
           screen.buttons[1].clickable = true;
+          displayAll();
         }
     }
     else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
       screen.chosen = 1;
       screen.buttons[1].setLabel("Remove", 14, 255);
       screen.buttons[1].clickable = true;
+      displayAll();
     }
   }
 }
@@ -610,7 +644,7 @@ void mouseClicked23(float mX, float mY) {
       for (int i = 0; i < screen.trade.displays.length; i++) {
         for (int j = 0; j < screen.trade.displays[i].size(); i++) {
           if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
-
+            // somewhere displayAll();
           }
         }
         //if ((String)displays.get(i))
@@ -633,10 +667,14 @@ void mouseClicked23(float mX, float mY) {
 // Precondition: The mousewheel is scrolled
 // Postcondition: The info displayed is shifted up or down depending on the scroll direction
 void mouseWheelScrollX(float e) {
-  if (e > 0 && screen.scrollX != 0)
+  if (e > 0 && screen.scrollX != 0) {
     screen.scrollX += 20;
-  else if (e < 0)
+    displayAll();
+  }
+  else if (e < 0) {
     screen.scrollX -= 20;
+    displayAll();
+  }
 }
 
 /*
@@ -652,19 +690,30 @@ void buttonsScrolled() {
   if (!menuOpen) {
     if (screen.buttons != null)
       for (int i = 0; i < screen.buttons.length; i++) {
-        if (screen.buttons[i].isInside(mouseX, mouseY))
+        if (screen.buttons[i].isInside(mouseX, mouseY)) {
           screen.buttons[i].scrolled = true;
-        else
-          screen.buttons[i].scrolled = false;
+          displayAll();
+        }
+        else {
+          if (screen.buttons[i].scrolled == true) {
+            screen.buttons[i].scrolled = false;
+            displayAll();
+          }
+
+        }
       }
   }
   else {
     if (menuScreen.buttons != null)
       for (int i = 0; i < menuScreen.buttons.length; i++) {
-        if (menuScreen.buttons[i].isInside(mouseX, mouseY))
+        if (menuScreen.buttons[i].isInside(mouseX, mouseY)) {
           menuScreen.buttons[i].scrolled = true;
-        else
+          displayAll();
+        }
+        else {
           menuScreen.buttons[i].scrolled = false;
+          displayAll();
+        }
       }
   }
 }
@@ -698,10 +747,14 @@ void keyPressedScrollX() {
       isCurrScreen(13) ||
       isCurrScreen(16) ||
       isCurrScreen(18)) {
-    if (keyCode == UP && screen.scrollX != 0)
+    if (keyCode == UP && screen.scrollX != 0) {
       screen.scrollX += 20;
-    else if (keyCode == DOWN)
+      displayAll();
+    }
+    else if (keyCode == DOWN) {
       screen.scrollX -= 20;
+      displayAll();
+    }
   }
 }
 
