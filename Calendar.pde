@@ -10,6 +10,9 @@ class Calendar {
   int cMonth;
   int cYear;
 
+  // Constructor
+  // Precondition: year month and day are current values, cyear and cmonth are currently being shown
+  // Postcondition: creates the Object
   Calendar() {
     year = cYear = 17;// year is the display year, cYear is game current year
     month = cMonth = 1;

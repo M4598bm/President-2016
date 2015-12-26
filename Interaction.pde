@@ -7,7 +7,9 @@ class Interaction {
   // how displays works is that it holds ArrayLists of titles, and they link with stuff.
   // displays[i].get(0) is what is always shown, and if it is expanded, what is under it is.
 
-
+  // Constructor
+  // Precondition: you and them are the things to be traded between
+  // Postcondition: creates the Object
   Interaction(String[] you, String[] them) {
     yourOptions = you;
     themOptions = them;

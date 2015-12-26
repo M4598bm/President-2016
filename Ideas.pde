@@ -2,6 +2,9 @@ class Ideas {
   Table ideaTable;
   String[] names;
 
+  // Constructor
+  // Precondition: ideas.csv contains all of the ideas in the game
+  // Postcondition: creates the Object
   Ideas() {
     ideaTable = loadTable("ideas.csv", "header");
     names = new String[ideaTable.getRowCount()];

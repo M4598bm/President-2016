@@ -4,15 +4,18 @@ class SCJustice {
   int liberalism;// 0 conservative, 100 liberal
   char party;
   boolean chief;
-  
-  SCJustice(String n,int s, int l, char p,boolean leader) {
+
+  // Constructor
+  // Precondition: each of the variables represent the variables that need to be set
+  // Postcondition: creates the Object
+  SCJustice(String n,int s, int l, char p, boolean leader) {
     socialism = s;
     liberalism = l;
     party = p;
     name = n;
     chief = leader;
   }
-  
-  
-  
+
+
+
 }

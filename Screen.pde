@@ -46,6 +46,9 @@ class Screen {
   String input;// a string input
   Interaction trade;// facilitates any kind of trading screen
 
+  // Constructor
+  // Precondition: each of the variables needs to be set
+  // Postcondition: creates the Object
   Screen() {
     /* The constructor for string, mostly initializes values
     */

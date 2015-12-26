@@ -6,6 +6,9 @@ class Secretary {
   int happiness;// current state of the dept (does it have the capital to be efficient?)
   int funding;
 
+  // Constructor
+  // Precondition: d is department of the secretary and t is the title, both found in majordepartments.csv
+  // Postcondition: creates the Object
   Secretary(String d, String t) {
     dep = d;
     title = t;

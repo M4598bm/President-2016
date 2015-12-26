@@ -1,8 +1,12 @@
 class MenuScreen extends Screen {
+  
   String toString() {
     return "menu";
   }
 
+  // Constructor
+  // Precondition: the super class sets all the values
+  // Postcondition: creates the Object
   MenuScreen() {
     super();
     setScreen();

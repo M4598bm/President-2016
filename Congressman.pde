@@ -25,6 +25,9 @@ class Congressman {
   // Leaders are chosen after elections (democrats "caucus" republicans have a "conference")
   int leadership;// 0 is none, 1 is leader, 2 is whip, 3 is speaker. 1 and 2 have majority or minority and senate or house
 
+  // Constructor
+  // Precondition: n is name, s is state, h is house of congress
+  // Postcondition: creates the Object
   Congressman(String n, String s, int h) {
     name = n;
     state = s;

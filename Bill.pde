@@ -14,6 +14,9 @@ class Bill {
   int turnsHere;// committee gets infinite turns, house and senate 2 turns, pres 2 turns, veto 2 turns, law 0
   boolean isLaw;
 
+  // Constructor
+  // Precondition: variables need to be set
+  // Postcondition: creates the Object
   Bill() {
     ideas = new int[3];
     for (int i = 0; i < 3; i++)
@@ -106,7 +109,7 @@ class Bill {
       house[i].opinions = op;
     }
   }
-  
+
   // set the opinion held of this bill for house members
   // Precondition: senate is an array of Congressmen, socialism and liberalism are values of this class
   // Postcondition: every senator has an opinion, 0-100, on this bill parallel to this in bills

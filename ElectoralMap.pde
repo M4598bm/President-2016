@@ -1,6 +1,9 @@
 class ElectoralMap {
   PImage map;
 
+  // Constructor
+  // Precondition: map is an image that's always the same
+  // Postcondition: creates the Object
   ElectoralMap() {
     map = loadImage("electoralmap.jpg");
   }

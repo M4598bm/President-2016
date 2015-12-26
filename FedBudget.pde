@@ -8,6 +8,9 @@ class FedBudget {
   int[] funding;
   int[] proposedFunding;
 
+  // Constructor
+  // Precondition: startingbudget.csv contains budget info
+  // Postcondition: creates the Object
   FedBudget() {
     budget = loadTable("startingbudget.csv", "header");
     expense = 0;

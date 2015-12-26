@@ -11,6 +11,9 @@ class Slider {
 
   String units;
 
+  // Constructor
+  // Precondition: each of the variables represent the variables that need to be set
+  // Postcondition: creates the Object
   Slider(float xVal, float yVal, int max, float leng) {
     x = xVal;
     y = yVal;

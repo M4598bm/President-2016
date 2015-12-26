@@ -18,6 +18,9 @@ class Button {
   int lSize;
   color lCol;
 
+  // Constructor
+  // Precondition: each of the variables represent the variables that need to be set
+  // Postcondition: creates the Object
   Button(float xV, float yV, float wV, float hV, color c, int s) {
     x = xV;
     y = yV;

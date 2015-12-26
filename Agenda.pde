@@ -8,7 +8,7 @@ class Agenda {
   // Other election details
   ArrayList<Integer> scDecisions;
   ArrayList<Bill> billsOnDesk;
-  
+
     /* Examples of news include:
        * How a speech went
        * Important events that happened and how you're going to treat them
@@ -21,6 +21,9 @@ class Agenda {
        * Important Supreme Court cases coming up and recent decisions
        * Bills that you can sign or table
      */
+  // Constructor
+  // Precondition: tons of ArrayLists
+  // Postcondition: creates the Object
   Agenda() {
     events = new ArrayList<Integer>();
     billsChangedStatus = new ArrayList<Bill>();
@@ -30,13 +33,13 @@ class Agenda {
     scDecisions = new ArrayList<Integer>();
     billsOnDesk = new ArrayList<Bill>();
   }
-  
+
   void update() {
     // events haven't been done yet
-    
-    
+
+
   }
-  
-  
-     
+
+
+
 }

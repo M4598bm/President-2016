@@ -5,6 +5,9 @@ class NationalCom {
   int[] statePresFunds;
   boolean administration;// if it's the president's party
 
+  // Constructor
+  // Precondition: p is the party to make it the Republican National Committee or the Democratic National Committee
+  // Postcondition: creates the Object
   NationalCom(String p) {
     party = p;
     funds = 100;
