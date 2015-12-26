@@ -1,5 +1,7 @@
 class Bill {
   int[] ideas;
+  int[] isconstitutional;//Every idea will have a unconstitutional rating with 
+                            //it,How constitutional a bill is is dependent upon how many unconstitutional ideas there are
   int[] percentages;// amount of force put on each one
   String name;
   int weeklyCost;
@@ -8,7 +10,7 @@ class Bill {
   int committee;
   Congressman broughtBy;
   boolean presBacked;// The president created this bill
-
+int constitutional;//0-Constitutional,1-Maybe Constitutional,2-Somewhat Unconstitutional,3-Blatantly Unconstitutional
 
   int status;//0: Committee, 1: House, 2: Senate, 3: Pres, 4: Veto, 5: Law
   int turnsHere;// committee gets infinite turns, house and senate 2 turns, pres 2 turns, veto 2 turns, law 0
@@ -18,6 +20,7 @@ class Bill {
   // Precondition: variables need to be set
   // Postcondition: creates the Object
   Bill() {
+  
     ideas = new int[3];
     for (int i = 0; i < 3; i++)
       ideas[i] = -1;
