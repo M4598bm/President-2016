@@ -1,6 +1,9 @@
 class Screen16 extends Screen {
   // Find Representative for the bill
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "16";
   }

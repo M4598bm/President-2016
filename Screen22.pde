@@ -1,6 +1,9 @@
 class Screen22 extends Screen {
   // Show agenda
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "22";
   }

@@ -1,7 +1,10 @@
 class Screen0 extends Screen {
 
   // Main Screen of the game //
-
+  
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "0";
   }

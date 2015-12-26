@@ -1,6 +1,9 @@
 class Screen6 extends Screen {
   // United Nations
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "6";
   }

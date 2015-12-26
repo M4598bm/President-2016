@@ -1,6 +1,9 @@
 class Screen15 extends Screen {
   // Budget Policies
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "15";
   }

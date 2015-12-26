@@ -1,6 +1,9 @@
 class Screen21 extends Screen {
   // Finish bill
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "21";
   }

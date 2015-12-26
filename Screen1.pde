@@ -1,6 +1,9 @@
 class Screen1 extends Screen {
   // Statistics
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "1";
   }

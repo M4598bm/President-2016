@@ -5,6 +5,9 @@ class Screen13 extends Screen {
   String input;// a string input
   ArrayList<Congressman> search;// the result of a search through congresses
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "13";
   }

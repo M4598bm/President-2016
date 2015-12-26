@@ -1,6 +1,9 @@
 class Screen25 extends Screen {
   // General Assembly
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "25";
   }

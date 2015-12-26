@@ -1,6 +1,9 @@
 class Screen7 extends Screen {
   // Calandar
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "7";
   }

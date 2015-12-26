@@ -3,6 +3,9 @@ class Screen2 extends Screen {
 
 
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "2";
   }

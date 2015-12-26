@@ -1,6 +1,9 @@
 class Screen10 extends Screen {
   // House Speech
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "10";
   }

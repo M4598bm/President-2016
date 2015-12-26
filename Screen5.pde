@@ -1,6 +1,9 @@
 class Screen5 extends Screen {
   // D/R National Committee
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "5";
   }

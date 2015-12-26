@@ -1,6 +1,9 @@
 class Screen14 extends Screen {
   // Control Funding
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "14";
   }

@@ -2,7 +2,9 @@ class Screen3 extends Screen {
   // Congress
 
 
-
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "3";
   }

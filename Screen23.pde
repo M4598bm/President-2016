@@ -1,6 +1,9 @@
 class Screen23 extends Screen {
   // Legislative deals
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "23";
   }

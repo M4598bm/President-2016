@@ -1,5 +1,8 @@
 class MenuScreen extends Screen {
   
+  // toString method
+  // Precondition: none
+  // Postcondition: returns "menu"
   String toString() {
     return "menu";
   }

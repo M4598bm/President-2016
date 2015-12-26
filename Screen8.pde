@@ -1,6 +1,9 @@
 class Screen8 extends Screen {
   // War
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "8";
   }

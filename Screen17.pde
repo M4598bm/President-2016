@@ -1,6 +1,9 @@
 class Screen17 extends Screen {
   // Electoral Map
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "17";
   }

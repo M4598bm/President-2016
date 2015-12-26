@@ -1,6 +1,9 @@
 class Screen4 extends Screen {
   // International Relations
 
+  // toString method
+  // Precondition: none
+  // Postcondition: returns screen number
   String toString() {
     return "4";
   }
