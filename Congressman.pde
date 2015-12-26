@@ -1,7 +1,7 @@
 class Congressman {
   String name;
-  int socialism;// 0 capitalist, 100 socialist
-  int liberalism;// 0 conservative, 100 liberal
+  int socialism;// 0 capitalist, 5 socialist
+  int liberalism;// 0 conservative, 5 liberal
   int approval;// home approval rating
   float youApproval;// approval of you
   int strength;// how they stand under pressure
