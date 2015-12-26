@@ -14,11 +14,9 @@ Gameplay:
     - At the beginning of the game you can make an inaugural speech which outlines where you want stats to be at by the end of the first term, and in which you can choose from all available ideas which you want to use. This advice will be used by the Congressional AI to make decisions about passing laws (your party will aligned with your values and the other will go against them). Every year you must realign your ideas in a State Of The Union Address. Beware of flip-flopping!
 
     - Perform a speech to either or both houses of congress. Both houses have committee bill proposals at the floor with known yea and nay votes at most times.
-      * Bills are on the floor when the Speaker decides, but talking to the speaker or VP can get it moved forward or back.
       * You may pick maximum 2 each turn to support (you may be forced to support extra if you made a deal)
       * You may pick maximum 2 each turn to denounce (and whether you threaten to veto it, which will add nay votes but increase the possibility of an override)
       * To pass a law, a bill must be brought to committee in the House. This can be done automatically or through you. It then needs to pass in the House. It is brought to the Senate (small chance it doesn't), where it needs to pass. If it passes both houses it gets to you and you can choose whether to sign or veto. If you veto, in the next turn both houses will vote to override, which will happen with a two thirds vote (290/435 and 67/100) and then you will need to sign.
-
     - You may pick a bill to send (through a representative) to a committee that you hope will eventually get to you to sign into law. You can create a bill that has up to 3 ideas in it (each could possibly make it more toxic, so be careful).
 
     - You may talk to all legislators in your party privately to support up to 5 specific ideas (not bills) a turn. They may leak the information. (Still need to write that part)
@@ -49,3 +47,17 @@ Gameplay:
     - Control aspects of the CIA:
       * Plan assassination of leaders, with limited success rate and range of consequence
       * Fund rebel groups in different nations
+  How a law gets passed:
+    - Bills start in house or senate
+      * House member puts it in the hopper, senator introduces it on the floor.
+      * Bill is refered to the appropriate committee and it is placed on that committee's calendar
+        * If a bill is not being acted upon a discharge petition of 218 can release it
+      * The committee votes on the bill
+      * The committee holds a markup session of the bill
+      * If more than two changes are made it is a clean bill and gets a new number
+      * They vote again
+      * Bill is put on the House Calendar, Speaker and Majority Leader decide when it comes to the floor
+      * For Senate it is Legislative Calendar, or Executive Calendar for appointments and treaties, and Majority Leader sets calendar but majority of the Senate decides when
+      * In the House riders are not allowed but in the Senate they are, and sometimes filibusters destroy a bill
+      * If it is passed it goes to the other house, and if the bills are different in each house it goes to the Conference Committee to merge both.
+      * Then it goes to the president
