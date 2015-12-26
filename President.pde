@@ -244,22 +244,13 @@ void calcApproval() {
 
 
 // Loads the screen on loop continuously
-// Precondition: Every aspect that needs to be run has a display type method and this calls each one
-// Postcondition: Each loop the display methods are called and the screen is called
+// Precondition: Every aspect that needs to be run has a display type method, but this doesn't call all of them anymore
+// Postcondition: Nothing really happens, but the method is required for other built-in methods
 void draw() {
-  /* Also an essential Processing function!
+  /* An essential Processing function!
      This runs the whole thing. Eventually
      it will also run a starting screen.
   */
-  //screen.display();// For some reason we do this every loop... that
-  //makes it slow and it doesn't need to happen so I'll work on that later
-  //if (menuOpen)
-  //  menuScreen.display();
-  //topBar();// That menu at the top is displayed
-
-
-  //if (!screen.toString().equals("0"))
-  //  mainButton();// The button that returns to main screen
 }
 
 // Displays everything
