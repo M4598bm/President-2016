@@ -39,10 +39,11 @@ class Congressman {
   // Sets the political stance
   // Precondition: socialism is economic liberalism, liberalism is social liberalism, party is 'd' or 'r'
   // Postcondition: the values are set in this object
-  void setPolitics(int s, int l, char p) {//, int d) {
+  void setPolitics(int s, int l, char p,int loy) {//, int d) {
     socialism = s;
     liberalism = l;
     party = p;
+    loyalty=loy;
     //district = d;// I may not use district because of inaccuracies caused. Probably later
   }
 
