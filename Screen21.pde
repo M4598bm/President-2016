@@ -23,7 +23,7 @@ class Screen21 extends Screen {
     for (int i = 0; i < house.length; i++) {
       if (house[i].committee == tempBill.committee) {
         if (x == chosen)
-          tempBill.broughtBy = house[i];
+          tempBill.sponsor = house[i];
         x++;
       }
     }
@@ -54,7 +54,7 @@ class Screen21 extends Screen {
       if ((millis()/1000)%2 == 0)
         line(width/6+namespaceWidth+textWidth(tempBill.name), height/6+3, width/6+namespaceWidth+textWidth(tempBill.name), height/6+37);
       fill(0);
-      text("Brought to House committee by Rep. "+tempBill.broughtBy.name+"("+(tempBill.broughtBy.party+"").toUpperCase()+")", width/6, height/6+40);
+      text("Brought to House committee by Rep. "+tempBill.sponsor.name+"("+(tempBill.sponsor.party+"").toUpperCase()+")", width/6, height/6+40);
       textSize(25);
       text("Main clauses of this bill:", width/6, height/6+90);
       text("1. "+ideas.names[tempBill.ideas[0]]+" ("+tempBill.percentages[0]+"%)", width/6, height/6+130);

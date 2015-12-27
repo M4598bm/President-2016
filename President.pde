@@ -258,6 +258,8 @@ void draw() {
 // Postcondition: the topbar and menu button and either screen or menu are displayed
 void displayAll() {
   screen.display();
+  if (menuOpen)
+    menuScreen.display();
   topBar();
   if (!screen.toString().equals("0"))
     mainButton();// The button that returns to main screen
@@ -406,7 +408,7 @@ void keyPressed() {
     }
     else {
       menuOpen = !menuOpen;
-      menuScreen.display();
+      displayAll();
     }
   }
   else if (isCurrScreen(21)) {
@@ -470,7 +472,7 @@ void mouseClickedMenu(float mX, float mY) {
   // text("|| Menu ||", width*3/4, 15);
   if (mX < width && mX > width*3/4 && mY < 30) {
     menuOpen = !menuOpen;
-    menuScreen.display();
+    displayAll();
   }
   // If menu buttons are clicked
   if (menuOpen) {
@@ -702,8 +704,10 @@ void buttonsScrolled() {
           displayAll();
         }
         else {
-          menuScreen.buttons[i].scrolled = false;
-          displayAll();
+          if (menuScreen.buttons[i].scrolled == true) {
+            menuScreen.buttons[i].scrolled = false;
+            displayAll();
+          }
         }
       }
   }

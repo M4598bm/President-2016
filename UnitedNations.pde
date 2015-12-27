@@ -13,9 +13,7 @@ class UnitedNations{
     Name=Countries;
     approval=app;
     militarism=mil;
-    
-    militarism=m;
-    relations=rus;
+    //relations=rus;
     isSecurity=sec;
     proidea=pro;
     conidea=con;

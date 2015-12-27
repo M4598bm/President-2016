@@ -101,7 +101,7 @@ class Bill {
       initial -= pow(abs(house[i].socialism - avgSoc()), 2)*.005;
       initial -= pow(abs(house[i].liberalism - avgLib()), 2)*.005;
       op.add(initial);
-      if (broughtBy.party == house[i].party)
+      if (sponsor.party == house[i].party)
         op.set(op.size()-1, op.get(op.size()-1)+(int)(25*house[i].loyalty*.01));// 0 to 25
       else
         op.set(op.size()-1, op.get(op.size()-1)-(int)(25*house[i].loyalty*.01));// 0 to 25
@@ -123,7 +123,7 @@ class Bill {
       initial -= pow(abs(senate[i].socialism - avgSoc()), 2)*.005;
       initial -= pow(abs(senate[i].liberalism - avgLib()), 2)*.005;
       op.add(initial);
-      if (broughtBy.party == senate[i].party)
+      if (sponsor.party == senate[i].party)
         op.set(op.size()-1, op.get(op.size()-1)+(int)(25*senate[i].loyalty*.01));// 0 to 25
       else
         op.set(op.size()-1, op.get(op.size()-1)-(int)(25*senate[i].loyalty*.01));// 0 to 25
