@@ -90,4 +90,17 @@ class Screen {
     for (int i = 0; i < sliders.length; i++)
       sliders[i].display();
   }
+
+  // Displays a scroll bar.
+  //  The size of the bar is proportional to the size of the data compared to the space displayed
+  //  At the bottom of the data, the bottom of the bar must be at the very bottom
+  // Precondition: listlength is size of the list in pixels, space is the pixels of space shown at once
+  // Postcondition: the bar is displayed if listlength is more than space, and it conforms to the instructions above
+  void displayScrollBar(float listLength, float space) {
+    fill(50, 125, 250);// needs to be the background color
+    if (space < listLength) {
+      float scrollLength = space/listLength;// scrolllength is I think what is broken.
+      rect(width*5/6, height/6-scrollX*space/listLength, 10, scrollLength, 5);// This is the problem line.
+    }
+  }
 }

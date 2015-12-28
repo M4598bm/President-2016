@@ -2,9 +2,6 @@ class Screen13 extends Screen {
   // Talk to Legislators
 
 
-  String input;// a string input
-  ArrayList<Congressman> search;// the result of a search through congresses
-
   // toString method
   // Precondition: none
   // Postcondition: returns screen number
@@ -84,22 +81,9 @@ class Screen13 extends Screen {
         line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
     }
 
-    //===============================================================================
-    //===============================================================================
-    // This is the code that represents one scroll bar. The directions for what to do
-    // are in the github issue. Use listLength and space.
-    fill(50, 125, 250);
     float listLength = max(1, 24*search.size());// listlength is size of the list in pixels. List.size() is # of items
     float space = height*2/3;// Space that the text area takes up.
-    if (space < listLength) {
-      float scrollLength = space/listLength;// scrolllength is I think what is broken.
-      rect(width*5/6, height/6-scrollX*space/listLength, 10, scrollLength, 5);// This is the problem line.
-    }
-    //===============================================================================
-    //===============================================================================
-    //===============================================================================
-
-
+    displayScrollBar(listLength, space);
 
   }
 

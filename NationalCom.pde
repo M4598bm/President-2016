@@ -34,6 +34,7 @@ class NationalCom {
     textSize(16);
     text("Funds available for this year: ", width/2, 40);
     text("Funds reserved for your Presidential Campaign for this year: ", width/2, 60);
+    
     /* needs to be split into something probably region:
         * New England:
         * Southeast:

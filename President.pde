@@ -311,7 +311,6 @@ void mouseClicked() {
     mouseClickedButton(mX, mY);
     println(isCurrScreen(10));
     println(screen);
-    println(Utils.convertIntToString(10));
     if (isCurrScreen(7)) {// Calendar Screen
       calendar.clickMonth(mX, mY);
     }
