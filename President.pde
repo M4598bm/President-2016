@@ -58,7 +58,7 @@ void setup() {
 
   int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
   int hei = (int)(displayHeight*.8);// Eventually this will just be displayHeight
-  size(displayWidth, 640);// 640 is temp bc processing 3 sucks a bit
+  size(displayWidth, displayHeight);//640);// 640 is temp bc processing 3 sucks a bit
 
   turn = 0;
   String[] parties = {"Democratic", "Republican"};
@@ -82,12 +82,7 @@ void setup() {
   }
   // ^ Temporary ^ //
 
-
-  // To decrease runtime, this will eventually happen at key times.
-  // I might have to keep a variable for bgcolor because this is a
-  // random assortment of numbers. We might also want a different
-  // color, this one can be temp, so yea, that's a good idea
-  background(50, 125, 250);
+  displayAll();
 }
 
 // Sets up the two parties
@@ -95,6 +90,7 @@ void setup() {
 //    President's party and parties[1] is the opposition (["Democratic", "Republican"])
 // Postcondition: you and them are new national committees for both parties
 void setPresParty(String[] parties) {
+  println("setPresParty");
   you = new NationalCom(parties[0]);
   them = new NationalCom(parties[1]);
 
@@ -106,6 +102,7 @@ void setPresParty(String[] parties) {
 // Precondition: The variables with the class name created in President.pde
 // Postcondition: The variables are set
 void createSingleClasses() {
+  println("createSingleClasses");
   // one of each class things
   screen = new Screen0();
   screen.setScreen();
@@ -134,6 +131,7 @@ void createSingleClasses() {
 // Precondition: majordepartments.csv lists all of the major departments to have secretaries
 // Postcondition: cabinet is an array of Secretaries with only department set
 void createCabinet() {
+  println("createCabinet");
   cabinet = new Secretary[15];
   Table d = loadTable("majordepartments.csv", "header");
   for (int i = 0; i < cabinet.length; i++)
@@ -144,7 +142,7 @@ void createCabinet() {
 // Precondition:
 // Postcondition:
 void createCourt() {
-
+  println("createCourt");
 
 }
 // You can split this into helper functions, but here's the bulk
@@ -152,6 +150,7 @@ void createCourt() {
 // Precondition: states.csv has information about states, val is an int with how likely each state is to be Dem.
 // Postcondition: senate and house are arrays of Congressmen fully initialized
 void createCongress() {
+  println("createCongress");
   Table states = loadTable("states.csv", "header");// a table with states etc.
   initCongress(states);
   int xSenate = 0;
@@ -182,13 +181,14 @@ void createCongress() {
 // Precondition: senate and house are arrays of Congressmen that are initialized
 // Postcondition: Prints the makeup of each house of congress
 private void testCongress() {
-
+  println("testCongress");
 }
 
 // Initialize Congresspeople
 // Precondition: names.csv lists first and last names; states lists states and state info from states.csv
 // Postcondition: Both houses of congress have Congressmen with names, states, and house set
 void initCongress(Table states) {
+  println("initCongress");
   Table names = loadTable("names.csv", "header");// A table that has first and last names
   ArrayList<String> firstNames = new ArrayList<String>();
   ArrayList<String> lastNames  = new ArrayList<String>();
@@ -222,6 +222,7 @@ void initCongress(Table states) {
 // Precondition: any images needed for the whole game are stored as variables
 // Postcondition: load all images and set the variables to them
 void loadImages() {
+  println("loadImages");
   // The Electoral Map thing only sorta belongs here
 
   eM = new ElectoralMap();// move this to createSingleClasses()
@@ -233,6 +234,7 @@ void loadImages() {
 // Precondition: This isn't a finished method so I don't really know yet
 // Postcondition: Approval is a percentage between 0 - 100
 void calcApproval() {
+  println("calcApproval");
   approval = 50;// Temporary, eventually there will be a calculation here.
 }
 
@@ -381,6 +383,7 @@ void mouseWheel(MouseEvent event) {
   if (isCurrScreen(10) ||
       isCurrScreen(11) ||
       isCurrScreen(13) ||
+      isCurrScreen(14) ||
       isCurrScreen(16) ||
       isCurrScreen(18)) {
     mouseWheelScrollX(e);
@@ -414,7 +417,7 @@ void keyPressed() {
     tempBill.name = typeResult(tempBill.name);
     displayAll();
   }
-  else if (isCurrScreen(13)) {
+  else if (isCurrScreen(13) || isCurrScreen(14)) {
     screen.input = typeResult(screen.input);
     displayAll();
   }
@@ -739,6 +742,7 @@ void keyPressedScrollX() {
   if( isCurrScreen(10) ||
       isCurrScreen(11) ||
       isCurrScreen(13) ||
+      isCurrScreen(14) ||
       isCurrScreen(16) ||
       isCurrScreen(18)) {
     if (keyCode == UP && screen.scrollX != 0) {
