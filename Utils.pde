@@ -5,9 +5,14 @@ static class Utils {
   // postcondition: returns an int version of String num
   static int convertInt(String num) {
     int n = 0;
+    int negate = 1;
+    if (num.contains("-")) {
+      negate = -1;
+      num = num.substring(1, num.length());
+    }
     for (int i = 0; i < num.length (); i++)
       n += ((int)num.charAt(num.length()-1-i)-(int)'0')*pow(10, i);
-    return n;
+    return n*negate;
   }
   // converts numbers from int to string
   // precondition: an int num
@@ -54,6 +59,14 @@ static class Utils {
       dems = 2;
     return dems;
   }
+
+  // Used for CSV file reading to replace commas
+  // Precondition: The String s may have a comma in it marked by its HTML number, &#44;
+  // Postcondition: Returns String s where &#44; is replaced by a comma
+  static String returnCommas(String s) {
+    return s.replace("&#44;", ",");
+  }
+
 
   // Find congressmen in the house and senate who satisfy the input
   // Precondition: String input is a search separated by spaces, house and senate are Congressman[] from President.pde

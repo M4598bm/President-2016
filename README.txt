@@ -50,7 +50,7 @@ Gameplay:
   How a law gets passed:
     - Bills start in house or senate
       * House member puts it in the hopper, senator introduces it on the floor.
-      * Bill is refered to the appropriate committee and it is placed on that committee's calendar
+      * Bill is referred to the appropriate committee and it is placed on that committee's calendar
         * If a bill is not being acted upon a discharge petition of 218 can release it
       * The committee votes on the bill
       * The committee holds a markup session of the bill

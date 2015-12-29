@@ -16,6 +16,26 @@ class Bill {
   int turnsHere;// committee gets infinite turns, house and senate 2 turns, pres 2 turns, veto 2 turns, law 0
   boolean isLaw;
 
+  /* The legislative process in this game:
+
+  - Bills start in house or senate
+    * House member puts it in the hopper, senator introduces it on the floor.
+  - Bill is referred to the appropriate committee and it is placed on that committee's calendar
+    * If a bill is not being acted upon a discharge petition of 218 votes can release it
+  - The committee votes on the bill
+  - The committee holds a markup session of the bill
+  - If more than two changes are made it is a clean bill and gets a new number
+  - They vote again
+  - Bill is put on the House Calendar, Speaker and Majority Leader decide when it comes to the floor
+  - For Senate it is Legislative Calendar, or Executive Calendar for appointments and treaties, and Majority Leader sets calendar but majority of the Senate decides when
+  - In the House riders are not allowed but in the Senate they are, and sometimes filibusters destroy a bill
+  - If it is passed it goes to the other house, and if the bills are different in each house it goes to the Conference Committee to merge both.
+  - Then it goes to the president
+
+  */
+
+
+
   // Constructor
   // Precondition: variables need to be set
   // Postcondition: creates the Object

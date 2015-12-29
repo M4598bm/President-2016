@@ -22,6 +22,10 @@ int turn;// number of turns so far (starting from 0 at setup to 1 at first turn)
 int approval;// national polling approval of you
 boolean houseSpeech;// have you made a speech to the house this turn?
 boolean senateSpeech;// have you made a speech to the senate this turn?
+
+ArrayList<Congressman>[] houseCommittees;
+ArrayList<Congressman>[] senateCommittees;
+
 ArrayList<Bill> bills;// all bills created at the moment
 ArrayList<Bill> laws;// all laws passed
 Congressman[] house;// array of congressmen in the house
@@ -152,21 +156,27 @@ void createCourt() {
 void createCongress() {
   println("createCongress");
   Table states = loadTable("states.csv", "header");// a table with states etc.
+  Table districts = loadTable("districts.csv", "header");// a table with the districts
   initCongress(states);
   int xSenate = 0;
   int xHouse = 0;
   for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
     if (!row.getString(1).equals("DC")) {
-    // val is an int from 0 to 5 inclusive that tells you how likely it is to be a dem (5 is very likely)
-      int val = Utils.convertInt(row.getString(2));// This can be used anywhere you want
-
       //=== Senators ===//
+
+      // PVI is the index for how liberal the state is. Negative is GOP and positive is Dem
+      int PVI = Utils.convertInt(row.getString(2));
 
       // senate[x] and senate[x+1] are Congressman objects to be accessed
       xSenate+=2;
 
       //=== Representatives ===//
-      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {// row.getString(3) says how many reps in the state
+      for (TableRow dRow : districts.rows()) {// row.getString(3) says how many reps in the state
+        // PVI is the index for how liberal the district is. Negative is GOP and positive is Dem
+        int districtPVI = Utils.convertInt(dRow.getString(2));
+
+        // You can use both PVI for the state and districtPVI
+
         // house[x] is the Congressman to be accessed
         xHouse++;
       }
@@ -203,14 +213,14 @@ void initCongress(Table states) {
     if (!row.getString(1).equals("DC")) {
       // Initialize Senators
       String n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-      senate[xSenate] = new Congressman(n, row.getString(1), 1);
+      senate[xSenate] = new Congressman(n, row.getString(1), 1, 0);
       n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-      senate[xSenate+1] = new Congressman(n, row.getString(1), 1);
+      senate[xSenate+1] = new Congressman(n, row.getString(1), 1, 0);
       xSenate+=2;
       // Initialize Representatives
-      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
+      for (TableRow dRow : districts.rows()) {
         n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-        house[xHouse] = new Congressman(n, row.getString(1), 0);
+        house[xHouse] = new Congressman(n, row.getString(1), 0, Utils.convertInt(dRow.getString(1));
         house[xHouse].party = 'D';
         xHouse++;
       }

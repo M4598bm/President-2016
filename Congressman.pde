@@ -6,11 +6,11 @@ class Congressman {
   float youApproval;// approval of you
   int strength;// how they stand under pressure
   int loyalty;// party loyalty
+  int termsInOffice;// How many terms this Congressman has served in current house
 
   char party;// 'D' or 'R'
   String state;// "NY", "RI", "CA", "TN", "ME", etc.
-  //int district;// 0 is senator
-  int committee;// 15 is none
+  int district;// 0 is senator
   int nextElection;// 2018 and every 2 years for all house reps, split in threes for senators
   int funding;// how much money they have for the next election
   int house;// 0 if house of reps, 1 if senate
