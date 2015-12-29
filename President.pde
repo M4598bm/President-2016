@@ -168,16 +168,18 @@ void createCongress() {
       int PVI = Utils.convertInt(row.getString(2));
 
       // senate[x] and senate[x+1] are Congressman objects to be accessed
+      // Write code for setting values for Congressman senate[x] and Congressman senate[x+1] here
+
       xSenate+=2;
 
       //=== Representatives ===//
-      for (TableRow dRow : districts.rows()) {// row.getString(3) says how many reps in the state
+      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {// row.getString(3) says how many reps in the state
         // PVI is the index for how liberal the district is. Negative is GOP and positive is Dem
-        int districtPVI = Utils.convertInt(dRow.getString(2));
-
-        // You can use both PVI for the state and districtPVI
+        int districtPVI = Utils.convertInt(districts.getRow(xHouse).getString(2));
 
         // house[x] is the Congressman to be accessed
+        // Write code for setting values for Congressman house[x] here
+
         xHouse++;
       }
     }
