@@ -1,5 +1,7 @@
 class Bill {
   int[] ideas;
+  ArrayList<Integer> amendments;
+
   int[] isconstitutional;//Every idea will have a unconstitutional rating with
                         //it,How constitutional a bill is is dependent upon how many unconstitutional ideas there are
   int[] percentages;// amount of force put on each one
@@ -12,8 +14,24 @@ class Bill {
   boolean presBacked;// The president created this bill
   int constitutional;//0-Constitutional,1-Maybe Constitutional,2-Somewhat Unconstitutional,3-Blatantly Unconstitutional
 
-  int status;//0: Committee, 1: House, 2: Senate, 3: Pres, 4: Veto, 5: Law
-  int turnsHere;// committee gets infinite turns, house and senate 2 turns, pres 2 turns, veto 2 turns, law 0
+  String date;// "04/05/17" the next date set for this bill
+  int status;
+  /*
+  0: House committee - has markup date
+  1: Senate committee - has markup date
+  2: House committee markup - has vote date
+  3: Senate committee markup - has vote date
+  4: House - has vote date
+  5: Senate - has vote date
+  6: Conference Committee - has vote date
+  6: Pres - date is null
+  7: Veto - has override date
+  8: Law - date is null
+
+  */
+
+  boolean passedHouse;
+  boolean passedSenate;
   boolean isLaw;
 
   /* The legislative process in this game:
@@ -35,12 +53,10 @@ class Bill {
   */
 
 
-
   // Constructor
   // Precondition: variables need to be set
   // Postcondition: creates the Object
   Bill() {
-
     ideas = new int[3];
     for (int i = 0; i < 3; i++)
       ideas[i] = -1;
@@ -163,6 +179,21 @@ class Bill {
     isLaw = true;
     laws.add(this);
   }
+
+  /*
+  0: House committee - has markup date
+  1: Senate committee - has markup date
+  2: House committee markup - has vote date
+  3: Senate committee markup - has vote date
+  4: House - has vote date
+  5: Senate - has vote date
+  6: Conference Committee - has vote date
+  6: Pres - date is null
+  7: Veto - has override date
+  8: Law - date is null
+  */
+
+
   // Find average socialism rating of this Bill
   // Precondition: each idea has a socialism and liberalism value, percentages says how strong each idea will be
   // Postcondition: a Socialism rating is given, 0-100
