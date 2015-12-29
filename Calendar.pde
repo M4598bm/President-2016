@@ -134,6 +134,6 @@ class Calendar {
       else if (mX > width/2-40 && mX < width/2-40+textWidth("September 2020   >"))
         changeMonth(1);
     }
-    screen.display();
+    displayAll();
   }
 }

@@ -16,6 +16,8 @@ class Congressman {
   int house;// 0 if house of reps, 1 if senate
   ArrayList<Integer> opinions;//each represents bill # index on the floor, less than 33 is nay, more than 66 is yea
 
+  int committee;// Temporary until I find a better way to do this
+
   // Deal related
   ArrayList<Integer> mustVoteFor;//made a deal to vote for these
   ArrayList<Integer> mustVoteAgainst;//made a deal to vote against these
@@ -28,10 +30,11 @@ class Congressman {
   // Constructor
   // Precondition: n is name, s is state, h is house of congress
   // Postcondition: creates the Object
-  Congressman(String n, String s, int h) {
+  Congressman(String n, String s, int h, int d) {
     name = n;
     state = s;
     house = h;
+    district = d;
     committee = (int)random(16);
     opinions = new ArrayList<Integer>();
   }

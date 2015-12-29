@@ -48,7 +48,7 @@ class Bill {
     for (int i = 0; i < percentages.length; i++)
       percentages[i] = 50;
     name = "Type name here";
-    sponsor = new Congressman("", "NY", 0);
+    sponsor = new Congressman("", "NY", 0, 0);
   }
 
   String toString() {

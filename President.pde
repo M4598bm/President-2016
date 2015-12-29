@@ -62,7 +62,7 @@ void setup() {
 
   int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
   int hei = (int)(displayHeight*.8);// Eventually this will just be displayHeight
-  size(displayWidth, displayHeight);//640);// 640 is temp bc processing 3 sucks a bit
+  size(displayWidth, 640);// 640 is temp bc processing 3 sucks a bit
 
   turn = 0;
   String[] parties = {"Democratic", "Republican"};
@@ -151,13 +151,13 @@ void createCourt() {
 }
 // You can split this into helper functions, but here's the bulk
 // This method stacks the two arrays that hold Congress.
-// Precondition: states.csv has information about states, val is an int with how likely each state is to be Dem.
+// Precondition: states.csv has information about states, PVI is an int with likelihood to be Dem.
 // Postcondition: senate and house are arrays of Congressmen fully initialized
 void createCongress() {
   println("createCongress");
   Table states = loadTable("states.csv", "header");// a table with states etc.
   Table districts = loadTable("districts.csv", "header");// a table with the districts
-  initCongress(states);
+  initCongress(states, districts);
   int xSenate = 0;
   int xHouse = 0;
   for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
@@ -195,10 +195,11 @@ private void testCongress() {
 }
 
 // Initialize Congresspeople
-// Precondition: names.csv lists first and last names; states lists states and state info from states.csv
+// Precondition: names.csv lists first and last names; states lists state info from states.csv and districts is from districts.csv
 // Postcondition: Both houses of congress have Congressmen with names, states, and house set
-void initCongress(Table states) {
+void initCongress(Table states, Table districts) {
   println("initCongress");
+
   Table names = loadTable("names.csv", "header");// A table that has first and last names
   ArrayList<String> firstNames = new ArrayList<String>();
   ArrayList<String> lastNames  = new ArrayList<String>();
@@ -217,10 +218,11 @@ void initCongress(Table states) {
       n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
       senate[xSenate+1] = new Congressman(n, row.getString(1), 1, 0);
       xSenate+=2;
+
       // Initialize Representatives
-      for (TableRow dRow : districts.rows()) {
+      for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
         n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
-        house[xHouse] = new Congressman(n, row.getString(1), 0, Utils.convertInt(dRow.getString(1));
+        house[xHouse] = new Congressman(n, row.getString(0), 0, Utils.convertInt(districts.getRow(xHouse).getString(1)));
         house[xHouse].party = 'D';
         xHouse++;
       }
@@ -413,7 +415,7 @@ void mouseMoved() {
 void keyPressed() {
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
-    if (!isCurrScreen(0)) {
+    if (!isCurrScreen(0) && !menuOpen) {
       newScreen(new Button(0));
       screen.setScreen();
       displayAll();
@@ -433,7 +435,7 @@ void keyPressed() {
   }
 
   keyPressedScrollX();
-
+  keyPressedScrollHoriz();
 
 }
 
@@ -749,7 +751,7 @@ String typeResult(String s) {
 // Precondition: The keyboard arrow keys are used
 // Postcondition: The info displayed is shifted up or down depending on the arrow keys used
 void keyPressedScrollX() {
-  if( isCurrScreen(10) ||
+  if (isCurrScreen(10) ||
       isCurrScreen(11) ||
       isCurrScreen(13) ||
       isCurrScreen(14) ||
@@ -761,6 +763,22 @@ void keyPressedScrollX() {
     }
     else if (keyCode == DOWN) {
       screen.scrollX -= 20;
+      displayAll();
+    }
+  }
+}
+
+// All cases where arrow keys are used horizontally
+// Precondition: The LEFT RIGHT arrow keys are used
+// Postcondition: The screen reacts to the Horizontal arrow keys
+void keyPressedScrollHoriz() {
+  if (isCurrScreen(7)) {
+    if (keyCode == LEFT) {
+      calendar.changeMonth(-1);
+      displayAll();
+    }
+    else if (keyCode == RIGHT) {
+      calendar.changeMonth(1);
       displayAll();
     }
   }
