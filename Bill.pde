@@ -193,6 +193,41 @@ class Bill {
   8: Law - date is null
   */
 
+  void progressThrough() {
+    switch (status) {
+      case 0:
+        markup(0);
+        break;
+      case 1:
+        markup(1);
+        break;
+      case 2:
+        committeeVote(0);
+        break;
+      case 3:
+        committeeVote(1);
+        break;
+      case 4:
+        amend(0);
+        vote(0);
+        break;
+      case 5:
+        amend(1);
+        vote(1);
+        break;
+      case 7:
+        overrideVeto();
+        break;
+    }
+
+  }
+
+void markup(int chamber) {}
+void committeeVote(int chamber) {}
+void amend(int chamber) {}
+void vote(int chamber) {}
+void overrideVeto() {}
+
 
   // Find average socialism rating of this Bill
   // Precondition: each idea has a socialism and liberalism value, percentages says how strong each idea will be
