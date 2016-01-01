@@ -4,7 +4,7 @@ class Screen {
    1: Stats < 0
    2: Cabinet < 0
    3: Congress < 0
-   4: International < 0
+   4: Executive orders < 0
    5: (D/R)NC < 0
    6: UN < 0
    7: Calendar < 0
@@ -16,7 +16,7 @@ class Screen {
    13: Legislators < 3
    14: Control NC Funding < 5
    15: Submit a Budget Proposal < 12
-   16: Find Rep for Bill < 20
+   16: Find Sponsor for Bill < 20
    17: 2020 Electoral Map < 5
    18: New bill step 2 < 12
    19: New bill step 3 < 18

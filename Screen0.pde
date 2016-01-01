@@ -1,7 +1,7 @@
 class Screen0 extends Screen {
 
   // Main Screen of the game //
-  
+
   // toString method
   // Precondition: none
   // Postcondition: returns screen number
@@ -19,7 +19,7 @@ class Screen0 extends Screen {
     buttons[1] = new Button(width/2-100, height/2-110, 200, 60, color(255, 0, 0), 3);
     buttons[1].setLabel("Congress", 14, 255);
     buttons[2] = new Button(width/2+120, height/2-110, 200, 60, color(255, 0, 0), 4);
-    buttons[2].setLabel("International Treaties", 14, 255);
+    buttons[2].setLabel("Executive Orders", 14, 255);
     buttons[3] = new Button(width/2-320, height/2-30, 200, 60, color(255, 0, 0), 5);
     buttons[3].setLabel(presParty+" National Committee", 12, 255);
     buttons[4] = new Button(width/2-100, height/2-30, 200, 60, color(255, 0, 0), 6);

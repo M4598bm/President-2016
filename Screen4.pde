@@ -1,5 +1,5 @@
 class Screen4 extends Screen {
-  // International Relations
+  //Executive Orders
 
   // toString method
   // Precondition: none
