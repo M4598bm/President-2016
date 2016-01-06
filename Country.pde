@@ -18,18 +18,18 @@ class Country {
   //Constructor
   //Precondition:Name,militarism rating,isSecurity boolean
   //Postcondition:Creates an country with name,militarism, and isSecurity
-  void Country(String n,int mil,boolean iss) {
-    Name=n;
-    militarism=mil;
-    isSecurity=iss;
+  void Country(String n, int mil, boolean iss) {
+    Name = n;
+    militarism = mil;
+    isSecurity = iss;
   }
 
   //Constructor
   //Precondition:Countries that host country has relations with and their relationship ratings
   //Postcondition:Initializes relationships and relations array
-  void setRelations(String[] rel,int[] relation) {
-    relationships=rel;
-    relations=relation;
+  void setRelations(String[] rel, int[] relation) {
+    relationships = rel;
+    relations = relation;
 
   }
 
