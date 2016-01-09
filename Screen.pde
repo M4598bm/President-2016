@@ -28,6 +28,15 @@ class Screen {
    25: GA < 6
    26: Security Council < 6
    27: International Treaties < 6
+   28: See Executive Orders < 4
+   29: New Executive Order < 4
+   30: Bills status < 2
+   31: GA Delegate < 25
+   32: UN Speech < 6
+   33: Propose Resolution < 31
+   34: Security Council Delegate < 26
+   35: Propose Action < 34
+   36: Specific Calendars
   */
 
   // Most used variables for basic structure
