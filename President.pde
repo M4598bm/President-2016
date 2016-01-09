@@ -26,6 +26,7 @@ boolean senateSpeech;// have you made a speech to the senate this turn?
 ArrayList<Congressman>[] houseCommittees;
 ArrayList<Congressman>[] senateCommittees;
 
+ArrayList<ExecutiveOrder> executiveOrders;// all executive orders signed
 ArrayList<Bill> bills;// all bills created at the moment
 ArrayList<Bill> laws;// all laws passed
 Congressman[] house;// array of congressmen in the house
@@ -34,6 +35,7 @@ Secretary[] cabinet;// array of secretaries in your cabinet
 SCJustice[] scotus;// array of justices in the Supreme Court (will I need this at alL?)
 
 
+ExecutiveOrder tempOrder;// current ExecutiveOrder being drafted and floated
 Bill tempBill;// current bill that you're having drafted (only stored here because it has to be global)
 Slider currSlider;// The slider that was just clicked on and is being dragged
 
@@ -71,6 +73,7 @@ void setup() {
   createCongress();
   createCabinet();
   createCourt();
+  createOther();
 
   loadImages();
 
@@ -115,6 +118,7 @@ void createSingleClasses() {
   fedBudget = new FedBudget();
   ideas = new Ideas();
 
+  executiveOrders = new ArrayList<ExecutiveOrder>();
   bills = new ArrayList<Bill>();
   laws = new ArrayList<Bill>();
   house = new Congressman[435];
@@ -123,12 +127,20 @@ void createSingleClasses() {
 
   screens = new ArrayList<Screen>();
   screens.add(screen);
+}
 
+  // Sets other values that need to be set
+  // Precondition: no precondition
+  // Postcondition: The variables are set
+  void createOther() {
   // Needs to happen somewhere, don't worry about it.
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();
   agS = new ArrayList<Integer>();
+
+  tempOrder = new ExecutiveOrder();
+  tempOrder.president = "you";
 }
 
 // Sets up the Cabinet
@@ -347,6 +359,9 @@ void mouseClicked() {
     }
     else if (isCurrScreen(23)) {// Legislative Deal
       mouseClicked23(mX, mY);
+    }
+    else if (isCurrScreen(29)) {// New Executive Action
+      mouseClicked29(mX, mY);
     }
   }
 }
@@ -664,6 +679,41 @@ void mouseClicked23(float mX, float mY) {
 }
 
 
+// Screen 18
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
+void mouseClicked29(float mX, float mY) {
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height/2) {
+      for (int i = 0; i < screen.depIdeas.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+4;
+          screen.buttons[2].setLabel("Add", 14, 255);
+          screen.buttons[2].clickable = true;
+          displayAll();
+        }
+    }
+    else if (tempOrder.ideas[0] != -1 && mY > height-208 && mY < height-174) {
+      screen.chosen = 1;
+      screen.buttons[2].setLabel("Remove", 14, 255);
+      screen.buttons[2].clickable = true;
+      displayAll();
+    }
+    else if (tempOrder.ideas[1] != -1 && mY > height-174 && mY < height-140) {
+      screen.chosen = 2;
+      screen.buttons[2].setLabel("Remove", 14, 255);
+      screen.buttons[2].clickable = true;
+      displayAll();
+    }
+    else if (tempOrder.ideas[2] != -1 && mY > height-140 && mY < height-116) {
+      screen.chosen = 3;
+      screen.buttons[2].setLabel("Remove", 14, 255);
+      screen.buttons[2].clickable = true;
+      displayAll();
+    }
+  }
+}
+
 
 
 /*
@@ -902,6 +952,51 @@ void newScreen(Button b) {
       screen = new Screen25();
       screens.add(screen);
       break;
+    case 26:
+      screen = new Screen26();
+      screens.add(screen);
+      break;
+    case 27:
+      screen = new Screen27();
+      screens.add(screen);
+      break;
+    case 28:
+      screen = new Screen28();
+      screens.add(screen);
+      break;
+    case 29:
+      screen = new Screen29();
+      screens.add(screen);
+      break;
+    case 30:
+      screen = new Screen30();
+      screens.add(screen);
+      break;
+    case 31:
+      screen = new Screen31();
+      screens.add(screen);
+      break;
+    case 32:
+      screen = new Screen32();
+      screens.add(screen);
+      break;
+    case 33:
+      screen = new Screen33();
+      screens.add(screen);
+      break;
+    case 34:
+      screen = new Screen34();
+      screens.add(screen);
+      break;
+    case 35:
+      screen = new Screen35();
+      screens.add(screen);
+      break;
+    case 36:
+      screen = new Screen36();
+      screens.add(screen);
+      break;
+
     // MenuScreen Cases
     case 100:
       menuScreen = new MenuScreen();

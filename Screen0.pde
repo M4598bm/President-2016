@@ -62,7 +62,6 @@ class Screen0 extends Screen {
 
     }
 
-
     else if (extra == 10) {// speechwriting house
       suppH = d1;
       agH = d2;
@@ -70,6 +69,12 @@ class Screen0 extends Screen {
     else if (extra == 11) {// speechwriting senate
       suppS = d1;
       agS = d2;
+    }
+
+    else if (extra == 29) {// new executive order
+      executiveOrders.add(tempOrder);
+      tempOrder = new ExecutiveOrder();
+      tempOrder.president = "you";
     }
     // ============================
     // ============================

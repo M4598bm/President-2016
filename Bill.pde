@@ -2,8 +2,7 @@ class Bill {
   int[] ideas;
   ArrayList<Integer> amendments;
 
-  int[] isconstitutional;//Every idea will have a unconstitutional rating with
-                        //it,How constitutional a bill is is dependent upon how many unconstitutional ideas there are
+  int[] constitutional;// Each idea has constitutional safety, 0-100
   int[] percentages;// amount of force put on each one
   String name;
   int billNumber;
@@ -12,7 +11,6 @@ class Bill {
   int committee;
   Congressman sponsor;
   boolean presBacked;// The president created this bill
-  int constitutional;//0-Constitutional,1-Maybe Constitutional,2-Somewhat Unconstitutional,3-Blatantly Unconstitutional
 
   String date;// "04/05/17" the next date set for this bill
   int status;
@@ -63,6 +61,7 @@ class Bill {
     percentages = new int[3];
     for (int i = 0; i < percentages.length; i++)
       percentages[i] = 50;
+    constitutional = new int[3];
     name = "Type name here";
     sponsor = new Congressman("", "NY", 0, 0);
   }

@@ -15,7 +15,7 @@ class Screen2 extends Screen {
   // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     textSize(14);
-    buttons = new Button[18];
+    buttons = new Button[3+cabinet.length];
     buttons[0] = new Button(width/2-100, height-100, 200, 60, color(255, 0, 0), 0);
     buttons[0].setLabel("See Bills", 14, 255);
     buttons[1] = new Button(width-textWidth("Sec. of Housing and Urban Dev.   ")-200, height-100, 200, 60, color(255, 0, 0), 2);

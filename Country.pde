@@ -19,7 +19,7 @@ class Country {
   //Precondition:Name,militarism rating,isSecurity boolean
   //Postcondition:Creates an country with name,militarism, and isSecurity
   void Country(String n, int mil, boolean iss) {
-    Name = n;
+    name = n;
     militarism = mil;
     isSecurity = iss;
   }
