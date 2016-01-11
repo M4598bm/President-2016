@@ -10,6 +10,8 @@ class Calendar {
   int cMonth;
   int cYear;
 
+  Table events;
+
   // Constructor
   // Precondition: year month and day are current values, cyear and cmonth are currently being shown
   // Postcondition: creates the Object
@@ -17,9 +19,17 @@ class Calendar {
     year = cYear = 17;// year is the display year, cYear is game current year
     month = cMonth = 1;
     day = 22;
+
+    events = new Table();
+    events.addColumn("day");
+    events.addColumn("month");
+    events.addColumn("year");
+    events.addColumn("event");
   }
 
-  //
+  // set the month forward or backward
+  // Precondition: direction is positive or negative
+  // Postcondition: if direction < 0 month goes back, if direction >= 0 month goes forward
   void changeMonth(int direction) {
     if (direction < 0) {
       if (year != 17 || month != 1) {
@@ -39,6 +49,9 @@ class Calendar {
     }
   }
 
+  // Display the calendar
+  // Precondition: no precondition
+  // Postcondition: the calendar is displayed
   void display() {
     displayBackground();
 
@@ -121,6 +134,17 @@ class Calendar {
       }
     }
     text(dayCount, width/6+width/21+width*2/21*col, height/6+height*2/21+height/21+width/21*row);
+  }
+
+  // add an event
+  // Precondition: day month year is the date, and the event is a string that will be displayed
+  // Postcondition: the date and event is stored in a table
+  void addEvent(int day, int month, int year, String event) {
+    TableRow r = events.addRow();
+    r.addInt("day", day);
+    r.addInt("month", month);
+    r.addInt("year", year);
+    r.addString("event", event);
   }
 
   // Change the month if the buttons are clicked

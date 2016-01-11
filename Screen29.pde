@@ -51,19 +51,22 @@ class Screen29 extends Screen {
   // Precondition: extra is an int from the last Screen
   // Postcondition: actions are taken according to the int extra
   void extraActions() {
-    if (chosen == 0) {
-      
+    if (lastButtonInd == 2) {
+      if (chosen == 0) {}
+      else if (chosen < 3) {
+        tempOrder.removeIdea(tempOrder.ideas[chosen-1]);
+        chosen = 0;
+        screens.remove(screens.size()-2);
+      }
+      else {
+        tempOrder.addIdea(ideas.nameToInd(depIdeas.get(chosen-4)));
+        chosen = 0;
+        screens.remove(screens.size()-2);
+      }
     }
-    else if (chosen < 3) {
-      tempOrder.removeIdea(tempOrder.ideas[chosen-1]);
-      chosen = 0;
-      screens.remove(screens.size()-2);
-    }
-    else {
-      tempOrder.addIdea(ideas.nameToInd(depIdeas.get(chosen-4)));
-      chosen = 0;
-      screens.remove(screens.size()-2);
-    }
+
+    chosen = 0;
+
     for (int i = 0; i < sliders.length; i++) {
       sliders[i].value = tempOrder.percentages[i];
       if (tempOrder != null && tempOrder.ideas[i] == -1)
@@ -83,7 +86,7 @@ class Screen29 extends Screen {
     textSize(26);
     textAlign(CENTER, CENTER);
     fill(0);
-    text("Create an Executive Order to various departments:", width/2, (height-30)*1/12+30);
+    text(cabinet[extra].dep, width/2, (height-30)*1/12+30);
     // Create the ideas box
     fill(255);
     rect(width/6, height/6, width*2/3, height-215-height/6);
@@ -93,7 +96,7 @@ class Screen29 extends Screen {
     for (int i = 0; i < depIdeas.size(); i++) {
       if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1-3 is already there, so 4 is 1
         if (i == chosen-4) {
-          fill(0, 0, 100);
+          fill(255, 255, 20);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }
@@ -106,6 +109,15 @@ class Screen29 extends Screen {
     rect(width/6, height-208, width*2/3, 102);
     line(width/6, height-174, width*5/6, height-174);
     line(width/6, height-140, width*5/6, height-140);
+
+    fill(255, 255, 20);
+    if (chosen == 1)
+      rect(width/6, height-208, width*4/6, 34);
+    if (chosen == 2)
+      rect(width/6, height-174, width*4/6, 34);
+    if (chosen == 3)
+      rect(width/6, height-140, width*4/6, 34);
+
     textAlign(LEFT, CENTER);
     fill(0);
     if (tempOrder.ideas[0] != -1)
@@ -114,14 +126,6 @@ class Screen29 extends Screen {
       text(ideas.names[tempOrder.ideas[1]], width/6, height-157);
     if (tempOrder.ideas[2] != -1)
       text(ideas.names[tempOrder.ideas[2]], width/6, height-123);
-
-    fill(0, 0, 100);
-    if (chosen == 1)
-      rect(width/6, height-208, width*4/6, 34);
-    if (chosen == 2)
-      rect(width/6, height-174, width*4/6, 34);
-    if (chosen == 3)
-      rect(width/6, height-140, width*4/6, 34);
 
     fill(0);
 

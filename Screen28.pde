@@ -13,6 +13,13 @@ class Screen28 extends Screen {
   // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[0];
+    println(extra);
+    if (extra == 1) {
+      buttons = new Button[1];
+      buttons[0] = new Button(width*5/6-60, height*5/6, 100, 60, color(255, 0, 0), 28);
+      buttons[0].setLabel("Close", 14, 255);
+      buttons[0].extra = 0;
+    }
   }
 
   // Displays the screen
@@ -29,6 +36,7 @@ class Screen28 extends Screen {
       rect(width/6, height/6, width*2/3, height*2/3);
       textAlign(LEFT, TOP);
       fill(0);
+      textSize(20);
       for (int i = 0; i < executiveOrders.size(); i++) {
         if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
           text(executiveOrders.get(i).name, width/6+5, height/6+24*i+scrollX);
@@ -44,7 +52,7 @@ class Screen28 extends Screen {
       fill(0);
       textAlign(CENTER, TOP);
       textSize(20);
-      text(executiveOrders.get(chosen).name, width/2, height*2/3);
+      text(executiveOrders.get(chosen).name, width/2, height/6);
     }
   }
 

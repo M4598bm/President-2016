@@ -6,6 +6,7 @@ String name;// Player name (Set at start later)
 String presParty;// Player party (Set at start later)
 
 boolean menuOpen;// True or false if the Menu is up
+int lastButtonInd;// the index of the last button pressed
 
 ArrayList<Screen> screens;
 Screen screen;// Handles most display aspects
@@ -348,6 +349,9 @@ void mouseClicked() {
     else if (isCurrScreen(13)) {// Legislator Deal Choice
       mouseClicked13(mX, mY);
     }
+    else if (isCurrScreen(14)) {// Open Congressperson Popup
+      mouseClicked14(mX, mY);
+    }
     else if (isCurrScreen(16)) {// Find a Rep for Bill
       mouseClicked16(mX, mY);
     }
@@ -360,7 +364,10 @@ void mouseClicked() {
     else if (isCurrScreen(23)) {// Legislative Deal
       mouseClicked23(mX, mY);
     }
-    else if (isCurrScreen(29)) {// New Executive Action
+    else if (isCurrScreen(28)) {// Show Executive Action
+      mouseClicked28(mX, mY);
+    }
+    else if (isCurrScreen(29)) {// New Executive Order
       mouseClicked29(mX, mY);
     }
   }
@@ -489,6 +496,7 @@ void mouseClickedButton(float mX, float mY) {
     boolean done = false;
     for (int i = 0; i < screen.buttons.length && !done; i++)
       if (screen.buttons[i].isInside(mX, mY) && screen.buttons[i].visible && screen.buttons[i].clickable) {
+        lastButtonInd = i;
         done = true;
         newScreen(screen.buttons[i]);
         displayAll();
@@ -586,6 +594,25 @@ void mouseClicked13(float mX, float mY) {
   }
 }
 
+// Screen 14
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and popup window comes up
+void mouseClicked14(float mX, float mY) {
+  if (screen.extra == 0) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height*5/6) {
+        for (int i = 0; i < screen.search.size(); i++)
+          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+            screen.chosen = i;
+            screen.extra = 1;
+            screen.setScreen();
+            displayAll();
+          }
+      }
+    }
+  }
+}
+
 // Screen 16
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and is highlighted
@@ -678,8 +705,26 @@ void mouseClicked23(float mX, float mY) {
   }
 }
 
+// Screen 28
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and popup window comes up
+void mouseClicked28(float mX, float mY) {
+  if (screen.extra == 0) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height*5/6) {
+        for (int i = 0; i < executiveOrders.size(); i++)
+          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+            screen.chosen = i;
+            screen.extra = 1;
+            screen.setScreen();
+            displayAll();
+          }
+      }
+    }
+  }
+}
 
-// Screen 18
+// Screen 29
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
 void mouseClicked29(float mX, float mY) {

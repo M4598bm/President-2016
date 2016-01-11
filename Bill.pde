@@ -38,10 +38,9 @@ class Bill {
     * House member puts it in the hopper, senator introduces it on the floor.
   - Bill is referred to the appropriate committee and it is placed on that committee's calendar
     * If a bill is not being acted upon a discharge petition of 218 votes can release it
-  - The committee votes on the bill
   - The committee holds a markup session of the bill
   - If more than two changes are made it is a clean bill and gets a new number
-  - They vote again
+  - They vote on the bill
   - Bill is put on the House Calendar, Speaker and Majority Leader decide when it comes to the floor
   - For Senate it is Legislative Calendar, or Executive Calendar for appointments and treaties, and Majority Leader sets calendar but majority of the Senate decides when
   - In the House riders are not allowed but in the Senate they are, and sometimes filibusters destroy a bill

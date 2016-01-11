@@ -63,6 +63,8 @@ class Screen {
     */
     d1 = new ArrayList<Integer>();
     d2 = new ArrayList<Integer>();
+    input = "";
+    chosen = -1;
     search = new ArrayList<Congressman>();
     buttons = new Button[0];
     sliders = new Slider[0];

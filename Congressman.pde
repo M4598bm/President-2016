@@ -12,6 +12,7 @@ class Congressman {
   String state;// "NY", "RI", "CA", "TN", "ME", etc.
   int district;// 0 is senator
   int nextElection;// 2018 and every 2 years for all house reps, split in threes for senators
+  int ncFunds;// how much money they get from the (D/R)NC
   int funding;// how much money they have for the next election
   int house;// 0 if house of reps, 1 if senate
   ArrayList<Integer> opinions;//each represents bill # index on the floor, less than 33 is nay, more than 66 is yea
@@ -37,6 +38,9 @@ class Congressman {
     district = d;
     committee = (int)random(16);
     opinions = new ArrayList<Integer>();
+
+    //Temporary
+    ncFunds = 100;
   }
 
   // Sets the political stance

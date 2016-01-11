@@ -1,6 +1,8 @@
 class Screen14 extends Screen {
   // Control Funding
 
+  Congressman cperson;
+
   // toString method
   // Precondition: none
   // Postcondition: returns screen number
@@ -13,22 +15,46 @@ class Screen14 extends Screen {
   // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     buttons = new Button[2];
-    buttons[0] = new Button(width/2-320, height*5/6+20, 300, height/6-40, color(255, 0, 0), 0);
+    if (extra == 1)
+      buttons = new Button[3];
+
+    buttons[0] = new Button(width/2-220, height*5/6+40, 200, height/6-50, color(255, 0, 0), 0);
     buttons[0].setLabel("Cancel", 14, 255);
-    buttons[1] = new Button(width/2-320, height*5/6+20, 300, height/6-40, color(255, 0, 0), 0);
+    buttons[1] = new Button(width/2+20, height*5/6+40, 200, height/6-50, color(255, 0, 0), 0);
     buttons[1].setLabel("Update", 14, 255);
     buttons[1].extra = 4;
 
-    input = "";
-    search = new ArrayList<Congressman>();
-    chosen = -1;
+    search = Utils.searchThrough(input, house, senate);
 
     sliders = new Slider[1];
-    textSize(16);
-    sliders[0] = new Slider(width/2+textWidth("Funds reserved for your Presidential Campaign for this year: 0 ")/2, 64, you.funds, 200);
+    if (extra == 1)
+      sliders = new Slider[2];
+    textSize(20);
+    float wordsWidth = textWidth("Funds reserved for your Presidential Campaign for this year: ");
+    sliders[0] = new Slider(width/6+wordsWidth, height*5/6+10, you.funds, width*5/6-(width/6+wordsWidth));
     sliders[0].units = "Million";
+
+    extraActions();
+
+    for (int i = 0; i < buttons.length; i++)
+      buttons[i].scrollCol = color(200, 0, 0);
   }
 
+  // Does the extra actions
+  // Precondition: extra is an int from the last Screen, chosen also
+  // Postcondition: actions are taken according to the ints extra and chosen
+  void extraActions() {
+    if (extra == 1) {
+      cperson = search.get(chosen);
+
+      buttons[2] = new Button(width*2/3-100, height*2/3, 100, 40, color(255, 0, 0), 14);
+      buttons[2].setLabel("Close", 14, 255);
+      buttons[2].extra = 0;
+
+      sliders[1] = new Slider(width/3+textWidth("Funding: "), height/3+30, cperson.ncFunds, width/6);
+      sliders[1].units = "Thousand";
+    }
+  }
     // Displays the screen
     // Precondition: setScreen has been called for this screen, this is the current Screen
     // Postcondition: this screen is displayed
@@ -38,6 +64,10 @@ class Screen14 extends Screen {
     you.display();
 
     textAlign(LEFT, TOP);
+
+    textSize(16);
+    text("Funds available for this year: ", width/6, 40);
+
     float w = textWidth("Search by state, name, party, or position:")+5;
     fill(0);
     text("Search by state, name, party, or position:", width/6, 65);
@@ -56,14 +86,11 @@ class Screen14 extends Screen {
     text("Congressmen:", width/2, height/6-30);
 
     search = Utils.searchThrough(input, house, senate);
+    println(input);
+    println(search.size());
     textAlign(LEFT, TOP);
     for (int i = 0; i < search.size(); i++) {
       if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
-        if (i == chosen) {
-          fill(0, 0, 100);
-          rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
-          fill(0);
-        }
         text("Sen. "+search.get(i).name+"  ("+search.get(i).party+", "+search.get(i).state+")", width/6+5, height/6+24*i+scrollX);
       }
       if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
@@ -72,5 +99,27 @@ class Screen14 extends Screen {
     float listLength = max(1, 24*search.size());// listlength is size of the list in pixels. List.size() is # of items
     float space = height*2/3;// Space that the text area takes up.
     displayScrollBar(listLength, space);
+
+    fill(0);
+    text("Funds reserved for your Presidential Campaign for this year: ", width/6, height*5/6);
+
+    popUpWindow();
+    displayButtonsSliders();
+  }
+
+  // Displays a popup with settings for the selected congressperson's funding
+  // Precondition: chosen is the int from the search that was selected for the popup
+  // Postcondition: A popup window is displayed over the Screen
+  void popUpWindow() {
+    if (extra == 1) {
+      fill(255);
+      rect(width/3, height/3, width/3, height/3);
+      fill(0);
+      textAlign(CENTER, TOP);
+      textSize(20);
+      text(cperson.name+"("+cperson.party+","+cperson.state+")", width/2, height/3);
+      textAlign(LEFT, TOP);
+      text("Funding: ", width/3, height/3+30);
+    }
   }
 }
