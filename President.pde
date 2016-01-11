@@ -32,6 +32,8 @@ ArrayList<Bill> bills;// all bills created at the moment
 ArrayList<Bill> laws;// all laws passed
 Congressman[] house;// array of congressmen in the house
 Congressman[] senate;// array of congressmen in the senate
+Committee[] houseCommittees;// array of committees in the house
+Committee[] senateCommittees;// array of committees in the senate
 Secretary[] cabinet;// array of secretaries in your cabinet
 SCJustice[] scotus;// array of justices in the Supreme Court (will I need this at alL?)
 
@@ -72,6 +74,7 @@ void setup() {
   setPresParty(parties);// Default is that Democrat is the presParty
   createSingleClasses();
   createCongress();
+  createCommittees();
   createCabinet();
   createCourt();
   createOther();
@@ -124,6 +127,8 @@ void createSingleClasses() {
   laws = new ArrayList<Bill>();
   house = new Congressman[435];
   senate = new Congressman[100];
+
+  cabinet = new Secretary[15];
   scotus = new SCJustice[9];
 
   screens = new ArrayList<Screen>();
@@ -149,7 +154,6 @@ void createSingleClasses() {
 // Postcondition: cabinet is an array of Secretaries with only department set
 void createCabinet() {
   println("createCabinet");
-  cabinet = new Secretary[15];
   Table d = loadTable("majordepartments.csv", "header");
   for (int i = 0; i < cabinet.length; i++)
     cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
@@ -242,6 +246,28 @@ void initCongress(Table states, Table districts) {
         xHouse++;
       }
     }
+  }
+}
+
+// creates committees in both houses
+// Precondition: housecommittees.csv and senatecommittees.csv contain committee info
+// Postcondition: two arrays of committees are setup
+void createCommittees() {
+  Table h = loadTable("housecommittees.csv", "header");
+  Table s = loadTable("senatecommittees.csv", "header");
+
+  houseCommittees = new Committee[h.getRowCount()];
+  senateCommittees = new Committee[s.getRowCount()];
+
+  for (int i = 0; i < h.getRowCount(); i++) {
+    TableRow r = h.getRow(i);
+    houseCommittees[i] = new Committee(r.getString(0), Utils.convertInt(r.getString(1)), 0);
+    // put in members to committee
+  }
+  for (int i = 0; i < s.getRowCount(); i++) {
+    TableRow r = s.getRow(i);
+    senateCommittees[i] = new Committee(r.getString(0), Utils.convertInt(r.getString(1)), 1);
+    // put in members to committee
   }
 }
 
@@ -338,8 +364,6 @@ void mouseClicked() {
 
   if (!menuOpen) {
     mouseClickedButton(mX, mY);
-    println(isCurrScreen(10));
-    println(screen);
     if (isCurrScreen(7)) {// Calendar Screen
       calendar.clickMonth(mX, mY);
     }
@@ -369,6 +393,9 @@ void mouseClicked() {
     }
     else if (isCurrScreen(29)) {// New Executive Order
       mouseClicked29(mX, mY);
+    }
+    else if (isCurrScreen(30)) {// See Bills Status
+      mouseClicked30(mX, mY);
     }
   }
 }
@@ -530,7 +557,6 @@ void mouseClickedMenu(float mX, float mY) {
 // Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked10and11(float mX, float mY) {
   if (mX > width/6 && mX < width*5/6) {
-    println("Hello");
     if (mY > height/6 && mY < height/2) {
       for (int i = 0; i < bills.size(); i++)
         if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
@@ -759,7 +785,34 @@ void mouseClicked29(float mX, float mY) {
   }
 }
 
-
+// Screen 30
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and popup window comes up
+void mouseClicked30(float mX, float mY) {
+  if (screen.chosen == -1) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height*5/6) {
+        int x = 0;
+        for (int i = 0; i < bills.size(); i++) {
+          if (
+            (screen.extra == 0 && (bills.get(i).status < 2)) ||
+            (screen.extra == 1 && (bills.get(i).status == 2 || bills.get(i).status == 4)) ||
+            (screen.extra == 2 && (bills.get(i).status == 3 || bills.get(i).status == 5)) ||
+            (screen.extra == 3 && (bills.get(i).status == 6)) ||
+            (screen.extra == 4 && (bills.get(i).status == 7))
+          ) {
+            if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
+              screen.chosen = i;
+              screen.setScreen();
+              displayAll();
+            }
+            x++;
+          }
+        }
+      }
+    }
+  }
+}
 
 /*
 
@@ -1066,7 +1119,7 @@ void newScreen(Button b) {
   }
   screen.extra = b.extra;
   if (screens.size() > 1) {
-    screen.chosen = screens.get(screens.size()-2).chosen;
+    //screen.chosen = screens.get(screens.size()-2).chosen;
     screen.d1 = screens.get(screens.size()-2).d1;
     screen.d2 = screens.get(screens.size()-2).d2;
   }

@@ -16,13 +16,15 @@ class Screen2 extends Screen {
   void setScreen() {
     textSize(14);
     buttons = new Button[3+cabinet.length];
-    buttons[0] = new Button(width/2-100, height-100, 200, 60, color(255, 0, 0), 0);
-    buttons[0].setLabel("See Bills", 14, 255);
+    buttons[0] = new Button(width/2-100, height-100, 200, 60, color(255, 0, 0), 30);
+    buttons[0].setLabel("See Bills Status", 14, 255);
+
     buttons[1] = new Button(width-textWidth("Sec. of Housing and Urban Dev.   ")-200, height-100, 200, 60, color(255, 0, 0), 2);
     buttons[1].setLabel("Next", 14, 255);
     buttons[1].extra = extra+1;
     if (extra == cabinet.length-1)
       buttons[1].visible = false;
+
     buttons[2]= new Button(width/6, height-100, 200, 60, color(255, 0, 0), 2);
     buttons[2].setLabel("Back", 14, 255);
     buttons[2].extra = extra-1;

@@ -12,7 +12,12 @@ class Screen36 extends Screen {
   // Precondition: This is the current Screen, buttons and sliders are arrays
   // Postcondition: The screen is prepared to be displayed
   void setScreen() {
-    buttons = new Button[0];
+    buttons = new Button[1];
+    buttons[1] = new Button(width/2-100, height/6, 200, 80, color(255, 0, 0), 20);
+    buttons[1].setLabel("Calendars", 14, 255);
+
+    calendar.year = calendar.cYear;
+    calendar.month = calendar.cMonth;
   }
 
   // Displays the screen
@@ -21,6 +26,7 @@ class Screen36 extends Screen {
   void display() {
     super.display();
 
+    //display calendar
 
 
   }

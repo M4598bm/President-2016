@@ -141,10 +141,10 @@ class Calendar {
   // Postcondition: the date and event is stored in a table
   void addEvent(int day, int month, int year, String event) {
     TableRow r = events.addRow();
-    r.addInt("day", day);
-    r.addInt("month", month);
-    r.addInt("year", year);
-    r.addString("event", event);
+    r.setInt("day", day);
+    r.setInt("month", month);
+    r.setInt("year", year);
+    r.setString("event", event);
   }
 
   // Change the month if the buttons are clicked

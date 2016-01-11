@@ -4,16 +4,19 @@ class Committee {
   Congressman chairperson;
   Congressman rankingmember;
   Calendar cCalendar;
+  ArrayList<Bill> cBills;
 
   int chamber;// 0 is house of reps, 1 is senate
 
   // create a new Committee
   // Precondition: String n is name, int size is the amount of people in the Committee
   // Postcondition: members array is set to size
-  Committee(String n, int size) {
+  Committee(String n, int size, int ch) {
     name = n;
-    members = new Congressman[size];
+    chamber = ch;
+    members = new Congressman[size+(int)random(-(size/4), size/4)];
     cCalendar = new Calendar();
+    cBills = new ArrayList<Bill>();
   }
 
   // chooses who should be the leadership

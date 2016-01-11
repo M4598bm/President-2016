@@ -22,9 +22,9 @@ class Bill {
   4: House - has vote date
   5: Senate - has vote date
   6: Conference Committee - has vote date
-  6: Pres - date is null
-  7: Veto - has override date
-  8: Law - date is null
+  7: Pres - date is null
+  8: Veto - has override date
+  9: Law - date is null
 
   */
 
@@ -186,9 +186,9 @@ class Bill {
   4: House - has vote date
   5: Senate - has vote date
   6: Conference Committee - has vote date
-  6: Pres - date is null
-  7: Veto - has override date
-  8: Law - date is null
+  7: Pres - date is null
+  8: Veto - has override date
+  9: Law - date is null
   */
 
   void progressThrough() {
@@ -213,7 +213,7 @@ class Bill {
         amend(1);
         vote(1);
         break;
-      case 7:
+      case 8:
         overrideVeto();
         break;
     }
