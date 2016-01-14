@@ -37,7 +37,7 @@ class Screen16 extends Screen {
       if (house[i].committee == tempBill.committee) {
         if (height/6+24*x+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6) {
           if (x == chosen) {
-            fill(0, 0, 100);
+            fill(hLColor);
             rect(width/6, height/6+24*x+scrollX, width*4/6, 24);
             fill(0);
           }

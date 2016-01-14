@@ -47,7 +47,7 @@ class Screen {
   int scrollX;// The xval of what was scrolled
   int[] scrollsX;// The scrollX for when there are many areas that are scrollable
   int chosen;// a selected value, usually out of a list
-
+  int lastchosen;// the selected value from the last screen
   ArrayList<Integer> d1;// holds int data (used in speeches as for)
   ArrayList<Integer> d2;// holds more int data (used in speeches as against)
   ArrayList<Congressman> search;// the result of a search through congresses

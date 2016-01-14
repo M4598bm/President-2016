@@ -22,7 +22,7 @@ class Screen21 extends Screen {
     int x = 0;
     for (int i = 0; i < house.length; i++) {
       if (house[i].committee == tempBill.committee) {
-        if (x == chosen)
+        if (x == lastchosen)
           tempBill.sponsor = house[i];
         x++;
       }

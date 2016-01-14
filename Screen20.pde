@@ -25,12 +25,14 @@ class Screen20 extends Screen {
       buttons[i].scrollCol = color(200, 0, 0);
     sliders = new Slider[1];
 
-    sliders[0] = new Slider(width*5/6-(210+textWidth("100")), height-157, 100, 200);
+    sliders[0] = new Slider(width*5/6-(210+textWidth("100 %")), height-157, 100, 200);
     sliders[0].value = tempBill.percentages[2];
-    if (tempBill != null && tempBill.ideas[2] == -1)
-      sliders[0].visible = false;
+    sliders[0].units = "%";
 
     extraActions();
+
+    if (tempBill != null && tempBill.ideas[2] == -1)
+      sliders[0].visible = false;
   }
 
   // Does the extra actions
@@ -38,18 +40,23 @@ class Screen20 extends Screen {
   // Postcondition: actions are taken according to the int extra
   void extraActions() {
     depIdeas = ideas.departmentNames(extra);
-    if (chosen == 0) {
+    if (lastchosen == 0) {
+
     }
-    else if (chosen == 1) {
+    else if (lastchosen == 1) {
       tempBill.removeIdea(tempBill.ideas[2]);
-      chosen = 0;
       screens.remove(screens.size()-2);
     }
     else {
-      tempBill.addIdea(ideas.nameToInd(depIdeas.get(chosen-2)));
-      chosen = 0;
+      tempBill.addIdea(ideas.nameToInd(depIdeas.get(lastchosen-2)));
       screens.remove(screens.size()-2);
     }
+/*
+    for (int i = 0; i < sliders.length; i++) {
+      sliders[i].value = tempBill.percentages[2];
+      if (tempBill != null && tempBill.ideas[2] == -1)
+        sliders[0].visible = false;
+    }*/
   }
 
 
@@ -73,7 +80,7 @@ class Screen20 extends Screen {
     for (int i = 0; i < depIdeas.size(); i++) {
       if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1 is already there, so 2 is 1
         if (i == chosen-2) {
-          fill(0, 0, 100);
+          fill(hLColor);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }
@@ -85,12 +92,11 @@ class Screen20 extends Screen {
     fill(255);
     rect(width/6, height-174, width*2/3, 34);
     textAlign(LEFT, CENTER);
-    fill(0);
     if (chosen == 1) {
-      fill(0, 0, 100);
+      fill(hLColor);
       rect(width/6, height-174, width*2/3, 34);
-      fill(0);
     }
+    fill(0);
     if (tempBill.ideas[2] != -1)
       text(ideas.names[tempBill.ideas[2]], width/6, height-157);
 

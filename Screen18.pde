@@ -21,13 +21,15 @@ class Screen18 extends Screen {
     buttons[1].clickable = false;
     scrollX = 0;
 
-    for (int i = 0; i < buttons.length; i++)
-      buttons[i].scrollCol = color(200, 0, 0);
-
     sliders = new Slider[2];
 
-    sliders[0] = new Slider(width*5/6-(210+textWidth("100")), height-191, 100, 200);
-    sliders[1] = new Slider(width*5/6-(210+textWidth("100")), height-157, 100, 200);
+    sliders[0] = new Slider(width*5/6-(210+textWidth("100 %")), height-191, 100, 200);
+    sliders[1] = new Slider(width*5/6-(210+textWidth("100 %")), height-157, 100, 200);
+
+    for (int i = 0; i < buttons.length; i++)
+      buttons[i].scrollCol = color(200, 0, 0);
+    for (int i = 0; i < sliders.length; i++)
+      sliders[i].units = "%";
 
     depIdeas = ideas.departmentNames(extra);
 
@@ -38,19 +40,15 @@ class Screen18 extends Screen {
   // Precondition: extra is an int from the last Screen
   // Postcondition: actions are taken according to the int extra
   void extraActions() {
-    if (chosen == 0) {
-      tempBill = new Bill();
+    if (lastchosen == 0) {
       tempBill.committee = extra;
-      tempBill.presBacked = true;
     }
-    else if (chosen < 3) {
-      tempBill.removeIdea(tempBill.ideas[chosen-1]);
-      chosen = 0;
+    else if (lastchosen < 3) {
+      tempBill.removeIdea(tempBill.ideas[lastchosen-1]);
       screens.remove(screens.size()-2);
     }
     else {
-      tempBill.addIdea(ideas.nameToInd(depIdeas.get(chosen-3)));
-      chosen = 0;
+      tempBill.addIdea(ideas.nameToInd(depIdeas.get(lastchosen-3)));
       screens.remove(screens.size()-2);
     }
     for (int i = 0; i < sliders.length; i++) {
@@ -81,7 +79,7 @@ class Screen18 extends Screen {
     for (int i = 0; i < depIdeas.size(); i++) {
       if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1-2 is already there, so 3 is 1
         if (i == chosen-3) {
-          fill(0, 0, 100);
+          fill(hLColor);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }
@@ -94,17 +92,18 @@ class Screen18 extends Screen {
     rect(width/6, height-208, width*2/3, 68);
     line(width/6, height-174, width*5/6, height-174);
     textAlign(LEFT, CENTER);
+
+    fill(hLColor);
+    if (chosen == 1)
+      rect(width/6, height-208, width*4/6, 34);
+    if (chosen == 2)
+      rect(width/6, height-174, width*4/6, 34);
+
     fill(0);
     if (tempBill.ideas[0] != -1)
       text(ideas.names[tempBill.ideas[0]], width/6, height-191);
     if (tempBill.ideas[1] != -1)
       text(ideas.names[tempBill.ideas[1]], width/6, height-157);
-    fill(0, 0, 100);
-    if (chosen == 1)
-      rect(width/6, height-208, width*4/6, 34);
-    if (chosen == 2)
-      rect(width/6, height-174, width*4/6, 34);
-    fill(0);
 
     displayButtonsSliders();
   }

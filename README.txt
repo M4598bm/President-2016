@@ -1,6 +1,9 @@
 # President
 A turn based simulation game in Processing: You've just won the 2016 presidential election! Now you have to do the work, as the 45th Chief Executive.
 
+sources to use:
+https://www.whitehouse.gov/briefing-room/signed-legislation
+
 Initial setup:
 
   The game begins on January 20th, 2017, and you have been able to pick a party (Democrat or Republican). In the default mode both houses of Congress are narrowly lead by your party, but that may change in two years, and you'll get to know the party leadership along the way.

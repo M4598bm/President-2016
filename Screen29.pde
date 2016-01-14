@@ -96,7 +96,7 @@ class Screen29 extends Screen {
     for (int i = 0; i < depIdeas.size(); i++) {
       if (height/6+24*i+scrollX >= height/6) {// 0 is none, 1-3 is already there, so 4 is 1
         if (i == chosen-4) {
-          fill(255, 255, 20);
+          fill(hLColor);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }

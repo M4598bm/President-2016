@@ -1,6 +1,13 @@
+// President
+// A realistic nation building game
+// Created 2015-2016
+
+
+// Static Variables
+static color hLColor = #FFFF14;// Highlighted text box color
+
+
 // Globals:
-// this is good:
-// https://www.whitehouse.gov/briefing-room/signed-legislation
 
 String name;// Player name (Set at start later)
 String presParty;// Player party (Set at start later)
@@ -12,6 +19,8 @@ ArrayList<Screen> screens;
 Screen screen;// Handles most display aspects
 MenuScreen menuScreen;// Displays if menuOpen
 Calendar calendar;// the calendar
+Calendar houseCalendar;// calendar for the house floor
+Calendar senateCalendar;// calendar for the senate floor
 FedBudget fedBudget;// Handles the budget
 Ideas ideas;// Handles the 'ideas', Bills are made of up to 3 of ideas held in this object
 
@@ -23,9 +32,6 @@ int turn;// number of turns so far (starting from 0 at setup to 1 at first turn)
 int approval;// national polling approval of you
 boolean houseSpeech;// have you made a speech to the house this turn?
 boolean senateSpeech;// have you made a speech to the senate this turn?
-
-ArrayList<Congressman>[] houseCommittees;
-ArrayList<Congressman>[] senateCommittees;
 
 ArrayList<ExecutiveOrder> executiveOrders;// all executive orders signed
 ArrayList<Bill> bills;// all bills created at the moment
@@ -119,6 +125,8 @@ void createSingleClasses() {
   screen.setScreen();
   menuScreen = new MenuScreen();
   calendar = new Calendar();
+  houseCalendar = new Calendar();
+  senateCalendar = new Calendar();
   fedBudget = new FedBudget();
   ideas = new Ideas();
 
@@ -365,7 +373,7 @@ void mouseClicked() {
   if (!menuOpen) {
     mouseClickedButton(mX, mY);
     if (isCurrScreen(7)) {// Calendar Screen
-      calendar.clickMonth(mX, mY);
+      ((Screen7)screen).currCalendar.clickMonth(mX, mY);
     }
     else if (isCurrScreen(10) || isCurrScreen(11)) {// Speech Screens
       mouseClicked10and11(mX, mY);
@@ -522,7 +530,7 @@ void mouseClickedButton(float mX, float mY) {
   if (screen.buttons != null) {
     boolean done = false;
     for (int i = 0; i < screen.buttons.length && !done; i++)
-      if (screen.buttons[i].isInside(mX, mY) && screen.buttons[i].visible && screen.buttons[i].clickable) {
+      if (screen.buttons[i].isClicked(mX, mY)) {
         lastButtonInd = i;
         done = true;
         newScreen(screen.buttons[i]);
@@ -892,6 +900,9 @@ String typeResult(String s) {
     }
 
   else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
+    if (s.equals("Type name here")) {
+      return key;
+    }
     s += key;
   }
   return s;
@@ -924,11 +935,11 @@ void keyPressedScrollX() {
 void keyPressedScrollHoriz() {
   if (isCurrScreen(7)) {
     if (keyCode == LEFT) {
-      calendar.changeMonth(-1);
+      ((Screen7)screen).currCalendar.changeMonth(-1);
       displayAll();
     }
     else if (keyCode == RIGHT) {
-      calendar.changeMonth(1);
+      ((Screen7)screen).currCalendar.changeMonth(1);
       displayAll();
     }
   }
@@ -944,6 +955,7 @@ void keyPressedScrollHoriz() {
 // Precondition: Button b has just been pressed, uses b.command, the screen it should go to
 // Postcondition: a new Screen is set up and added to the query of past Screens (0 resets)
 void newScreen(Button b) {
+  int lastchosen = screen.chosen;
   switch (b.command) {
     case 0:
       screen = new Screen0();
@@ -1119,7 +1131,7 @@ void newScreen(Button b) {
   }
   screen.extra = b.extra;
   if (screens.size() > 1) {
-    //screen.chosen = screens.get(screens.size()-2).chosen;
+    screen.lastchosen = lastchosen;
     screen.d1 = screens.get(screens.size()-2).d1;
     screen.d2 = screens.get(screens.size()-2).d2;
   }

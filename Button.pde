@@ -60,7 +60,7 @@ class Button {
         textAlign(CENTER, CENTER);
       }
       else
-        textAlign(LEFT, CENTER);
+        textAlign(LEFT, TOP);
       fill(lCol);
       textSize(lSize);
       if (variance != 1)
@@ -74,5 +74,12 @@ class Button {
   // Postcondition: returns if mX and mY are inside of the button's coords
   boolean isInside(float mX, float mY) {
     return mX > x && mX < x+w && mY > y && mY < y+h;
+  }
+
+  // returns if it is clicked on and can be clicked on
+  // Precondition: visible and clickable are set, and isInside(mx, my) is a Method
+  // Postcondition: returns if isInside and visible and clickable
+  boolean isClicked(float mX, float mY) {
+    return isInside(mX, mY) && visible && clickable;
   }
 }

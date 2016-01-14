@@ -1,6 +1,6 @@
-String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+static String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+static int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 class Calendar {
   int year;
@@ -85,6 +85,7 @@ class Calendar {
   // Precondition: There is an empty screen and the boxes need to be 6*7
   // Postcondition: There are boxes to put the days and weekday names on top
   void displayBackground() {
+    //println(2018%4 == 0);
     fill(255);
     rect(width/6, height/6, width*2/3, height*2/3);
     fill(0);
@@ -99,6 +100,17 @@ class Calendar {
     }
   }
 
+  int[] realDaysInMonth(int yearCount) {
+    int[] dIM = new int[12];
+    for (int i = 0; i < 12; i++) {
+      dIM[i] = daysInMonth[i];
+    }
+    if (yearCount%4 == 0) {
+      dIM[1] = 29;
+    }
+    return dIM;
+  }
+
   // Displays the days of the current month
   // Precondition: lMonth = last month, nMonth = next month, lYear = last month year, nYear = next month year
   // Postcondition: The days of the current month are displayed
@@ -111,9 +123,9 @@ class Calendar {
     int yearCount = 17;
     int monthCount = 1;
     int dayCount = 1;
-    textAlign(CENTER, CENTER);
-    text(months[month-1] + " 20"+year, width/2, height/6-25);
-    while (yearCount != year || monthCount != month || dayCount < daysInMonth[month-1]) {
+    textAlign(CENTER, BOTTOM);
+    text(months[month-1] + " 20"+year, width/2, height/6-20);
+    while (yearCount != year || monthCount != month || dayCount < realDaysInMonth(yearCount)[month-1]) {
       if (yearCount == year && monthCount == month)
         text(dayCount, width/6+width/21+width*2/21*col, height/6+height*2/21+height/21+width/21*row);
         // ^ this needs to be cut down especially the 'y' part
@@ -123,7 +135,7 @@ class Calendar {
         col = 0;
       }
       dayCount++;
-      if (dayCount > daysInMonth[monthCount-1]) {
+      if (dayCount > realDaysInMonth(yearCount)[monthCount-1]) {
         dayCount = 1;
         monthCount++;
         row = 0;
