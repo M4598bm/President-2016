@@ -4,7 +4,10 @@
 
 
 // Static Variables
+static int daysPerTurn = 7;// not sure what this should be yet
+
 static color hLColor = #FFFF14;// Highlighted text box color
+
 
 
 // Globals:
@@ -28,6 +31,14 @@ NationalCom you;// Your party's national committee
 NationalCom them;// Opposing party's national committee
 
 int turn;// number of turns so far (starting from 0 at setup to 1 at first turn)
+int session;// number of this congress (starts with )
+int houseNumber;// number of bills presented to the floor
+int senateNumber;// number of bills presented to the floor
+
+
+ArrayList<Bill> billsH;// bills on the house floor
+ArrayList<Bill> billsS;// bills on the senate floor
+ArrayList<Bill> yourDesk;// bills on your desk
 
 int approval;// national polling approval of you
 boolean houseSpeech;// have you made a speech to the house this turn?
@@ -61,6 +72,15 @@ ArrayList<Integer> agS;//   what I already wrote anyway, so don't worry about it
 ArrayList<Integer> suppH;// what these are, they're basically so that each turn the senate and house speeches
 ArrayList<Integer> agH;//   the player made in the turn are processed. It holds those.
 
+// Sets the size of the game
+// Precondition: size() or fullScreen()
+// Postcondition: creates the game window
+void settings() {
+  //fullScreen();
+  size(displayWidth, (int)(displayHeight*.8));// *.8 is temp
+}
+
+
 /*
   This is valuable for Processing, it's simply what sets up the game when it is initially run.
   Right now this is developing a Beta so there isn't a nice menu, game setup, and loading games etc.
@@ -71,15 +91,12 @@ ArrayList<Integer> agH;//   the player made in the turn are processed. It holds 
 // Postcondition: Variables are set and the game is playable default
 void setup() {
 
-  int wid = displayWidth;// for some reason size wouldn't take variables, so this is the solution. Ugh.
-  int hei = (int)(displayHeight*.8);// Eventually this will just be displayHeight
-  size(displayWidth, 640);// 640 is temp bc processing 3 sucks a bit
-
   turn = 0;
   String[] parties = {"Democratic", "Republican"};
   setPresParty(parties);// Default is that Democrat is the presParty
   createSingleClasses();
   createCongress();
+  initCongress();
   createCommittees();
   createCabinet();
   createCourt();
@@ -108,6 +125,7 @@ void setup() {
 // Postcondition: you and them are new national committees for both parties
 void setPresParty(String[] parties) {
   println("setPresParty");
+  presParty = parties[0];
   you = new NationalCom(parties[0]);
   them = new NationalCom(parties[1]);
 
@@ -314,6 +332,21 @@ void draw() {
      This runs the whole thing. Eventually
      it will also run a starting screen.
   */
+  //if ((millis()/500)%2 == 0) {// smaller the divisor, faster the blinking
+  displayTextInputs();
+  //}
+}
+
+void displayTextInputs() {
+  if (isCurrScreen(13)) {
+    screen.displayTextInput(width/6, 62, "Search by state, name, party, or position:", screen.input, width*2/3, 16);
+  }
+  else if (isCurrScreen(14)) {
+    screen.displayTextInput(width/6, 62, "Search by state, name, party, or position:", screen.input, width*2/3, 16);
+  }
+  else if (isCurrScreen(21)) {// this one is broken
+    screen.displayTextInput(width/6, height/6, "Bill #" + (bills.size()+1)+":", tempBill.name, width*2/3, 30);
+  }
 }
 
 // Displays everything
@@ -373,7 +406,8 @@ void mouseClicked() {
   if (!menuOpen) {
     mouseClickedButton(mX, mY);
     if (isCurrScreen(7)) {// Calendar Screen
-      ((Screen7)screen).currCalendar.clickMonth(mX, mY);
+      if (screen.extra < 100)
+        ((Screen7)screen).currCalendar.clickMonth(mX, mY);
     }
     else if (isCurrScreen(10) || isCurrScreen(11)) {// Speech Screens
       mouseClicked10and11(mX, mY);
@@ -901,7 +935,7 @@ String typeResult(String s) {
 
   else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
     if (s.equals("Type name here")) {
-      return key;
+      return key+"";
     }
     s += key;
   }
@@ -940,6 +974,16 @@ void keyPressedScrollHoriz() {
     }
     else if (keyCode == RIGHT) {
       ((Screen7)screen).currCalendar.changeMonth(1);
+      displayAll();
+    }
+  }
+  else if (isCurrScreen(2)) {
+    if (keyCode == LEFT && screen.extra != 0) {
+      newScreen(screen.buttons[2]);
+      displayAll();
+    }
+    else if (keyCode == RIGHT && screen.extra != cabinet.length-1) {
+      newScreen(screen.buttons[1]);
       displayAll();
     }
   }
@@ -1180,25 +1224,14 @@ void nextTurn() {
   for (int i = 0; i < house.length; i++)
     house[i].listenToSpeech(suppH, agH);
 
-  suppH = new ArrayList<Integer>();
-  suppS = new ArrayList<Integer>();
-  agH = new ArrayList<Integer>();
-  agS = new ArrayList<Integer>();
 
-  // This is the beginning of code that changes the status of bills
-  //  for (int i = 0; i < bills.length; i++) {
-  //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
-
- //   }
-
+  resetForTurn();
 }
+
 // This moves time forward once each turn
 // Precondition: the current date, in calendar is outdated
 // Postcondition: the day, month, and year are up to date and forward daysPerTurn days
 void setDay() {
-  int daysPerTurn = 7; // this decides how many days is one turn.
-  // I don't really know what it should be yet, it depends on testing.
-
   for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
     calendar.day++;
     if (calendar.day > daysInMonth[calendar.cMonth-1]) {
@@ -1210,4 +1243,13 @@ void setDay() {
       }
     }
   }
+}
+// handles any resetting required in a new turn
+// Precondition: new turn
+// Postcondition: values are reset
+void resetForTurn() {
+    suppH = new ArrayList<Integer>();
+    suppS = new ArrayList<Integer>();
+    agH = new ArrayList<Integer>();
+    agS = new ArrayList<Integer>();
 }

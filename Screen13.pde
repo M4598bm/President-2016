@@ -45,15 +45,12 @@ class Screen13 extends Screen {
     text("Make private deals with groups or individuals in Congress", width/2, 35);
     textAlign(LEFT, TOP);
     float w = textWidth("Search by state, name, party, or position:")+5;
+
+    // text input box
     fill(0);
     text("Search by state, name, party, or position:", width/6, 65);
-    fill(255);
-    rect(width/6+w, 62, width*2/3-w, 26);
-    fill(0);
-    text(input, width/6+w, 65);
+    displayTextInputs();
 
-    if ((millis()/1000)%2 == 0)
-      line(width/6+w+textWidth(input)+1, 65, width/6+w+textWidth(input)+1, 65+20);
     fill(255);
     rect(width/6, height/6, width*2/3, height*2/3);//Congressmen
     fill(0);

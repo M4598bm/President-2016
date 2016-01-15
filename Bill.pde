@@ -1,19 +1,25 @@
 class Bill {
   int[] ideas;
-  ArrayList<Integer> amendments;
+  ArrayList<Integer> amendmentsH;
+  ArrayList<Integer> amendmentsS;
 
   int[] constitutional;// Each idea has constitutional safety, 0-100
   int[] percentages;// amount of force put on each one
   String name;
-  int billNumber;
-  int weeklyCost;
-  int initialCost;
+  String billNumberH;
+  String billNumberS;
   int committee;
   Congressman sponsor;
   boolean presBacked;// The president created this bill
 
   String date;// "04/05/17" the next date set for this bill
-  int status;
+
+  boolean passedHouse;
+  boolean passedSenate;
+  boolean isLaw;
+
+  int weeklyCost;
+  int initialCost;
   /*
   0: House committee - has markup date
   1: Senate committee - has markup date
@@ -27,10 +33,6 @@ class Bill {
   9: Law - date is null
 
   */
-
-  boolean passedHouse;
-  boolean passedSenate;
-  boolean isLaw;
 
   /* The legislative process in this game:
 
@@ -173,58 +175,26 @@ class Bill {
   // Precondition: the player wishes to sign this bill into law, 5 is signed status
   // Postcondition: this is a law, and added to laws
   void sign() {
-    status = 5;
     isLaw = true;
     laws.add(this);
   }
 
-  /*
-  0: House committee - has markup date
-  1: Senate committee - has markup date
-  2: House committee markup - has vote date
-  3: Senate committee markup - has vote date
-  4: House - has vote date
-  5: Senate - has vote date
-  6: Conference Committee - has vote date
-  7: Pres - date is null
-  8: Veto - has override date
-  9: Law - date is null
-  */
 
-  void progressThrough() {
-    switch (status) {
-      case 0:
-        markup(0);
-        break;
-      case 1:
-        markup(1);
-        break;
-      case 2:
-        committeeVote(0);
-        break;
-      case 3:
-        committeeVote(1);
-        break;
-      case 4:
-        amend(0);
-        vote(0);
-        break;
-      case 5:
-        amend(1);
-        vote(1);
-        break;
-      case 8:
-        overrideVeto();
-        break;
-    }
+  void markup(int chamber) {
 
   }
+  void committeeVote(int chamber) {
 
-void markup(int chamber) {}
-void committeeVote(int chamber) {}
-void amend(int chamber) {}
-void vote(int chamber) {}
-void overrideVeto() {}
+  }
+  void amend(int chamber) {
+
+  }
+  void vote(int chamber) {
+
+  }
+  void overrideVeto() {
+
+  }
 
 
   // Find average socialism rating of this Bill

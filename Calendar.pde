@@ -81,6 +81,20 @@ class Calendar {
   }
 
 
+  // returns a list of the days adjusted for leap day
+  // Precondition: yearCount is the year displayed
+  // Postcondition: returns days in each month with 29 in feb on a leap year
+  int[] realDaysInMonth(int yearCount) {
+    int[] dIM = new int[12];
+    for (int i = 0; i < 12; i++) {
+      dIM[i] = daysInMonth[i];
+    }
+    if (yearCount%4 == 0) {
+      dIM[1] = 29;
+    }
+    return dIM;
+  }
+
   // creates the background for the Calendar
   // Precondition: There is an empty screen and the boxes need to be 6*7
   // Postcondition: There are boxes to put the days and weekday names on top
@@ -100,17 +114,6 @@ class Calendar {
     }
   }
 
-  int[] realDaysInMonth(int yearCount) {
-    int[] dIM = new int[12];
-    for (int i = 0; i < 12; i++) {
-      dIM[i] = daysInMonth[i];
-    }
-    if (yearCount%4 == 0) {
-      dIM[1] = 29;
-    }
-    return dIM;
-  }
-
   // Displays the days of the current month
   // Precondition: lMonth = last month, nMonth = next month, lYear = last month year, nYear = next month year
   // Postcondition: The days of the current month are displayed
@@ -125,9 +128,10 @@ class Calendar {
     int dayCount = 1;
     textAlign(CENTER, BOTTOM);
     text(months[month-1] + " 20"+year, width/2, height/6-20);
+    textAlign(CENTER, CENTER);
     while (yearCount != year || monthCount != month || dayCount < realDaysInMonth(yearCount)[month-1]) {
       if (yearCount == year && monthCount == month)
-        text(dayCount, width/6+width/21+width*2/21*col, height/6+height*2/21+height/21+width/21*row);
+        text(dayCount, width/6+width/21+width*2/21*col, height/6+(height*2/3)*3/14+(height*2/3)*row/7);
         // ^ this needs to be cut down especially the 'y' part
       col++;
       if (col == 7) {
@@ -145,7 +149,7 @@ class Calendar {
         }
       }
     }
-    text(dayCount, width/6+width/21+width*2/21*col, height/6+height*2/21+height/21+width/21*row);
+    text(dayCount, width/6+width/21+width*2/21*col, height/6+(height*2/3)*3/14+(height*2/3)*row/7);
   }
 
   // add an event

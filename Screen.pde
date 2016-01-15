@@ -114,4 +114,24 @@ class Screen {
       rect(width*5/6, height/6-scrollX*space/listLength, 10, scrollLength, 5);// This is the problem line.
     }
   }
+
+  // Displays a textInput
+  // Precondition:
+  // Postcondition:
+  void displayTextInput(float x, float y, String name, String text, float length, float textsize) {
+    textAlign(LEFT, TOP);
+    textSize(textsize);
+    float w = textWidth(name)+5;
+    fill(255);
+    rect(x+w, y, length-w, textsize+6);
+    fill(0);
+    text(text, x+w, y+3);
+
+    if ((millis()/500)%2 == 0)
+      line(x+w+textWidth(text)+1, y+3, x+w+textWidth(text)+1, y+3+textsize);
+  }
+
+
+
+
 }
