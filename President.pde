@@ -62,10 +62,10 @@ ArrayList<Integer> suppH;// what these are, they're basically so that each turn 
 ArrayList<Integer> agH;//   the player made in the turn are processed. It holds those.
 
 /*
-  This is valuable for Processing, it's simply what sets up the game when it is initially run.
-  Right now this is developing a Beta so there isn't a nice menu, game setup, and loading games etc.
-  There will be all that stuff and I look forward to it. It will mostly be put here. But for now, this
-  is sort of a silly method that sets default variables that need to be set.
+This is valuable for Processing, it's simply what sets up the game when it is initially run.
+Right now this is developing a Beta so there isn't a nice menu, game setup, and loading games etc.
+There will be all that stuff and I look forward to it. It will mostly be put here. But for now, this
+is sort of a silly method that sets default variables that need to be set.
 */
 // Precondition: No variables are set
 // Postcondition: Variables are set and the game is playable default
@@ -79,7 +79,9 @@ void setup() {
   String[] parties = {"Democratic", "Republican"};
   setPresParty(parties);// Default is that Democrat is the presParty
   createSingleClasses();
-  createCongress();
+  initCongress();
+  createHouse;
+  createSenate();
   createCommittees();
   createCabinet();
   createCourt();
@@ -143,10 +145,10 @@ void createSingleClasses() {
   screens.add(screen);
 }
 
-  // Sets other values that need to be set
-  // Precondition: no precondition
-  // Postcondition: The variables are set
-  void createOther() {
+// Sets other values that need to be set
+// Precondition: no precondition
+// Postcondition: The variables are set
+void createOther() {
   // Needs to happen somewhere, don't worry about it.
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
@@ -164,7 +166,7 @@ void createCabinet() {
   println("createCabinet");
   Table d = loadTable("majordepartments.csv", "header");
   for (int i = 0; i < cabinet.length; i++)
-    cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
+  cabinet[i] = new Secretary(d.getRow(i).getString(0), d.getRow(i).getString(1));
 }
 
 // Sets up the Supreme Court
@@ -174,17 +176,14 @@ void createCourt() {
   println("createCourt");
 
 }
-// You can split this into helper functions, but here's the bulk
-// This method stacks the two arrays that hold Congress.
-// Precondition: states.csv has information about states, PVI is an int with likelihood to be Dem.
-// Postcondition: senate and house are arrays of Congressmen fully initialized
-void createCongress() {
-  println("createCongress");
+
+// Gives senators liberalism and socialism stats
+//  Precondition: Senators have no liberalism or socialism stats
+// Postcondition: Senators have liberalism and socialism stats
+void createSenate() {
+  println("createSenate");
   Table states = loadTable("states.csv", "header");// a table with states etc.
-  Table districts = loadTable("districts.csv", "header");// a table with the districts
-  initCongress(states, districts);
   int xSenate = 0;
-  int xHouse = 0;
   for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
     if (!row.getString(1).equals("DC")) {
       //=== Senators ===//
@@ -196,8 +195,19 @@ void createCongress() {
       // Write code for setting values for Congressman senate[x] and Congressman senate[x+1] here
 
       xSenate+=2;
+    }
+  }
+}
 
-      //=== Representatives ===//
+// Gives Representatives liberalism and socialism stats
+//  Precondition: Representatives have no liberalism or socialism stats
+// Postcondition: Representatives have liberalism and socialism stats
+void createHouse() {
+  println("createHouse");
+  Table districts = loadTable("districts.csv", "header");// a table with states etc.
+  int xHouse = 0;
+  for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
+    if (!row.getString(1).equals("DC")) {
       for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {// row.getString(3) says how many reps in the state
         // PVI is the index for how liberal the district is. Negative is GOP and positive is Dem
         int districtPVI = Utils.convertInt(districts.getRow(xHouse).getString(2));
@@ -209,9 +219,6 @@ void createCongress() {
       }
     }
   }
-
-  // You may find this useful, it tests the code for senate
-  testCongress();
 }
 
 // Test to check the makeup of congress
@@ -311,8 +318,8 @@ void calcApproval() {
 // Postcondition: Nothing really happens, but the method is required for other built-in methods
 void draw() {
   /* An essential Processing function!
-     This runs the whole thing. Eventually
-     it will also run a starting screen.
+  This runs the whole thing. Eventually
+  it will also run a starting screen.
   */
 }
 
@@ -322,10 +329,10 @@ void draw() {
 void displayAll() {
   screen.display();
   if (menuOpen)
-    menuScreen.display();
+  menuScreen.display();
   topBar();
   if (!screen.toString().equals("0"))
-    mainButton();// The button that returns to main screen
+  mainButton();// The button that returns to main screen
 }
 
 // displays a horizontal bar at the top of the screen most of the time.
@@ -417,8 +424,8 @@ void mousePressed() {
   // ====== Sliders ======
   if (screen.sliders != null) {
     for (int i = 0; i < screen.sliders.length; i++)
-      if (screen.sliders[i].isInside(mouseX, mouseY) && screen.sliders[i].visible)
-        currSlider = screen.sliders[i];
+    if (screen.sliders[i].isInside(mouseX, mouseY) && screen.sliders[i].visible)
+    currSlider = screen.sliders[i];
   }
 
 }
@@ -441,132 +448,132 @@ void mouseDragged() {
   if (currSlider != null) {
     currSlider.value = (int)constrain(((
       mouseX+currSlider.boxSize/2-currSlider.x)*currSlider.maxVal/currSlider.len), 0, currSlider.maxVal);
-    displayAll();
-  }
-}
-
-// If the mousewheel is used
-// Precondition: Mousewheel is used
-// Postcondition: The goal of the mousewheel is fulfilled, usually a scrolling that happened
-void mouseWheel(MouseEvent event) {
-  // When the mouse is scrolled. Very useful for replacing the arrow keys
-  float e = event.getCount();
-  if (isCurrScreen(10) ||
-      isCurrScreen(11) ||
-      isCurrScreen(13) ||
-      isCurrScreen(14) ||
-      isCurrScreen(16) ||
-      isCurrScreen(18)) {
-    mouseWheelScrollX(e);
-  }
-}
-
-// If the mouse is moved
-// Precondition: Mouse is moved, not necessarily clicked or dragged
-// Postcondition: The buttons recognize if they were scrolled over
-void mouseMoved() {
-  buttonsScrolled();
-}
-
-// If the keyboard is used
-// Precondition: A key is pressed
-// Postcondition: The goal of the key pressed is fulfilled
-void keyPressed() {
-  if (keyCode == ESC) {// this is really cool :D
-    key = 0;// making sure it doesnt quit
-    if (!isCurrScreen(0) && !menuOpen) {
-      newScreen(new Button(0));
-      screen.setScreen();
-      displayAll();
-    }
-    else {
-      menuOpen = !menuOpen;
       displayAll();
     }
   }
-  else if (isCurrScreen(21)) {
-    tempBill.name = typeResult(tempBill.name);
-    displayAll();
+
+  // If the mousewheel is used
+  // Precondition: Mousewheel is used
+  // Postcondition: The goal of the mousewheel is fulfilled, usually a scrolling that happened
+  void mouseWheel(MouseEvent event) {
+    // When the mouse is scrolled. Very useful for replacing the arrow keys
+    float e = event.getCount();
+    if (isCurrScreen(10) ||
+    isCurrScreen(11) ||
+    isCurrScreen(13) ||
+    isCurrScreen(14) ||
+    isCurrScreen(16) ||
+    isCurrScreen(18)) {
+      mouseWheelScrollX(e);
+    }
   }
-  else if (isCurrScreen(13) || isCurrScreen(14)) {
-    screen.input = typeResult(screen.input);
-    displayAll();
+
+  // If the mouse is moved
+  // Precondition: Mouse is moved, not necessarily clicked or dragged
+  // Postcondition: The buttons recognize if they were scrolled over
+  void mouseMoved() {
+    buttonsScrolled();
   }
 
-  keyPressedScrollX();
-  keyPressedScrollHoriz();
+  // If the keyboard is used
+  // Precondition: A key is pressed
+  // Postcondition: The goal of the key pressed is fulfilled
+  void keyPressed() {
+    if (keyCode == ESC) {// this is really cool :D
+      key = 0;// making sure it doesnt quit
+      if (!isCurrScreen(0) && !menuOpen) {
+        newScreen(new Button(0));
+        screen.setScreen();
+        displayAll();
+      }
+      else {
+        menuOpen = !menuOpen;
+        displayAll();
+      }
+    }
+    else if (isCurrScreen(21)) {
+      tempBill.name = typeResult(tempBill.name);
+      displayAll();
+    }
+    else if (isCurrScreen(13) || isCurrScreen(14)) {
+      screen.input = typeResult(screen.input);
+      displayAll();
+    }
 
-}
+    keyPressedScrollX();
+    keyPressedScrollHoriz();
+
+  }
 
 
 
 
-//===================================================//
-//===================================================//
-//============ Controls Helper Methods ==============//
-//===================================================//
-//===================================================//
+  //===================================================//
+  //===================================================//
+  //============ Controls Helper Methods ==============//
+  //===================================================//
+  //===================================================//
 
-/*
+  /*
 
   MouseClicked() Helpers
 
-*/
+  */
 
-// Checks whether a button is pressed and handles the action associated
-// Precondition: The mouse is clicked
-// Postcondition: The command of the button is fulfilled and a new screen is created
-void mouseClickedButton(float mX, float mY) {
-  // Main Menu Button
-  textSize(16);
-  float wordWidth = textWidth("Main Menu")/2;
-  if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
-    newScreen(new Button(0));
-    //screen.setScreen();
-    displayAll();
-  }
+  // Checks whether a button is pressed and handles the action associated
+  // Precondition: The mouse is clicked
+  // Postcondition: The command of the button is fulfilled and a new screen is created
+  void mouseClickedButton(float mX, float mY) {
+    // Main Menu Button
+    textSize(16);
+    float wordWidth = textWidth("Main Menu")/2;
+    if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
+      newScreen(new Button(0));
+      //screen.setScreen();
+      displayAll();
+    }
 
-  // Normal buttons:
-  if (screen.buttons != null) {
-    boolean done = false;
-    for (int i = 0; i < screen.buttons.length && !done; i++)
+    // Normal buttons:
+    if (screen.buttons != null) {
+      boolean done = false;
+      for (int i = 0; i < screen.buttons.length && !done; i++)
       if (screen.buttons[i].isClicked(mX, mY)) {
         lastButtonInd = i;
         done = true;
         newScreen(screen.buttons[i]);
         displayAll();
       }
+    }
   }
-}
 
-// Checks whether the Menu button was pressed and opens the menu
-// Precondition: The mouse is clicked
-// Postcondition: The menu is opened
-void mouseClickedMenu(float mX, float mY) {
-  // text("|| Menu ||", width*3/4, 15);
-  if (mX < width && mX > width*3/4 && mY < 30) {
-    menuOpen = !menuOpen;
-    displayAll();
-  }
-  // If menu buttons are clicked
-  if (menuOpen) {
-    boolean done = false;
-    for (int i = 0; i < menuScreen.buttons.length && !done; i++)
+  // Checks whether the Menu button was pressed and opens the menu
+  // Precondition: The mouse is clicked
+  // Postcondition: The menu is opened
+  void mouseClickedMenu(float mX, float mY) {
+    // text("|| Menu ||", width*3/4, 15);
+    if (mX < width && mX > width*3/4 && mY < 30) {
+      menuOpen = !menuOpen;
+      displayAll();
+    }
+    // If menu buttons are clicked
+    if (menuOpen) {
+      boolean done = false;
+      for (int i = 0; i < menuScreen.buttons.length && !done; i++)
       if (menuScreen.buttons[i].isInside(mX, mY) && menuScreen.buttons[i].visible && menuScreen.buttons[i].clickable) {
         done = true;
         newScreen(menuScreen.buttons[i]);
         // Do I need to display the menuScreen here?
       }
+    }
   }
-}
 
-// Screen 10 and 11
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted
-void mouseClicked10and11(float mX, float mY) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mY > height/6 && mY < height/2) {
-      for (int i = 0; i < bills.size(); i++)
+  // Screen 10 and 11
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted
+  void mouseClicked10and11(float mX, float mY) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height/2) {
+        for (int i = 0; i < bills.size(); i++)
         if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
           screen.chosen = i+5;
           if (screen.d1.size() != 2) {
@@ -586,232 +593,78 @@ void mouseClicked10and11(float mX, float mY) {
             screen.buttons[2].clickable = false;
           }
         }
-      displayAll();
-    }
-    else if (mX < width/2-40) {
-      if (screen.d1.size() > 0 && mY > height/2+65 && mY < height/2+90) {
-        screen.chosen = 1;
+        displayAll();
       }
-      else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
-        screen.chosen = 2;
+      else if (mX < width/2-40) {
+        if (screen.d1.size() > 0 && mY > height/2+65 && mY < height/2+90) {
+          screen.chosen = 1;
+        }
+        else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
+          screen.chosen = 2;
+        }
+        screen.buttons[1].setLabel("Remove", 14, 255);
+        screen.buttons[1].clickable = true;
+        displayAll();
       }
-      screen.buttons[1].setLabel("Remove", 14, 255);
-      screen.buttons[1].clickable = true;
-      displayAll();
-    }
-    else if (mX > width/2+40) {
-      if (screen.d2.size() > 0 && mY > height/2+65 && mY < height/2+90) {
-        screen.chosen = 3;
+      else if (mX > width/2+40) {
+        if (screen.d2.size() > 0 && mY > height/2+65 && mY < height/2+90) {
+          screen.chosen = 3;
+        }
+        else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
+          screen.chosen = 4;
+        }
+        screen.buttons[2].setLabel("Remove", 14, 255);
+        screen.buttons[2].clickable = true;
+        displayAll();
       }
-      else if (screen.d1.size() > 1 && mY > height/2+90 && mY < height/2+115) {
-        screen.chosen = 4;
-      }
-      screen.buttons[2].setLabel("Remove", 14, 255);
-      screen.buttons[2].clickable = true;
-      displayAll();
     }
   }
-}
 
-// Screen 13
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
-void mouseClicked13(float mX, float mY) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mY > height/6 && mY < height*5/6) {
-      for (int i = 0; i < screen.search.size(); i++)
+  // Screen 13
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
+  void mouseClicked13(float mX, float mY) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height*5/6) {
+        for (int i = 0; i < screen.search.size(); i++)
         if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
           screen.chosen = i;
           displayAll();
         }
+      }
     }
   }
-}
 
-// Screen 14
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and popup window comes up
-void mouseClicked14(float mX, float mY) {
-  if (screen.extra == 0) {
-    if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height*5/6) {
-        for (int i = 0; i < screen.search.size(); i++)
+  // Screen 14
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and popup window comes up
+  void mouseClicked14(float mX, float mY) {
+    if (screen.extra == 0) {
+      if (mX > width/6 && mX < width*5/6) {
+        if (mY > height/6 && mY < height*5/6) {
+          for (int i = 0; i < screen.search.size(); i++)
           if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
             screen.chosen = i;
             screen.extra = 1;
             screen.setScreen();
             displayAll();
           }
-      }
-    }
-  }
-}
-
-// Screen 16
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted
-void mouseClicked16(float mX, float mY) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mX > height/6 && mY < height*5/6) {
-      int x = 0;
-      for (int i = 0; i < house.length; i++) {
-        if (house[i].committee == tempBill.committee) {
-          if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
-            screen.chosen = x;
-            displayAll();
-          }
-          x++;
         }
       }
     }
   }
-}
 
-// Screen 18
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
-void mouseClicked18(float mX, float mY) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mY > height/6 && mY < height/2) {
-      for (int i = 0; i < screen.depIdeas.size(); i++)
-        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-          screen.chosen = i+3;
-          screen.buttons[1].setLabel("Add", 14, 255);
-          screen.buttons[1].clickable = true;
-          displayAll();
-        }
-    }
-    else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
-      screen.chosen = 1;
-      screen.buttons[1].setLabel("Remove", 14, 255);
-      screen.buttons[1].clickable = true;
-      displayAll();
-    }
-    else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
-      screen.chosen = 2;
-      screen.buttons[1].setLabel("Remove", 14, 255);
-      screen.buttons[1].clickable = true;
-      displayAll();
-    }
-  }
-}
-
-// Screen 20
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
-void mouseClicked20(float mX, float mY) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mY > height/6 && mY < height-181) {
-      for (int i = 0; i < screen.depIdeas.size(); i++)
-        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-          screen.chosen = i+2;
-          screen.buttons[1].setLabel("Add", 14, 255);
-          screen.buttons[1].clickable = true;
-          displayAll();
-        }
-    }
-    else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
-      screen.chosen = 1;
-      screen.buttons[1].setLabel("Remove", 14, 255);
-      screen.buttons[1].clickable = true;
-      displayAll();
-    }
-  }
-}
-
-// Screen 23
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted
-void mouseClicked23(float mX, float mY) {
-  if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
-    if (mY > height/6 && mY < height*5/6) {
-      int x = 0;
-      for (int i = 0; i < screen.trade.displays.length; i++) {
-        for (int j = 0; j < screen.trade.displays[i].size(); i++) {
-          if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
-            // somewhere displayAll();
-          }
-        }
-        //if ((String)displays.get(i))
-        //
-      }
-    }
-  }
-}
-
-// Screen 28
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and popup window comes up
-void mouseClicked28(float mX, float mY) {
-  if (screen.extra == 0) {
+  // Screen 16
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted
+  void mouseClicked16(float mX, float mY) {
     if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height*5/6) {
-        for (int i = 0; i < executiveOrders.size(); i++)
-          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-            screen.chosen = i;
-            screen.extra = 1;
-            screen.setScreen();
-            displayAll();
-          }
-      }
-    }
-  }
-}
-
-// Screen 29
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
-void mouseClicked29(float mX, float mY) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mY > height/6 && mY < height/2) {
-      for (int i = 0; i < screen.depIdeas.size(); i++)
-        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-          screen.chosen = i+4;
-          screen.buttons[2].setLabel("Add", 14, 255);
-          screen.buttons[2].clickable = true;
-          displayAll();
-        }
-    }
-    else if (tempOrder.ideas[0] != -1 && mY > height-208 && mY < height-174) {
-      screen.chosen = 1;
-      screen.buttons[2].setLabel("Remove", 14, 255);
-      screen.buttons[2].clickable = true;
-      displayAll();
-    }
-    else if (tempOrder.ideas[1] != -1 && mY > height-174 && mY < height-140) {
-      screen.chosen = 2;
-      screen.buttons[2].setLabel("Remove", 14, 255);
-      screen.buttons[2].clickable = true;
-      displayAll();
-    }
-    else if (tempOrder.ideas[2] != -1 && mY > height-140 && mY < height-116) {
-      screen.chosen = 3;
-      screen.buttons[2].setLabel("Remove", 14, 255);
-      screen.buttons[2].clickable = true;
-      displayAll();
-    }
-  }
-}
-
-// Screen 30
-// Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and popup window comes up
-void mouseClicked30(float mX, float mY) {
-  if (screen.chosen == -1) {
-    if (mX > width/6 && mX < width*5/6) {
-      if (mY > height/6 && mY < height*5/6) {
+      if (mX > height/6 && mY < height*5/6) {
         int x = 0;
-        for (int i = 0; i < bills.size(); i++) {
-          if (
-            (screen.extra == 0 && (bills.get(i).status < 2)) ||
-            (screen.extra == 1 && (bills.get(i).status == 2 || bills.get(i).status == 4)) ||
-            (screen.extra == 2 && (bills.get(i).status == 3 || bills.get(i).status == 5)) ||
-            (screen.extra == 3 && (bills.get(i).status == 6)) ||
-            (screen.extra == 4 && (bills.get(i).status == 7))
-          ) {
+        for (int i = 0; i < house.length; i++) {
+          if (house[i].committee == tempBill.committee) {
             if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
-              screen.chosen = i;
-              screen.setScreen();
+              screen.chosen = x;
               displayAll();
             }
             x++;
@@ -820,394 +673,548 @@ void mouseClicked30(float mX, float mY) {
       }
     }
   }
-}
 
-/*
-
-  mouseWheel() Helpers
-
-*/
-
-// The mousewheel is used to scroll
-// Precondition: The mousewheel is scrolled
-// Postcondition: The info displayed is shifted up or down depending on the scroll direction
-void mouseWheelScrollX(float e) {
-  if (e > 0 && screen.scrollX != 0) {
-    screen.scrollX += 20;
-    displayAll();
-  }
-  else if (e < 0) {
-    screen.scrollX -= 20;
-    displayAll();
-  }
-}
-
-/*
-
-  mouseMoved() Helpers
-
-*/
-
-// Checks if a button is being scrolled over
-// Precondition: The mouse is moved somewhere
-// Postcondition: If the mouse is on a button, the button is set to scrolled == true
-void buttonsScrolled() {
-  if (!menuOpen) {
-    if (screen.buttons != null)
-      for (int i = 0; i < screen.buttons.length; i++) {
-        if (screen.buttons[i].isInside(mouseX, mouseY)) {
-          screen.buttons[i].scrolled = true;
+  // Screen 18
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
+  void mouseClicked18(float mX, float mY) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height/2) {
+        for (int i = 0; i < screen.depIdeas.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+3;
+          screen.buttons[1].setLabel("Add", 14, 255);
+          screen.buttons[1].clickable = true;
           displayAll();
         }
-        else {
-          if (screen.buttons[i].scrolled == true) {
-            screen.buttons[i].scrolled = false;
-            displayAll();
-          }
-
-        }
       }
+      else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
+        screen.chosen = 1;
+        screen.buttons[1].setLabel("Remove", 14, 255);
+        screen.buttons[1].clickable = true;
+        displayAll();
+      }
+      else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
+        screen.chosen = 2;
+        screen.buttons[1].setLabel("Remove", 14, 255);
+        screen.buttons[1].clickable = true;
+        displayAll();
+      }
+    }
   }
-  else {
-    if (menuScreen.buttons != null)
-      for (int i = 0; i < menuScreen.buttons.length; i++) {
-        if (menuScreen.buttons[i].isInside(mouseX, mouseY)) {
-          menuScreen.buttons[i].scrolled = true;
+
+  // Screen 20
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
+  void mouseClicked20(float mX, float mY) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height-181) {
+        for (int i = 0; i < screen.depIdeas.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+2;
+          screen.buttons[1].setLabel("Add", 14, 255);
+          screen.buttons[1].clickable = true;
           displayAll();
         }
-        else {
-          if (menuScreen.buttons[i].scrolled == true) {
-            menuScreen.buttons[i].scrolled = false;
+      }
+      else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
+        screen.chosen = 1;
+        screen.buttons[1].setLabel("Remove", 14, 255);
+        screen.buttons[1].clickable = true;
+        displayAll();
+      }
+    }
+  }
+
+  // Screen 23
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted
+  void mouseClicked23(float mX, float mY) {
+    if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
+      if (mY > height/6 && mY < height*5/6) {
+        int x = 0;
+        for (int i = 0; i < screen.trade.displays.length; i++) {
+          for (int j = 0; j < screen.trade.displays[i].size(); i++) {
+            if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
+              // somewhere displayAll();
+            }
+          }
+          //if ((String)displays.get(i))
+          //
+        }
+      }
+    }
+  }
+
+  // Screen 28
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and popup window comes up
+  void mouseClicked28(float mX, float mY) {
+    if (screen.extra == 0) {
+      if (mX > width/6 && mX < width*5/6) {
+        if (mY > height/6 && mY < height*5/6) {
+          for (int i = 0; i < executiveOrders.size(); i++)
+          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+            screen.chosen = i;
+            screen.extra = 1;
+            screen.setScreen();
             displayAll();
           }
         }
       }
+    }
   }
-}
-/*
 
-  keyPressed() Helpers
+  // Screen 29
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
+  void mouseClicked29(float mX, float mY) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height/2) {
+        for (int i = 0; i < screen.depIdeas.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i+4;
+          screen.buttons[2].setLabel("Add", 14, 255);
+          screen.buttons[2].clickable = true;
+          displayAll();
+        }
+      }
+      else if (tempOrder.ideas[0] != -1 && mY > height-208 && mY < height-174) {
+        screen.chosen = 1;
+        screen.buttons[2].setLabel("Remove", 14, 255);
+        screen.buttons[2].clickable = true;
+        displayAll();
+      }
+      else if (tempOrder.ideas[1] != -1 && mY > height-174 && mY < height-140) {
+        screen.chosen = 2;
+        screen.buttons[2].setLabel("Remove", 14, 255);
+        screen.buttons[2].clickable = true;
+        displayAll();
+      }
+      else if (tempOrder.ideas[2] != -1 && mY > height-140 && mY < height-116) {
+        screen.chosen = 3;
+        screen.buttons[2].setLabel("Remove", 14, 255);
+        screen.buttons[2].clickable = true;
+        displayAll();
+      }
+    }
+  }
 
-*/
-
-// Changes a String through typing
-// Precondition: The keyboard letters are typed, it is an appropriate screen
-// Postcondition: The String s is changed in the way the keyboard has requested
-String typeResult(String s) {
-  if (keyCode == BACKSPACE) {
-    if (s.length() != 0)
-      s = s.substring(0, s.length()-1);
+  // Screen 30
+  // Precondition: The mouse is clicked
+  // Postcondition: The entry clicked on has been chosen and popup window comes up
+  void mouseClicked30(float mX, float mY) {
+    if (screen.chosen == -1) {
+      if (mX > width/6 && mX < width*5/6) {
+        if (mY > height/6 && mY < height*5/6) {
+          int x = 0;
+          for (int i = 0; i < bills.size(); i++) {
+            if (
+              (screen.extra == 0 && (bills.get(i).status < 2)) ||
+              (screen.extra == 1 && (bills.get(i).status == 2 || bills.get(i).status == 4)) ||
+              (screen.extra == 2 && (bills.get(i).status == 3 || bills.get(i).status == 5)) ||
+              (screen.extra == 3 && (bills.get(i).status == 6)) ||
+              (screen.extra == 4 && (bills.get(i).status == 7))
+              ) {
+                if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
+                  screen.chosen = i;
+                  screen.setScreen();
+                  displayAll();
+                }
+                x++;
+              }
+            }
+          }
+        }
+      }
     }
 
-  else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
-    if (s.equals("Type name here")) {
-      return key;
-    }
-    s += key;
-  }
-  return s;
-}
+    /*
 
-// All cases where the arrow keys are used to scroll through a list
-// Precondition: The keyboard arrow keys are used
-// Postcondition: The info displayed is shifted up or down depending on the arrow keys used
-void keyPressedScrollX() {
-  if (isCurrScreen(10) ||
+    mouseWheel() Helpers
+
+    */
+
+    // The mousewheel is used to scroll
+    // Precondition: The mousewheel is scrolled
+    // Postcondition: The info displayed is shifted up or down depending on the scroll direction
+    void mouseWheelScrollX(float e) {
+      if (e > 0 && screen.scrollX != 0) {
+        screen.scrollX += 20;
+        displayAll();
+      }
+      else if (e < 0) {
+        screen.scrollX -= 20;
+        displayAll();
+      }
+    }
+
+    /*
+
+    mouseMoved() Helpers
+
+    */
+
+    // Checks if a button is being scrolled over
+    // Precondition: The mouse is moved somewhere
+    // Postcondition: If the mouse is on a button, the button is set to scrolled == true
+    void buttonsScrolled() {
+      if (!menuOpen) {
+        if (screen.buttons != null)
+        for (int i = 0; i < screen.buttons.length; i++) {
+          if (screen.buttons[i].isInside(mouseX, mouseY)) {
+            screen.buttons[i].scrolled = true;
+            displayAll();
+          }
+          else {
+            if (screen.buttons[i].scrolled == true) {
+              screen.buttons[i].scrolled = false;
+              displayAll();
+            }
+
+          }
+        }
+      }
+      else {
+        if (menuScreen.buttons != null)
+        for (int i = 0; i < menuScreen.buttons.length; i++) {
+          if (menuScreen.buttons[i].isInside(mouseX, mouseY)) {
+            menuScreen.buttons[i].scrolled = true;
+            displayAll();
+          }
+          else {
+            if (menuScreen.buttons[i].scrolled == true) {
+              menuScreen.buttons[i].scrolled = false;
+              displayAll();
+            }
+          }
+        }
+      }
+    }
+    /*
+
+    keyPressed() Helpers
+
+    */
+
+    // Changes a String through typing
+    // Precondition: The keyboard letters are typed, it is an appropriate screen
+    // Postcondition: The String s is changed in the way the keyboard has requested
+    String typeResult(String s) {
+      if (keyCode == BACKSPACE) {
+        if (s.length() != 0)
+        s = s.substring(0, s.length()-1);
+      }
+
+      else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
+        if (s.equals("Type name here")) {
+          return key;
+        }
+        s += key;
+      }
+      return s;
+    }
+
+    // All cases where the arrow keys are used to scroll through a list
+    // Precondition: The keyboard arrow keys are used
+    // Postcondition: The info displayed is shifted up or down depending on the arrow keys used
+    void keyPressedScrollX() {
+      if (isCurrScreen(10) ||
       isCurrScreen(11) ||
       isCurrScreen(13) ||
       isCurrScreen(14) ||
       isCurrScreen(16) ||
       isCurrScreen(18)) {
-    if (keyCode == UP && screen.scrollX != 0) {
-      screen.scrollX += 20;
-      displayAll();
-    }
-    else if (keyCode == DOWN) {
-      screen.scrollX -= 20;
-      displayAll();
-    }
-  }
-}
-
-// All cases where arrow keys are used horizontally
-// Precondition: The LEFT RIGHT arrow keys are used
-// Postcondition: The screen reacts to the Horizontal arrow keys
-void keyPressedScrollHoriz() {
-  if (isCurrScreen(7)) {
-    if (keyCode == LEFT) {
-      ((Screen7)screen).currCalendar.changeMonth(-1);
-      displayAll();
-    }
-    else if (keyCode == RIGHT) {
-      ((Screen7)screen).currCalendar.changeMonth(1);
-      displayAll();
-    }
-  }
-}
-
-//===================================================//
-//===================================================//
-//================== Other Methods ==================//
-//===================================================//
-//===================================================//
-
-// Adds a new screen and makes it the current screen shown
-// Precondition: Button b has just been pressed, uses b.command, the screen it should go to
-// Postcondition: a new Screen is set up and added to the query of past Screens (0 resets)
-void newScreen(Button b) {
-  int lastchosen = screen.chosen;
-  switch (b.command) {
-    case 0:
-      screen = new Screen0();
-      screens = new ArrayList<Screen>();
-      screens.add(screen);
-      break;
-    case 1:
-      screen = new Screen1();
-      screens.add(screen);
-      break;
-    case 2:
-      screen = new Screen2();
-      screens.add(screen);
-      break;
-    case 3:
-      screen = new Screen3();
-      screens.add(screen);
-      break;
-    case 4:
-      screen = new Screen4();
-      screens.add(screen);
-      break;
-    case 5:
-      screen = new Screen5();
-      screens.add(screen);
-      break;
-    case 6:
-      screen = new Screen6();
-      screens.add(screen);
-      break;
-    case 7:
-      screen = new Screen7();
-      screens.add(screen);
-      break;
-    case 8:
-      screen = new Screen8();
-      screens.add(screen);
-      break;
-    case 9:
-      screen = new Screen9();
-      screens.add(screen);
-      break;
-    case 10:
-      screen = new Screen10();
-      screens.add(screen);
-      break;
-    case 11:
-      screen = new Screen11();
-      screens.add(screen);
-      break;
-    case 12:
-      screen = new Screen12();
-      screens.add(screen);
-      break;
-    case 13:
-      screen = new Screen13();
-      screens.add(screen);
-      break;
-    case 14:
-      screen = new Screen14();
-      screens.add(screen);
-      break;
-    case 15:
-      screen = new Screen15();
-      screens.add(screen);
-      break;
-    case 16:
-      screen = new Screen16();
-      screens.add(screen);
-      break;
-    case 17:
-      screen = new Screen17();
-      screens.add(screen);
-      break;
-    case 18:
-      screen = new Screen18();
-      screens.add(screen);
-      break;
-    case 19:
-      screen = new Screen19();
-      screens.add(screen);
-      break;
-    case 20:
-      screen = new Screen20();
-      screens.add(screen);
-      break;
-    case 21:
-      screen = new Screen21();
-      screens.add(screen);
-      break;
-    case 22:
-      screen = new Screen22();
-      screens.add(screen);
-      break;
-    case 23:
-      screen = new Screen23();
-      screens.add(screen);
-      break;
-    case 24:
-      screen = new Screen24();
-      screens.add(screen);
-      break;
-    case 25:
-      screen = new Screen25();
-      screens.add(screen);
-      break;
-    case 26:
-      screen = new Screen26();
-      screens.add(screen);
-      break;
-    case 27:
-      screen = new Screen27();
-      screens.add(screen);
-      break;
-    case 28:
-      screen = new Screen28();
-      screens.add(screen);
-      break;
-    case 29:
-      screen = new Screen29();
-      screens.add(screen);
-      break;
-    case 30:
-      screen = new Screen30();
-      screens.add(screen);
-      break;
-    case 31:
-      screen = new Screen31();
-      screens.add(screen);
-      break;
-    case 32:
-      screen = new Screen32();
-      screens.add(screen);
-      break;
-    case 33:
-      screen = new Screen33();
-      screens.add(screen);
-      break;
-    case 34:
-      screen = new Screen34();
-      screens.add(screen);
-      break;
-    case 35:
-      screen = new Screen35();
-      screens.add(screen);
-      break;
-    case 36:
-      screen = new Screen36();
-      screens.add(screen);
-      break;
-
-    // MenuScreen Cases
-    case 100:
-      menuScreen = new MenuScreen();
-      menuScreen.extra = 0;
-      break;
-    case 101:
-      menuScreen = new MenuScreen();
-      menuScreen.extra = 1;
-      break;
-    case 102:
-      menuScreen = new MenuScreen();
-      menuScreen.extra = 2;
-      break;
-    case 103:
-      menuScreen = new MenuScreen();
-      menuScreen.extra = 3;
-      break;
-    case 104:
-      menuScreen = new MenuScreen();
-      menuScreen.extra = 4;
-      break;
-  }
-  screen.extra = b.extra;
-  if (screens.size() > 1) {
-    screen.lastchosen = lastchosen;
-    screen.d1 = screens.get(screens.size()-2).d1;
-    screen.d2 = screens.get(screens.size()-2).d2;
-  }
-  if (!menuOpen)
-    screen.setScreen();
-  else
-    menuScreen.setScreen();
-  println(screens);
-
-}
-
-// Returns whether int s is the current screen
-// Precondition: An int to test if it's the currentScreen
-// Postcondition: A boolean true of false whether it is
-boolean isCurrScreen(int s) {
-  return screen.toString().equals(Utils.convertIntToString(s));
-}
-
-// Returns an array with the widths of words in String[] words
-// Precondition: String[] words is an array of words, and int s is the textSize
-// Postcondition: returns a parallel array with the lengths of each word in String[] words
-int[] wordWidths(String[] words, int s) {
-  textSize(s);
-  int[] ls = new int[words.length];
-  for (int i = 0; i < words.length; i++)
-    ls[i] = (int)textWidth(words[i]);
-  return ls;
-}
-//===================================================//
-//===================================================//
-//================ Next Turn Method =================//
-//===================================================//
-//===================================================//
-
-// This method progresses the game by setting up the next turn.
-// Precondition: The Next Turn button has been pressed, and values need to be reset
-// Postcondition: Values are reset and the events of the turn are set
-void nextTurn() {
-  turn++;
-
-  setDay();
-
-  // React to speeches
-  for (int i = 0; i < senate.length; i++)
-    senate[i].listenToSpeech(suppS, agS);
-  for (int i = 0; i < house.length; i++)
-    house[i].listenToSpeech(suppH, agH);
-
-  suppH = new ArrayList<Integer>();
-  suppS = new ArrayList<Integer>();
-  agH = new ArrayList<Integer>();
-  agS = new ArrayList<Integer>();
-
-  // This is the beginning of code that changes the status of bills
-  //  for (int i = 0; i < bills.length; i++) {
-  //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
-
- //   }
-
-}
-// This moves time forward once each turn
-// Precondition: the current date, in calendar is outdated
-// Postcondition: the day, month, and year are up to date and forward daysPerTurn days
-void setDay() {
-  int daysPerTurn = 7; // this decides how many days is one turn.
-  // I don't really know what it should be yet, it depends on testing.
-
-  for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
-    calendar.day++;
-    if (calendar.day > daysInMonth[calendar.cMonth-1]) {
-      calendar.day = 1;
-      calendar.cMonth++;
-      if (calendar.cMonth > 12) {
-        calendar.cMonth = 1;
-        calendar.cYear++;
+        if (keyCode == UP && screen.scrollX != 0) {
+          screen.scrollX += 20;
+          displayAll();
+        }
+        else if (keyCode == DOWN) {
+          screen.scrollX -= 20;
+          displayAll();
+        }
       }
     }
-  }
-}
+
+    // All cases where arrow keys are used horizontally
+    // Precondition: The LEFT RIGHT arrow keys are used
+    // Postcondition: The screen reacts to the Horizontal arrow keys
+    void keyPressedScrollHoriz() {
+      if (isCurrScreen(7)) {
+        if (keyCode == LEFT) {
+          ((Screen7)screen).currCalendar.changeMonth(-1);
+          displayAll();
+        }
+        else if (keyCode == RIGHT) {
+          ((Screen7)screen).currCalendar.changeMonth(1);
+          displayAll();
+        }
+      }
+    }
+
+    //===================================================//
+    //===================================================//
+    //================== Other Methods ==================//
+    //===================================================//
+    //===================================================//
+
+    // Adds a new screen and makes it the current screen shown
+    // Precondition: Button b has just been pressed, uses b.command, the screen it should go to
+    // Postcondition: a new Screen is set up and added to the query of past Screens (0 resets)
+    void newScreen(Button b) {
+      int lastchosen = screen.chosen;
+      switch (b.command) {
+        case 0:
+        screen = new Screen0();
+        screens = new ArrayList<Screen>();
+        screens.add(screen);
+        break;
+        case 1:
+        screen = new Screen1();
+        screens.add(screen);
+        break;
+        case 2:
+        screen = new Screen2();
+        screens.add(screen);
+        break;
+        case 3:
+        screen = new Screen3();
+        screens.add(screen);
+        break;
+        case 4:
+        screen = new Screen4();
+        screens.add(screen);
+        break;
+        case 5:
+        screen = new Screen5();
+        screens.add(screen);
+        break;
+        case 6:
+        screen = new Screen6();
+        screens.add(screen);
+        break;
+        case 7:
+        screen = new Screen7();
+        screens.add(screen);
+        break;
+        case 8:
+        screen = new Screen8();
+        screens.add(screen);
+        break;
+        case 9:
+        screen = new Screen9();
+        screens.add(screen);
+        break;
+        case 10:
+        screen = new Screen10();
+        screens.add(screen);
+        break;
+        case 11:
+        screen = new Screen11();
+        screens.add(screen);
+        break;
+        case 12:
+        screen = new Screen12();
+        screens.add(screen);
+        break;
+        case 13:
+        screen = new Screen13();
+        screens.add(screen);
+        break;
+        case 14:
+        screen = new Screen14();
+        screens.add(screen);
+        break;
+        case 15:
+        screen = new Screen15();
+        screens.add(screen);
+        break;
+        case 16:
+        screen = new Screen16();
+        screens.add(screen);
+        break;
+        case 17:
+        screen = new Screen17();
+        screens.add(screen);
+        break;
+        case 18:
+        screen = new Screen18();
+        screens.add(screen);
+        break;
+        case 19:
+        screen = new Screen19();
+        screens.add(screen);
+        break;
+        case 20:
+        screen = new Screen20();
+        screens.add(screen);
+        break;
+        case 21:
+        screen = new Screen21();
+        screens.add(screen);
+        break;
+        case 22:
+        screen = new Screen22();
+        screens.add(screen);
+        break;
+        case 23:
+        screen = new Screen23();
+        screens.add(screen);
+        break;
+        case 24:
+        screen = new Screen24();
+        screens.add(screen);
+        break;
+        case 25:
+        screen = new Screen25();
+        screens.add(screen);
+        break;
+        case 26:
+        screen = new Screen26();
+        screens.add(screen);
+        break;
+        case 27:
+        screen = new Screen27();
+        screens.add(screen);
+        break;
+        case 28:
+        screen = new Screen28();
+        screens.add(screen);
+        break;
+        case 29:
+        screen = new Screen29();
+        screens.add(screen);
+        break;
+        case 30:
+        screen = new Screen30();
+        screens.add(screen);
+        break;
+        case 31:
+        screen = new Screen31();
+        screens.add(screen);
+        break;
+        case 32:
+        screen = new Screen32();
+        screens.add(screen);
+        break;
+        case 33:
+        screen = new Screen33();
+        screens.add(screen);
+        break;
+        case 34:
+        screen = new Screen34();
+        screens.add(screen);
+        break;
+        case 35:
+        screen = new Screen35();
+        screens.add(screen);
+        break;
+        case 36:
+        screen = new Screen36();
+        screens.add(screen);
+        break;
+
+        // MenuScreen Cases
+        case 100:
+        menuScreen = new MenuScreen();
+        menuScreen.extra = 0;
+        break;
+        case 101:
+        menuScreen = new MenuScreen();
+        menuScreen.extra = 1;
+        break;
+        case 102:
+        menuScreen = new MenuScreen();
+        menuScreen.extra = 2;
+        break;
+        case 103:
+        menuScreen = new MenuScreen();
+        menuScreen.extra = 3;
+        break;
+        case 104:
+        menuScreen = new MenuScreen();
+        menuScreen.extra = 4;
+        break;
+      }
+      screen.extra = b.extra;
+      if (screens.size() > 1) {
+        screen.lastchosen = lastchosen;
+        screen.d1 = screens.get(screens.size()-2).d1;
+        screen.d2 = screens.get(screens.size()-2).d2;
+      }
+      if (!menuOpen)
+      screen.setScreen();
+      else
+      menuScreen.setScreen();
+      println(screens);
+
+    }
+
+    // Returns whether int s is the current screen
+    // Precondition: An int to test if it's the currentScreen
+    // Postcondition: A boolean true of false whether it is
+    boolean isCurrScreen(int s) {
+      return screen.toString().equals(Utils.convertIntToString(s));
+    }
+
+    // Returns an array with the widths of words in String[] words
+    // Precondition: String[] words is an array of words, and int s is the textSize
+    // Postcondition: returns a parallel array with the lengths of each word in String[] words
+    int[] wordWidths(String[] words, int s) {
+      textSize(s);
+      int[] ls = new int[words.length];
+      for (int i = 0; i < words.length; i++)
+      ls[i] = (int)textWidth(words[i]);
+      return ls;
+    }
+    //===================================================//
+    //===================================================//
+    //================ Next Turn Method =================//
+    //===================================================//
+    //===================================================//
+
+    // This method progresses the game by setting up the next turn.
+    // Precondition: The Next Turn button has been pressed, and values need to be reset
+    // Postcondition: Values are reset and the events of the turn are set
+    void nextTurn() {
+      turn++;
+
+      setDay();
+
+      // React to speeches
+      for (int i = 0; i < senate.length; i++)
+      senate[i].listenToSpeech(suppS, agS);
+      for (int i = 0; i < house.length; i++)
+      house[i].listenToSpeech(suppH, agH);
+
+      suppH = new ArrayList<Integer>();
+      suppS = new ArrayList<Integer>();
+      agH = new ArrayList<Integer>();
+      agS = new ArrayList<Integer>();
+
+      // This is the beginning of code that changes the status of bills
+      //  for (int i = 0; i < bills.length; i++) {
+      //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
+
+      //   }
+
+    }
+    // This moves time forward once each turn
+    // Precondition: the current date, in calendar is outdated
+    // Postcondition: the day, month, and year are up to date and forward daysPerTurn days
+    void setDay() {
+      int daysPerTurn = 7; // this decides how many days is one turn.
+      // I don't really know what it should be yet, it depends on testing.
+
+      for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
+        calendar.day++;
+        if (calendar.day > daysInMonth[calendar.cMonth-1]) {
+          calendar.day = 1;
+          calendar.cMonth++;
+          if (calendar.cMonth > 12) {
+            calendar.cMonth = 1;
+            calendar.cYear++;
+          }
+        }
+      }
+    }
