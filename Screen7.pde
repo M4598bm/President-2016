@@ -49,14 +49,14 @@ class Screen7 extends Screen {
 
     for (int i = 0; i < houseCommittees.length; i++) {
       buttons[i+4] = new Button(width/6+10, height/6+houseButtonSize*(i+1), textWidth(houseCommittees[i].name), houseButtonSize, color(0, 0, 0), 7);
-      buttons[i+4].setLabel(houseCommittees[i].name, (int)houseButtonSize/2, color(0, 0, 0));
+      buttons[i+4].setLabel(Utils.returnCommas(houseCommittees[i].name), (int)houseButtonSize/2, color(0, 0, 0));
       buttons[i+4].extra = i+3;
       buttons[i+4].variance = 1;
     }
 
     for (int i = 0; i < senateCommittees.length; i++) {
       buttons[i+4+houseCommittees.length] = new Button(width*5/6-textWidth(senateCommittees[i].name)-10, height/6+senateButtonSize*(i+1), textWidth(senateCommittees[i].name), senateButtonSize, color(0, 0, 0), 7);
-      buttons[i+4+houseCommittees.length].setLabel(senateCommittees[i].name, (int)senateButtonSize/2, color(0, 0, 0));
+      buttons[i+4+houseCommittees.length].setLabel(Utils.returnCommas(senateCommittees[i].name), (int)senateButtonSize/2, color(0, 0, 0));
       buttons[i+4+houseCommittees.length].extra = i+3+houseCommittees.length;
       buttons[i+4+houseCommittees.length].variance = 1;
 
@@ -123,9 +123,9 @@ class Screen7 extends Screen {
       else if (extra == 2)
         text("Senate Calendar", width/2, height/6);
       else if (extra < 3+houseCommittees.length)
-        text(houseCommittees[extra-3].name+" Committee Calendar", width/2, height/6);
+        text(Utils.returnCommas(houseCommittees[extra-3].name)+" Committee Calendar", width/2, height/6);
       else if (extra < 3+houseCommittees.length+senateCommittees.length)
-        text(senateCommittees[extra-houseCommittees.length-3].name+" Committee Calendar", width/2, height/6);
+        text(Utils.returnCommas(senateCommittees[extra-houseCommittees.length-3].name)+" Committee Calendar", width/2, height/6);
     }
     else {
       fill(255);

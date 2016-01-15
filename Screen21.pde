@@ -46,13 +46,7 @@ class Screen21 extends Screen {
     text("Bill #" + (bills.size()+1)+":", width/6, height/6);
     fill(0);
     if (tempBill != null) {
-      textSize(32);
-      if (tempBill.name == "Type name here")
-        fill(150);
-      text(tempBill.name, width/6+namespaceWidth, height/6);
-      fill(0);
-      if ((millis()/1000)%2 == 0)
-        line(width/6+namespaceWidth+textWidth(tempBill.name), height/6+3, width/6+namespaceWidth+textWidth(tempBill.name), height/6+37);
+
       fill(0);
       text("Brought to House committee by Rep. "+tempBill.sponsor.name+"("+(tempBill.sponsor.party+"").toUpperCase()+")", width/6, height/6+40);
       textSize(25);

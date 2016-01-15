@@ -70,7 +70,7 @@ class Screen30 extends Screen {
       ) {
         if (height/6+24*x+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6) {
           if (i == chosen) {
-            fill(255, 255, 40);
+            fill(hLColor);
             rect(width/6, height/6+24*x+scrollX, width*4/6, 24);
             fill(0);
           }

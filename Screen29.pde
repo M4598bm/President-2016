@@ -52,15 +52,13 @@ class Screen29 extends Screen {
   // Postcondition: actions are taken according to the int extra
   void extraActions() {
     if (lastButtonInd == 2) {
-      if (chosen == 0) {}
-      else if (chosen < 3) {
-        tempOrder.removeIdea(tempOrder.ideas[chosen-1]);
-        chosen = 0;
+      if (lastchosen == 0) {}
+      else if (lastchosen < 3) {
+        tempOrder.removeIdea(tempOrder.ideas[lastchosen-1]);
         screens.remove(screens.size()-2);
       }
       else {
-        tempOrder.addIdea(ideas.nameToInd(depIdeas.get(chosen-4)));
-        chosen = 0;
+        tempOrder.addIdea(ideas.nameToInd(depIdeas.get(lastchosen-4)));
         screens.remove(screens.size()-2);
       }
     }
@@ -110,7 +108,7 @@ class Screen29 extends Screen {
     line(width/6, height-174, width*5/6, height-174);
     line(width/6, height-140, width*5/6, height-140);
 
-    fill(255, 255, 20);
+    fill(hLColor);
     if (chosen == 1)
       rect(width/6, height-208, width*4/6, 34);
     if (chosen == 2)

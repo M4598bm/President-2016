@@ -68,16 +68,6 @@ class Screen14 extends Screen {
     textSize(16);
     text("Funds available for this year: ", width/6, 40);
 
-    float w = textWidth("Search by state, name, party, or position:")+5;
-    fill(0);
-    text("Search by state, name, party, or position:", width/6, 65);
-    fill(255);
-    rect(width/6+w, 62, width*2/3-w, 26);
-    fill(0);
-    text(input, width/6+w, 65);
-
-    if ((millis()/1000)%2 == 0)
-      line(width/6+w+textWidth(input)+1, 65, width/6+w+textWidth(input)+1, 65+20);
     fill(255);
     rect(width/6, height/6, width*2/3, height*2/3);//Congressmen
     fill(0);
@@ -86,8 +76,6 @@ class Screen14 extends Screen {
     text("Congressmen:", width/2, height/6-30);
 
     search = Utils.searchThrough(input, house, senate);
-    println(input);
-    println(search.size());
     textAlign(LEFT, TOP);
     for (int i = 0; i < search.size(); i++) {
       if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
@@ -105,6 +93,13 @@ class Screen14 extends Screen {
 
     popUpWindow();
     displayButtonsSliders();
+
+    // displays a text input
+    fill(0);
+    textSize(16);
+    textAlign(LEFT, TOP);
+    text("Search by state, name, party, or position:", width/6, 65);
+    displayTextInputs();
   }
 
   // Displays a popup with settings for the selected congressperson's funding
