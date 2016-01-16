@@ -1,5 +1,7 @@
 class Congressman {
   String name;
+
+  // All are out of 100
   int socialism;// 0 capitalist, 5 socialist
   int liberalism;// 0 conservative, 5 liberal
   int approval;// home approval rating

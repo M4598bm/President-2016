@@ -18,6 +18,8 @@ class Bill {
   boolean passedSenate;
   boolean isLaw;
 
+  int status;// temporary
+
   int weeklyCost;
   int initialCost;
   /*

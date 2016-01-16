@@ -84,7 +84,7 @@ class Screen2 extends Screen {
     for (int i = 0; i < bills.size(); i++) {
       Bill bill = bills.get(i);
       if (bill.committee == extra) {
-        String mes = " • Bill #"+bill.billNumber+": "+bill.name+" (";
+        String mes = " • Bill "+bill.billNumberH+": "+bill.name+" (";
         if (bill.status == 0)
           mes += "in committee";
         else if (bill.status == 1)

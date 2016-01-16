@@ -30,12 +30,27 @@ class Committee {
   // Precondition: Bill b is being considered.
   // Postcondition: The committee chairperson and ranking member set it on the calendar
   void putOnCalendar(Bill b) {
-    int soc = b.avgSoc();
-    int lib = b.avgLib();
+    float soc = b.avgSoc();
+    float lib = b.avgLib();
     // Things that can happen:
     // * Chairperson wants it
-    //  - Ranking member persuades it off
-    //  - 
+    //  - Ranking member wants it (yes)
+    //  - Ranking member persuades it out (no)
+    //  - Ranking member can't persuade it out (yes)
+    // * Chairperson doesn't want it:
+    //  - Ranking member doesn't want it (no)
+    //  - Ranking member persuades it in (yes)
+    //  - Ranking member can't persuade it in (no)
+
+    if (/* the chairperson wants it */true) {
+      if (/* ranking member wants it*/true) {
+        if (/* no background deals */true) {
+          //cCalendar;
+        }
+      }
+    }
+
+
   }
 
   // hold a markup session on the bill
@@ -55,7 +70,7 @@ class Committee {
   // a meeting for one day of this Committee
   // Precondition: the calendar may have events for this Committee
   // Postcondition: the committee acts on a number of things
-  holdMeeting() {
+  void holdMeeting() {
 
   }
 
@@ -63,6 +78,6 @@ class Committee {
   // Precondition: a bill doesnt have a Date
   // Postcondition: returns if it was placed at all
   boolean setBillOnCalendar(Bill b) {
-
+    return true;
   }
 }

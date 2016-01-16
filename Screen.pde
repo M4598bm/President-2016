@@ -36,7 +36,15 @@ class Screen {
    33: Propose Resolution < 31
    34: Security Council Delegate < 26
    35: Propose Action < 34
-   36: Specific Calendars
+
+   100: Menu Screen
+   101:
+
+   200: Main Menu Screen
+   201: New game setup
+   202: Load game
+   203: Settings
+   204: Exit game
   */
 
   // Most used variables for basic structure

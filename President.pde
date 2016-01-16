@@ -95,14 +95,11 @@ void setup() {
   String[] parties = {"Democratic", "Republican"};
   setPresParty(parties);// Default is that Democrat is the presParty
   createSingleClasses();
-<<<<<<< HEAD
+
   initCongress();
-  createHouse;
+  createHouse();
   createSenate();
-=======
-  createCongress();
-  initCongress();
->>>>>>> fdca374d00e6c913bc6ad8609c1c22dab2b999b2
+
   createCommittees();
   createCabinet();
   createCourt();
@@ -111,16 +108,6 @@ void setup() {
   loadImages();
 
   calcApproval();
-
-  // This is temporary
-  for (int i = 0; i < 5; i++) {
-    bills.add(new Bill());
-    bills.get(i).name = "Bill "+(i+1);
-    bills.get(i).committee = i;
-    bills.get(i).status = (int)random(5);
-    bills.get(i).addOpinions();
-  }
-  // ^ Temporary ^ //
 
   displayAll();
 }
@@ -226,6 +213,7 @@ void createSenate() {
 // Postcondition: Representatives have liberalism and socialism stats
 void createHouse() {
   println("createHouse");
+  Table states = loadTable("states.csv", "header");// a table with states etc.
   Table districts = loadTable("districts.csv", "header");// a table with states etc.
   int xHouse = 0;
   for (TableRow row : states.rows()) {// Ok so everything about states is not an issue, keep these
@@ -253,9 +241,11 @@ private void testCongress() {
 // Initialize Congresspeople
 // Precondition: names.csv lists first and last names; states lists state info from states.csv and districts is from districts.csv
 // Postcondition: Both houses of congress have Congressmen with names, states, and house set
-void initCongress(Table states, Table districts) {
+void initCongress() {
   println("initCongress");
 
+  Table states = loadTable("states.csv", "header");// a table with states etc.
+  Table districts = loadTable("districts.csv", "header");// a table with states etc.
   Table names = loadTable("names.csv", "header");// A table that has first and last names
   ArrayList<String> firstNames = new ArrayList<String>();
   ArrayList<String> lastNames  = new ArrayList<String>();
@@ -944,19 +934,13 @@ void mouseDragged() {
         s = s.substring(0, s.length()-1);
       }
 
-<<<<<<< HEAD
       else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
         if (s.equals("Type name here")) {
-          return key;
+          return key+"";
         }
         s += key;
       }
       return s;
-=======
-  else if (keyCode != ENTER && keyCode != SHIFT && keyCode != UP && keyCode != DOWN) {
-    if (s.equals("Type name here")) {
-      return key+"";
->>>>>>> fdca374d00e6c913bc6ad8609c1c22dab2b999b2
     }
 
     // All cases where the arrow keys are used to scroll through a list
@@ -984,7 +968,17 @@ void mouseDragged() {
     // Precondition: The LEFT RIGHT arrow keys are used
     // Postcondition: The screen reacts to the Horizontal arrow keys
     void keyPressedScrollHoriz() {
-      if (isCurrScreen(7)) {
+      if (isCurrScreen(2)) {
+        if (keyCode == LEFT && screen.extra != 0) {
+          newScreen(screen.buttons[2]);
+          displayAll();
+        }
+        else if (keyCode == RIGHT && screen.extra != cabinet.length-1) {
+          newScreen(screen.buttons[1]);
+          displayAll();
+        }
+      }
+      else if (isCurrScreen(7)) {
         if (keyCode == LEFT) {
           ((Screen7)screen).currCalendar.changeMonth(-1);
           displayAll();
@@ -1009,176 +1003,180 @@ void mouseDragged() {
       int lastchosen = screen.chosen;
       switch (b.command) {
         case 0:
-        screen = new Screen0();
-        screens = new ArrayList<Screen>();
-        screens.add(screen);
-        break;
+          screen = new Screen0();
+          screens = new ArrayList<Screen>();
+          screens.add(screen);
+          break;
         case 1:
-        screen = new Screen1();
-        screens.add(screen);
-        break;
+          screen = new Screen1();
+          screens.add(screen);
+          break;
         case 2:
-        screen = new Screen2();
-        screens.add(screen);
-        break;
+          screen = new Screen2();
+          screens.add(screen);
+          break;
         case 3:
-        screen = new Screen3();
-        screens.add(screen);
-        break;
+          screen = new Screen3();
+          screens.add(screen);
+          break;
         case 4:
-        screen = new Screen4();
-        screens.add(screen);
-        break;
+          screen = new Screen4();
+          screens.add(screen);
+          break;
         case 5:
-        screen = new Screen5();
-        screens.add(screen);
-        break;
+          screen = new Screen5();
+          screens.add(screen);
+          break;
         case 6:
-        screen = new Screen6();
-        screens.add(screen);
-        break;
+          screen = new Screen6();
+          screens.add(screen);
+          break;
         case 7:
-        screen = new Screen7();
-        screens.add(screen);
-        break;
+          screen = new Screen7();
+          screens.add(screen);
+          break;
         case 8:
-        screen = new Screen8();
-        screens.add(screen);
-        break;
+          screen = new Screen8();
+          screens.add(screen);
+          break;
         case 9:
-        screen = new Screen9();
-        screens.add(screen);
-        break;
+          screen = new Screen9();
+          screens.add(screen);
+          break;
         case 10:
-        screen = new Screen10();
-        screens.add(screen);
-        break;
+          screen = new Screen10();
+          screens.add(screen);
+          break;
         case 11:
-        screen = new Screen11();
-        screens.add(screen);
-        break;
+          screen = new Screen11();
+          screens.add(screen);
+          break;
         case 12:
-        screen = new Screen12();
-        screens.add(screen);
-        break;
+          screen = new Screen12();
+          screens.add(screen);
+          break;
         case 13:
-        screen = new Screen13();
-        screens.add(screen);
-        break;
+          screen = new Screen13();
+          screens.add(screen);
+          break;
         case 14:
-        screen = new Screen14();
-        screens.add(screen);
-        break;
+          screen = new Screen14();
+          screens.add(screen);
+          break;
         case 15:
-        screen = new Screen15();
-        screens.add(screen);
-        break;
+          screen = new Screen15();
+          screens.add(screen);
+          break;
         case 16:
-        screen = new Screen16();
-        screens.add(screen);
-        break;
+          screen = new Screen16();
+          screens.add(screen);
+          break;
         case 17:
-        screen = new Screen17();
-        screens.add(screen);
-        break;
+          screen = new Screen17();
+          screens.add(screen);
+          break;
         case 18:
-        screen = new Screen18();
-        screens.add(screen);
-        break;
+          screen = new Screen18();
+          screens.add(screen);
+          break;
         case 19:
-        screen = new Screen19();
-        screens.add(screen);
-        break;
+          screen = new Screen19();
+          screens.add(screen);
+          break;
         case 20:
-        screen = new Screen20();
-        screens.add(screen);
-        break;
+          screen = new Screen20();
+          screens.add(screen);
+          break;
         case 21:
-        screen = new Screen21();
-        screens.add(screen);
-        break;
+          screen = new Screen21();
+          screens.add(screen);
+          break;
         case 22:
-        screen = new Screen22();
-        screens.add(screen);
-        break;
+          screen = new Screen22();
+          screens.add(screen);
+          break;
         case 23:
-        screen = new Screen23();
-        screens.add(screen);
-        break;
+          screen = new Screen23();
+          screens.add(screen);
+          break;
         case 24:
-        screen = new Screen24();
-        screens.add(screen);
-        break;
+          screen = new Screen24();
+          screens.add(screen);
+          break;
         case 25:
-        screen = new Screen25();
-        screens.add(screen);
-        break;
+          screen = new Screen25();
+          screens.add(screen);
+          break;
         case 26:
-        screen = new Screen26();
-        screens.add(screen);
-        break;
+          screen = new Screen26();
+          screens.add(screen);
+          break;
         case 27:
-        screen = new Screen27();
-        screens.add(screen);
-        break;
+          screen = new Screen27();
+          screens.add(screen);
+          break;
         case 28:
-        screen = new Screen28();
-        screens.add(screen);
-        break;
+          screen = new Screen28();
+          screens.add(screen);
+          break;
         case 29:
-        screen = new Screen29();
-        screens.add(screen);
-        break;
+          screen = new Screen29();
+          screens.add(screen);
+          break;
         case 30:
-        screen = new Screen30();
-        screens.add(screen);
-        break;
+          screen = new Screen30();
+          screens.add(screen);
+          break;
         case 31:
-        screen = new Screen31();
-        screens.add(screen);
-        break;
+          screen = new Screen31();
+          screens.add(screen);
+          break;
         case 32:
-        screen = new Screen32();
-        screens.add(screen);
-        break;
+          screen = new Screen32();
+          screens.add(screen);
+          break;
         case 33:
-        screen = new Screen33();
-        screens.add(screen);
-        break;
+          screen = new Screen33();
+          screens.add(screen);
+          break;
         case 34:
-        screen = new Screen34();
-        screens.add(screen);
-        break;
+          screen = new Screen34();
+          screens.add(screen);
+          break;
         case 35:
-        screen = new Screen35();
-        screens.add(screen);
-        break;
+          screen = new Screen35();
+          screens.add(screen);
+          break;
         case 36:
-        screen = new Screen36();
-        screens.add(screen);
-        break;
+          screen = new Screen36();
+          screens.add(screen);
+          break;
 
         // MenuScreen Cases
         case 100:
-        menuScreen = new MenuScreen();
-        menuScreen.extra = 0;
-        break;
+          menuScreen = new MenuScreen();
+          menuScreen.extra = 0;
+          break;
         case 101:
-        menuScreen = new MenuScreen();
-        menuScreen.extra = 1;
-        break;
+          menuScreen = new MenuScreen();
+          menuScreen.extra = 1;
+          break;
         case 102:
-        menuScreen = new MenuScreen();
-        menuScreen.extra = 2;
-        break;
+          menuScreen = new MenuScreen();
+          menuScreen.extra = 2;
+          break;
         case 103:
-        menuScreen = new MenuScreen();
-        menuScreen.extra = 3;
-        break;
+          menuScreen = new MenuScreen();
+          menuScreen.extra = 3;
+          break;
         case 104:
-        menuScreen = new MenuScreen();
-        menuScreen.extra = 4;
-        break;
+          menuScreen = new MenuScreen();
+          menuScreen.extra = 4;
+          break;
+
+        // MainMenuScreen Cases
+        case 200:
+          screen = new MainMenuScreen();
       }
       screen.extra = b.extra;
       if (screens.size() > 1) {
@@ -1200,21 +1198,6 @@ void mouseDragged() {
     boolean isCurrScreen(int s) {
       return screen.toString().equals(Utils.convertIntToString(s));
     }
-<<<<<<< HEAD
-=======
-  }
-  else if (isCurrScreen(2)) {
-    if (keyCode == LEFT && screen.extra != 0) {
-      newScreen(screen.buttons[2]);
-      displayAll();
-    }
-    else if (keyCode == RIGHT && screen.extra != cabinet.length-1) {
-      newScreen(screen.buttons[1]);
-      displayAll();
-    }
-  }
-}
->>>>>>> fdca374d00e6c913bc6ad8609c1c22dab2b999b2
 
     // Returns an array with the widths of words in String[] words
     // Precondition: String[] words is an array of words, and int s is the textSize
@@ -1246,19 +1229,10 @@ void mouseDragged() {
       for (int i = 0; i < house.length; i++)
       house[i].listenToSpeech(suppH, agH);
 
-<<<<<<< HEAD
-      suppH = new ArrayList<Integer>();
-      suppS = new ArrayList<Integer>();
-      agH = new ArrayList<Integer>();
-      agS = new ArrayList<Integer>();
-
-      // This is the beginning of code that changes the status of bills
-      //  for (int i = 0; i < bills.length; i++) {
-      //    if (bills.get(i).status == 1 || bills.get(i).status == 2)
-
-      //   }
+      resetForTurn();
 
     }
+
     // This moves time forward once each turn
     // Precondition: the current date, in calendar is outdated
     // Postcondition: the day, month, and year are up to date and forward daysPerTurn days
@@ -1278,27 +1252,7 @@ void mouseDragged() {
         }
       }
     }
-=======
 
-  resetForTurn();
-}
-
-// This moves time forward once each turn
-// Precondition: the current date, in calendar is outdated
-// Postcondition: the day, month, and year are up to date and forward daysPerTurn days
-void setDay() {
-  for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
-    calendar.day++;
-    if (calendar.day > daysInMonth[calendar.cMonth-1]) {
-      calendar.day = 1;
-      calendar.cMonth++;
-      if (calendar.cMonth > 12) {
-        calendar.cMonth = 1;
-        calendar.cYear++;
-      }
-    }
-  }
-}
 // handles any resetting required in a new turn
 // Precondition: new turn
 // Postcondition: values are reset
@@ -1308,4 +1262,3 @@ void resetForTurn() {
     agH = new ArrayList<Integer>();
     agS = new ArrayList<Integer>();
 }
->>>>>>> fdca374d00e6c913bc6ad8609c1c22dab2b999b2
