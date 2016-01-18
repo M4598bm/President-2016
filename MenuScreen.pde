@@ -24,7 +24,7 @@ class MenuScreen extends Screen {
     buttons[0].setLabel("Save", 14, 255);
     buttons[1] = new Button(width/2-100, height/4+(height/2)*1/5, 200, height/10, color(255, 0, 0), 101);
     buttons[1].setLabel("Load", 14, 255);
-    buttons[2] = new Button(width/2-100, height/4+(height/2)*2/5, 200, height/10, color(255, 0, 0), 102);
+    buttons[2] = new Button(width/2-100, height/4+(height/2)*2/5, 200, height/10, color(255, 0, 0), 200);
     buttons[2].setLabel("Main Menu", 14, 255);
     buttons[3] = new Button(width/2-100, height/4+(height/2)*3/5, 200, height/10, color(255, 0, 0), 103);
     buttons[3].setLabel("Quit Game", 14, 255);
@@ -49,7 +49,9 @@ class MenuScreen extends Screen {
 
     }
     else if (extra == 2) {// Main Menu
-
+      mainMenu = true;
+      screen = new MainMenuScreen();
+      displayAll();
     }
     else if (extra == 3) {// Quit Game
       exit();// Exit the game! Fun! Save first when it exists

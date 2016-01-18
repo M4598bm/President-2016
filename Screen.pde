@@ -43,7 +43,7 @@ class Screen {
    200: Main Menu Screen
    201: New game setup
    202: Load game
-   203: Settings
+   203: Options
    204: Exit game
   */
 

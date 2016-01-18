@@ -81,7 +81,7 @@ class Screen2 extends Screen {
     text("Current Bills in Congress for this department:", width/6, 100);
     textSize(18);
     int y = 130;
-    for (int i = 0; i < bills.size(); i++) {
+    /*for (int i = 0; i < bills.size(); i++) {
       Bill bill = bills.get(i);
       if (bill.committee == extra) {
         String mes = " • Bill "+bill.billNumberH+": "+bill.name+" (";
@@ -99,18 +99,7 @@ class Screen2 extends Screen {
         text(mes, width/6, y);
         y += 20;
       }
-    }
-
-   /*  THIS IS CODE FOR A GRID WHICH WAS BAD BUT JUST IN CASE IT'S HERE
-
-    line(width/6+width*2/9, 40, width/6+width*2/9, height-110);
-    line(width/6+width*4/9, 40, width/6+width*4/9, height-110);
-    for(int i = 1; i < 5; i++)
-    line(width/6, 40+(height-150)*i/5, width*5/6, 40+(height-150)*i/5);
-    */
-
-
-
+    }*/
 
   }
 
