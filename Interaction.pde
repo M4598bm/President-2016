@@ -89,17 +89,17 @@ class Interaction {
     displays[1].add(themOptions[1]);
     if (screen.search.get(0).house == 0)// house of representatives
       for (int i = 0; i < bills.size(); i++) {
-        if (bills.get(i).status == 1) {
+//        if (bills.get(i).status == 1) {
           displays[0].add(bills.get(i));
           displays[1].add(bills.get(i));
-        }
+//        }
       }
     else if (screen.search.get(0).house == 1)// senate
       for (int i = 0; i < bills.size(); i++) {
-        if (bills.get(i).status == 2) {
+//        if (bills.get(i).status == 2) {
           displays[0].add(bills.get(i));
           displays[1].add(bills.get(i));
-        }
+//        }
       }
     // " Endorse President"
     displays[2] = new ArrayList();
@@ -113,12 +113,12 @@ class Interaction {
     displays[4] = new ArrayList();
     displays[4].add(yourOptions[1]);
 
-    for (int i = 0; i < bills.size(); i++)
-      if (bills.get(i).status < 3) {
+    for (int i = 0; i < bills.size(); i++) {
+//      if (bills.get(i).status < 3) {
         displays[3].add(bills.get(i));
         displays[4].add(bills.get(i));
-      }
-
+//      }
+    }
 
     // "Sign a bill (+) "
     displays[5] = new ArrayList();
@@ -127,12 +127,12 @@ class Interaction {
     displays[6] = new ArrayList();
     displays[6].add(yourOptions[3]);
 
-    for (int i = 0; i < bills.size(); i++)
-      if (bills.get(i).status == 3) {
+    for (int i = 0; i < bills.size(); i++) {
+//      if (bills.get(i).status == 3) {
         displays[5].add(bills.get(i));
         displays[6].add(bills.get(i));
-      }
-
+//      }
+    }
     // "No attack ads for... (+) "
     displays[7] = new ArrayList();
     displays[7].add(yourOptions[4]);

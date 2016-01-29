@@ -67,6 +67,7 @@ class Screen29 extends Screen {
 
     for (int i = 0; i < sliders.length; i++) {
       sliders[i].value = tempOrder.percentages[i];
+      sliders[i].units = "%";
       if (tempOrder != null && tempOrder.ideas[i] == -1)
         sliders[i].visible = false;
     }

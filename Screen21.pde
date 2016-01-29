@@ -19,13 +19,14 @@ class Screen21 extends Screen {
     buttons[1].setLabel("Propose Bill", 14, 255);
     buttons[1].extra = 3;
 
+    // Edit this, it is wrong
     int x = 0;
     for (int i = 0; i < house.length; i++) {
-      if (house[i].committee == tempBill.committee) {
+      //if (house[i].committee == tempBill.committee) {
         if (x == lastchosen)
           tempBill.sponsor = house[i];
         x++;
-      }
+      //}
     }
 
     for (int i = 0; i < buttons.length; i++)
@@ -40,18 +41,20 @@ class Screen21 extends Screen {
 
     textAlign(LEFT, TOP);
     textSize(40);
-    float namespaceWidth = textWidth("Bill #" + (bills.size()+1)+":")+5;
-    rect(width/6+namespaceWidth, height/6, width*2/3-namespaceWidth, 40);
+
+    displayTextInputs();
+
     fill(255, 0, 0);
-    text("Bill #" + (bills.size()+1)+":", width/6, height/6);
+    text("Name:", width/6, height/6);
     fill(0);
     if (tempBill != null) {
-
       fill(0);
-      text("Brought to House committee by Rep. "+tempBill.sponsor.name+"("+(tempBill.sponsor.party+"").toUpperCase()+")", width/6, height/6+40);
+      textSize(30);
+      text("Sponsor: "+tempBill.sponsor.name+"("+(tempBill.sponsor.party+"").toUpperCase()+")", width/6, height/6+40);
       textSize(25);
       text("Main clauses of this bill:", width/6, height/6+90);
-      text("1. "+ideas.names[tempBill.ideas[0]]+" ("+tempBill.percentages[0]+"%)", width/6, height/6+130);
+      if (tempBill.ideas[0] != -1)
+        text("1. "+ideas.names[tempBill.ideas[0]]+" ("+tempBill.percentages[0]+"%)", width/6, height/6+130);
       if (tempBill.ideas[1] != -1)
         text("2. "+ideas.names[tempBill.ideas[1]]+" ("+tempBill.percentages[1]+"%)", width/6, height/6+160);
       if (tempBill.ideas[2] != -1)

@@ -13,7 +13,7 @@ class Screen19 extends Screen {
   // Postcondition: The screen is prepared to be displayed
   void setScreen() {
     Table t = new Table();
-    if (tempBill.status == 0) {
+    if (tempBill.originChamber == 0) {
       t = loadTable("housecommittees.csv", "header");
     }
     else {

@@ -22,7 +22,6 @@ class Screen17 extends Screen {
     super.display();
 
     eM.display();
-
   }
 
 }

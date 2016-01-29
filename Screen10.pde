@@ -37,29 +37,29 @@ class Screen10 extends Screen {
   // Precondition: extra is an int from the last Screen
   // Postcondition: actions are taken according to the int extra
   void extraActions() {
-    if (chosen == 0) {
+    if (lastchosen == -1) {
       d1 = suppH;
       d2 = agH;
       screens.add(screens.size()-1, null);
     }
-    else if (chosen < 3) {
-      d1.remove(chosen-1);
-      chosen = 0;
+    else if (lastchosen < 3) {
+      d1.remove(lastchosen-1);
+      lastchosen = 0;
     }
-    else if (chosen < 5) {
-      d2.remove(chosen-3);
-      chosen = 0;
+    else if (lastchosen < 5) {
+      d2.remove(lastchosen-3);
+      lastchosen = 0;
     }
     else if (extra == 0) {
       if (d1.size() < 2) {
-        d1.add(chosen-5);
-        chosen = 0;
+        d1.add(lastchosen-5);
+        lastchosen = 0;
       }
     }
     else if (extra == 1) {
       if (d2.size() < 2) {
-        d2.add(chosen-5);
-        chosen = 0;
+        d2.add(lastchosen-5);
+        lastchosen = 0;
       }
     }
     screens.remove(screens.size()-2);
@@ -82,7 +82,7 @@ class Screen10 extends Screen {
     for (int i = 0; i < bills.size(); i++) {// 0 is none, 1-2 is support, 3-4 is criticize, so 5 is the first
       if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
         if (i == chosen-5) {
-          fill(0, 0, 100);
+          fill(hLColor);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }
@@ -102,36 +102,36 @@ class Screen10 extends Screen {
     line(width/2+40, height/2+90, width*5/6, height/2+90);
     textAlign(LEFT, TOP);
     if (d1.size() > 0) {
-      text(d1.get(0), width/6, height/2+65);
       if (chosen == 1) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/6, height/2+65, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d1.get(0)).name, width/6, height/2+65);
     }
     if (d1.size() > 1) {
-      text(d1.get(1), width/6, height/2+90);
       if (chosen == 2) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/6, height/2+90, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d1.get(1)).name, width/6, height/2+90);
     }
     if (d2.size() > 0) {
-      text(d2.get(0), width/2+40, height/2+65);
       if (chosen == 3) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/2+40, height/2+65, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d2.get(0)).name, width/2+40, height/2+65);
     }
     if (d2.size() > 1) {
-      text(d2.get(1), width/2+40, height/2+90);
       if (chosen == 4) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/2+40, height/2+90, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d2.get(1)).name, width/2+40, height/2+90);
     }
 
   }

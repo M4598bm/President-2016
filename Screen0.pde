@@ -55,6 +55,12 @@ class Screen0 extends Screen {
     }
     else if (extra == 3) {// new bill
       bills.add(tempBill);
+      if (tempBill.originChamber == 0) {
+        houseCommittees[tempBill.committee].cBills.add(tempBill);
+      }
+      else {
+        senateCommittees[tempBill.committee].cBills.add(tempBill);
+      }
       tempBill.addOpinions();
       tempBill = null;
     }

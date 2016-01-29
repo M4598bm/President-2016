@@ -60,29 +60,48 @@ class Screen30 extends Screen {
     textAlign(LEFT, TOP);
     fill(0);
     int x = 0;
-    for (int i = 0; i < bills.size(); i++) {
-      if (
-        (extra == 0 && (bills.get(i).status < 2)) ||
-        (extra == 1 && (bills.get(i).status == 2 || bills.get(i).status == 4)) ||
-        (extra == 2 && (bills.get(i).status == 3 || bills.get(i).status == 5)) ||
-        (extra == 3 && (bills.get(i).status == 6)) ||
-        (extra == 4 && (bills.get(i).status == 7))
-      ) {
-        if (height/6+24*x+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6) {
-          if (i == chosen) {
-            fill(hLColor);
-            rect(width/6, height/6+24*x+scrollX, width*4/6, 24);
-            fill(0);
-          }
-          text(bills.get(i).name, width/6+5, height/6+24*x+scrollX);
+    ArrayList<Bill> billList = new ArrayList<Bill>();
+    if (extra == 0) {// committee
+      for (Committee c : houseCommittees) {
+        for (Bill b : c.cBills) {
+          billList.add(b);
         }
-        if (height/6+24*(x+1)+scrollX >= height/6 && height/6+24*(x+1)+scrollX <= height*5/6)
-          line(width/6, height/6+24*(x+1)+scrollX, width*5/6, height/6+24*(x+1)+scrollX);
-        x++;
+      }
+      for (Committee c : senateCommittees) {
+        for (Bill b : c.cBills) {
+          billList.add(b);
+        }
       }
     }
+    else if (extra == 1) {// House floor
+      billList = hBills;
+    }
+    else if (extra == 2) {// Senate floor
+      billList = sBills;
+    }
+    else if (extra == 3) {// Conference Committee
+      for (Committee c : conferenceComs) {
+        billList.add(c.cBills.get(0));
+      }
+    }
+    else if (extra == 4) {// Your Desk
+      billList = yourDesk;
+    }
+    
+    for (int i = 0; i < billList.size(); i++) {
+      if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
+        if (i == chosen) {
+          fill(hLColor);
+          rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
+          fill(0);
+        }
+        text(billList.get(i).name, width/6+5, height/6+24*i+scrollX);
+      }
+      if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
+        line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
+    }
 
-    displayScrollBar(x, height*2/3);
+    displayScrollBar(billList.size(), height*2/3);
     popUpWindow();
     displayButtonsSliders();
   }

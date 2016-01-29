@@ -38,7 +38,6 @@ class Screen {
    35: Propose Action < 34
 
    100: Menu Screen
-   101:
 
    200: Main Menu Screen
    201: New game setup

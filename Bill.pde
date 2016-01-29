@@ -14,11 +14,10 @@ class Bill {
 
   String date;// "04/05/17" the next date set for this bill
 
+  int originChamber;// chamber the bill started in
   boolean passedHouse;
   boolean passedSenate;
   boolean isLaw;
-
-  int status;// temporary
 
   int weeklyCost;
   int initialCost;

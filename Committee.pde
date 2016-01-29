@@ -6,7 +6,7 @@ class Committee {
   Calendar cCalendar;
   ArrayList<Bill> cBills;
 
-  int chamber;// 0 is house of reps, 1 is senate
+  int chamber;// 0 is house of reps, 1 is senate, 2 means it is a Conference Committee
 
   // create a new Committee
   // Precondition: String n is name, int size is the amount of people in the Committee
@@ -17,6 +17,25 @@ class Committee {
     members = new Congressman[size+(int)random(-(size/4), size/4)];
     cCalendar = new Calendar();
     cBills = new ArrayList<Bill>();
+  }
+
+  // create a Committee that is a Conference Committee
+  // Precondition: h and s are arraylists of any length of reps and senators to be in the committee, Bill b in question
+  // Postcondition: the committee is a Conference Committee with those members to work on Bill b
+  Committee(ArrayList<Congressman> h, ArrayList<Congressman> s, Bill b) {
+    name = "Conference on "+b.name;
+    chamber = 2;
+    members = new Congressman[h.size()+s.size()];
+    int x = 0;
+    for (Congressman c : h) {
+      members[x++] = c;
+    }
+    for (Congressman c : s) {
+      members[x++] = c;
+    }
+    cCalendar = new Calendar();
+    cBills = new ArrayList<Bill>();
+    cBills.add(b);
   }
 
   // chooses who should be the leadership

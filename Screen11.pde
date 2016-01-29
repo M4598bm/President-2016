@@ -81,7 +81,7 @@ class Screen11 extends Screen {
     for (int i = 0; i < bills.size(); i++) {// 0 is none, 1-2 is support, 3-4 is criticize, so 5 is the first
       if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
         if (i == chosen-5) {
-          fill(0, 0, 100);
+          fill(hLColor);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }
@@ -101,36 +101,36 @@ class Screen11 extends Screen {
     line(width/2+40, height/2+90, width*5/6, height/2+90);
     textAlign(LEFT, TOP);
     if (d1.size() > 0) {
-      text(d1.get(0), width/6, height/2+65);
       if (chosen == 1) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/6, height/2+65, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d1.get(0)).name, width/6, height/2+65);
     }
     if (d1.size() > 1) {
-      text(d1.get(1), width/6, height/2+90);
       if (chosen == 2) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/6, height/2+90, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d1.get(1)).name, width/6, height/2+90);
     }
     if (d2.size() > 0) {
-      text(d2.get(0), width/2+40, height/2+65);
       if (chosen == 3) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/2+40, height/2+65, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d2.get(0)).name, width/2+40, height/2+65);
     }
     if (d2.size() > 1) {
-      text(d2.get(1), width/2+40, height/2+90);
       if (chosen == 4) {
-        fill(0, 0, 100);
+        fill(hLColor);
         rect(width/2+40, height/2+90, width/3-40, 25);
         fill(0);
       }
+      text(bills.get(d2.get(1)).name, width/2+40, height/2+90);
     }
 
   }

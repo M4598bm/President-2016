@@ -35,22 +35,21 @@ int session;// number of this congress (starts with )
 int houseNumber;// number of bills presented to the floor
 int senateNumber;// number of bills presented to the floor
 
-
-ArrayList<Bill> billsH;// bills on the house floor
-ArrayList<Bill> billsS;// bills on the senate floor
-ArrayList<Bill> yourDesk;// bills on your desk
-
 int approval;// national polling approval of you
 boolean houseSpeech;// have you made a speech to the house this turn?
 boolean senateSpeech;// have you made a speech to the senate this turn?
 
 ArrayList<ExecutiveOrder> executiveOrders;// all executive orders signed
 ArrayList<Bill> bills;// all bills created at the moment
+ArrayList<Bill> hBills;// bills in the house
+ArrayList<Bill> sBills;// bills in the senate
+ArrayList<Bill> yourDesk;// bills on your desk
 ArrayList<Bill> laws;// all laws passed
 Congressman[] house;// array of congressmen in the house
 Congressman[] senate;// array of congressmen in the senate
 Committee[] houseCommittees;// array of committees in the house
 Committee[] senateCommittees;// array of committees in the senate
+ArrayList<Committee> conferenceComs;// conference committee that finalizes bills
 Secretary[] cabinet;// array of secretaries in your cabinet
 SCJustice[] scotus;// array of justices in the Supreme Court (will I need this at alL?)
 
@@ -110,7 +109,7 @@ is sort of a silly method that sets default variables that need to be set.
 // Postcondition: Variables are set and the game is playable default
 void setup() {
   menuActions = new MenuActions();// always needed
-  
+
   // This is the real code for this part but to write the game it needs to be tested
   /*
   mainMenu = true;
@@ -155,6 +154,9 @@ void createSingleClasses() {
 
   executiveOrders = new ArrayList<ExecutiveOrder>();
   bills = new ArrayList<Bill>();
+  hBills = new ArrayList<Bill>();
+  sBills = new ArrayList<Bill>();
+  yourDesk = new ArrayList<Bill>();
   laws = new ArrayList<Bill>();
   house = new Congressman[435];
   senate = new Congressman[100];
@@ -295,6 +297,7 @@ void createCommittees() {
   Table h = loadTable("housecommittees.csv", "header");
   Table s = loadTable("senatecommittees.csv", "header");
 
+  conferenceComs = new ArrayList<Committee>();
   houseCommittees = new Committee[h.getRowCount()];
   senateCommittees = new Committee[s.getRowCount()];
 
@@ -302,11 +305,17 @@ void createCommittees() {
     TableRow r = h.getRow(i);
     houseCommittees[i] = new Committee(r.getString(0), Utils.convertInt(r.getString(1)), 0);
     // put in members to committee
+    for (int j = 0; j < houseCommittees[i].members.length; j++)
+      houseCommittees[i].members[j] = house[(int)random(435)];
+    // ^ ^ Temp ^ ^
   }
   for (int i = 0; i < s.getRowCount(); i++) {
     TableRow r = s.getRow(i);
     senateCommittees[i] = new Committee(r.getString(0), Utils.convertInt(r.getString(1)), 1);
     // put in members to committee
+    for (int j = 0; j < senateCommittees[i].members.length; j++)
+      senateCommittees[i].members[j] = senate[(int)random(100)];
+    // ^ ^ Temp ^ ^
   }
 }
 
@@ -316,8 +325,9 @@ void createCommittees() {
 void loadImages() {
   println("loadImages");
   // The Electoral Map thing only sorta belongs here
-
   eM = new ElectoralMap();// move this to createSingleClasses()
+
+  // This should use requestImage() it's apparently better
 
   // Eventually all other images will be loaded.
 }
@@ -357,8 +367,11 @@ void displayTextInputs() {
   else if (isCurrScreen(14)) {
     screen.displayTextInput(width/6, 62, "Search by state, name, party, or position:", screen.input, width*2/3, 16);
   }
+  else if (isCurrScreen(16)) {
+    screen.displayTextInput(width/6, 62, "Search by state, name, party, or position:", screen.input, width*2/3, 16);
+  }
   else if (isCurrScreen(21)) {// this one is broken
-    screen.displayTextInput(width/6, height/6, "Bill #" + (bills.size()+1)+":", tempBill.name, width*2/3, 30);
+    screen.displayTextInput(width/6, height/6, "Name: ", tempBill.name, width*2/3, 40);
   }
 }
 
@@ -440,6 +453,9 @@ void mouseClicked() {
     else if (isCurrScreen(16)) {// Find a Rep for Bill
       mouseClicked16(mX, mY);
     }
+    else if (isCurrScreen(17)) {
+      mouseClicked17(mX, mY);
+    }
     else if (isCurrScreen(18)) {// New Bill Step 2
       mouseClicked18(mX, mY);
     }
@@ -502,54 +518,71 @@ void mouseDragged() {
 // Precondition: Mousewheel is used
 // Postcondition: The goal of the mousewheel is fulfilled, usually a scrolling that happened
 void mouseWheel(MouseEvent event) {
-// When the mouse is scrolled. Very useful for replacing the arrow keys
-float e = event.getCount();
-if (isCurrScreen(10) ||
-isCurrScreen(11) ||
-isCurrScreen(13) ||
-isCurrScreen(14) ||
-isCurrScreen(16) ||
-isCurrScreen(18)) {
-  mouseWheelScrollX(e);
-}
+  // When the mouse is scrolled. Very useful for replacing the arrow keys
+  float e = event.getCount();
+  if (isCurrScreen(10) ||
+  isCurrScreen(11) ||
+  isCurrScreen(13) ||
+  isCurrScreen(14) ||
+  isCurrScreen(16) ||
+  isCurrScreen(18)) {
+    mouseWheelScrollX(e);
+  }
 }
 
 // If the mouse is moved
 // Precondition: Mouse is moved, not necessarily clicked or dragged
 // Postcondition: The buttons recognize if they were scrolled over
 void mouseMoved() {
-buttonsScrolled();
+  buttonsScrolled();
 }
 
 // If the keyboard is used
 // Precondition: A key is pressed
 // Postcondition: The goal of the key pressed is fulfilled
 void keyPressed() {
-if (keyCode == ESC) {// this is really cool :D
-  key = 0;// making sure it doesnt quit
-  if (!mainMenu) {
-    if (!isCurrScreen(0) && !menuOpen) {
-      newScreen(new Button(0));
-      screen.setScreen();
-      displayAll();
+
+  if (isCurrScreen(17)) {
+    eM.stateCount++;
+    println(eM.stateCount);
+
+    if (keyCode == ENTER) {
+      Table t = new Table();
+      t.addColumn("state");
+      for (int i : eM.statePixels) {
+        TableRow tr = t.addRow();
+        tr.setInt("state", i);
+      }
     }
-    else {
-      menuOpen = !menuOpen;
-      displayAll();
+
+  }
+
+
+  if (keyCode == ESC) {// this is really cool :D
+    key = 0;// making sure it doesnt quit
+    if (!mainMenu) {
+      if (!isCurrScreen(0) && !menuOpen) {
+        newScreen(new Button(0));
+        screen.setScreen();
+        displayAll();
+      }
+      else {
+        menuOpen = !menuOpen;
+        displayAll();
+      }
     }
   }
-}
-else if (isCurrScreen(21)) {
-  tempBill.name = typeResult(tempBill.name);
-  displayAll();
-}
-else if (isCurrScreen(13) || isCurrScreen(14)) {
-  screen.input = typeResult(screen.input);
-  displayAll();
-}
+  else if (isCurrScreen(21)) {
+    tempBill.name = typeResult(tempBill.name);
+    displayAll();
+  }
+  else if (isCurrScreen(13) || isCurrScreen(14) || isCurrScreen(16)) {
+    screen.input = typeResult(screen.input);
+    displayAll();
+  }
 
-keyPressedScrollX();
-keyPressedScrollHoriz();
+  keyPressedScrollX();
+  keyPressedScrollHoriz();
 
 }
 
@@ -708,111 +741,131 @@ if (screen.extra == 0) {
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked16(float mX, float mY) {
-if (mX > width/6 && mX < width*5/6) {
-  if (mX > height/6 && mY < height*5/6) {
-    int x = 0;
-    for (int i = 0; i < house.length; i++) {
-      if (house[i].committee == tempBill.committee) {
-        if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
-          screen.chosen = x;
+  if (mX > width/6 && mX < width*5/6) {
+    if (mX > height/6 && mY < height*5/6) {
+      println(((Screen16)screen).sponsors.length);
+      for (int i = 0; i < ((Screen16)screen).sponsors.length; i++) {
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i;
+          println(i);
           displayAll();
         }
-        x++;
       }
     }
   }
 }
+
+// Screen 17
+// Precondition: The mouse is clicked
+// Postcondition: The entry clicked on has been chosen and is highlighted
+void mouseClicked17(float mX, float mY) {
+  if (eM.stateCount != 0) {
+    eM.colorState((int)mX, (int)mY);
+    println(eM.statePixels[(int)(mY*width+mX)]);
+  }
+  else {
+    loadPixels();
+    for (int i = 0; i < pixels.length; i++) {
+      if (pixels[i] > color(200))
+        pixels[i] = color(255);
+      else
+        pixels[i] = color(0);
+    }
+    updatePixels();
+  }
+
+
 }
 
 // Screen 18
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
 void mouseClicked18(float mX, float mY) {
-if (mX > width/6 && mX < width*5/6) {
-  if (mY > height/6 && mY < height/2) {
-    for (int i = 0; i < screen.depIdeas.size(); i++)
-    if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-      screen.chosen = i+3;
-      screen.buttons[1].setLabel("Add", 14, 255);
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height/2) {
+      for (int i = 0; i < screen.depIdeas.size(); i++)
+      if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+        screen.chosen = i+3;
+        screen.buttons[1].setLabel("Add", 14, 255);
+        screen.buttons[1].clickable = true;
+        displayAll();
+      }
+    }
+    else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
+      screen.chosen = 1;
+      screen.buttons[1].setLabel("Remove", 14, 255);
+      screen.buttons[1].clickable = true;
+      displayAll();
+    }
+    else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
+      screen.chosen = 2;
+      screen.buttons[1].setLabel("Remove", 14, 255);
       screen.buttons[1].clickable = true;
       displayAll();
     }
   }
-  else if (tempBill.ideas[0] != -1 && mY > height-208 && mY < height-174) {
-    screen.chosen = 1;
-    screen.buttons[1].setLabel("Remove", 14, 255);
-    screen.buttons[1].clickable = true;
-    displayAll();
-  }
-  else if (tempBill.ideas[1] != -1 && mY > height-174 && mY < height-140) {
-    screen.chosen = 2;
-    screen.buttons[1].setLabel("Remove", 14, 255);
-    screen.buttons[1].clickable = true;
-    displayAll();
-  }
-}
 }
 
 // Screen 20
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and is highlighted, buttons change names
 void mouseClicked20(float mX, float mY) {
-if (mX > width/6 && mX < width*5/6) {
-  if (mY > height/6 && mY < height-181) {
-    for (int i = 0; i < screen.depIdeas.size(); i++)
-    if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-      screen.chosen = i+2;
-      screen.buttons[1].setLabel("Add", 14, 255);
+  if (mX > width/6 && mX < width*5/6) {
+    if (mY > height/6 && mY < height-181) {
+      for (int i = 0; i < screen.depIdeas.size(); i++)
+      if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+        screen.chosen = i+2;
+        screen.buttons[1].setLabel("Add", 14, 255);
+        screen.buttons[1].clickable = true;
+        displayAll();
+      }
+    }
+    else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
+      screen.chosen = 1;
+      screen.buttons[1].setLabel("Remove", 14, 255);
       screen.buttons[1].clickable = true;
       displayAll();
     }
   }
-  else if (tempBill.ideas[2] != -1 && mY > height-174 && mY < height-140) {
-    screen.chosen = 1;
-    screen.buttons[1].setLabel("Remove", 14, 255);
-    screen.buttons[1].clickable = true;
-    displayAll();
-  }
-}
 }
 
 // Screen 23
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and is highlighted
 void mouseClicked23(float mX, float mY) {
-if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
-  if (mY > height/6 && mY < height*5/6) {
-    int x = 0;
-    for (int i = 0; i < screen.trade.displays.length; i++) {
-      for (int j = 0; j < screen.trade.displays[i].size(); i++) {
-        if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
-          // somewhere displayAll();
+  if (mX > width/6 && mX < width/6+max(wordWidths(screen.trade.themOptions, 15))) {
+    if (mY > height/6 && mY < height*5/6) {
+      int x = 0;
+      for (int i = 0; i < screen.trade.displays.length; i++) {
+        for (int j = 0; j < screen.trade.displays[i].size(); i++) {
+          if (mY > height/6+15*x+screen.scrollsX[0] && mY < height/6+15*x+screen.scrollsX[0]+24) {
+            // somewhere displayAll();
+          }
         }
+        //if ((String)displays.get(i))
+        //
       }
-      //if ((String)displays.get(i))
-      //
     }
   }
-}
 }
 
 // Screen 28
 // Precondition: The mouse is clicked
 // Postcondition: The entry clicked on has been chosen and popup window comes up
 void mouseClicked28(float mX, float mY) {
-if (screen.extra == 0) {
-  if (mX > width/6 && mX < width*5/6) {
-    if (mY > height/6 && mY < height*5/6) {
-      for (int i = 0; i < executiveOrders.size(); i++)
-      if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
-        screen.chosen = i;
-        screen.extra = 1;
-        screen.setScreen();
-        displayAll();
+  if (screen.extra == 0) {
+    if (mX > width/6 && mX < width*5/6) {
+      if (mY > height/6 && mY < height*5/6) {
+        for (int i = 0; i < executiveOrders.size(); i++)
+        if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+          screen.chosen = i;
+          screen.extra = 1;
+          screen.setScreen();
+          displayAll();
+        }
       }
     }
   }
-}
 }
 
 // Screen 29
@@ -857,21 +910,39 @@ void mouseClicked30(float mX, float mY) {
   if (screen.chosen == -1) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height*5/6) {
-        int x = 0;
-        for (int i = 0; i < bills.size(); i++) {
-          if (
-            (screen.extra == 0 && (bills.get(i).status < 2)) ||
-            (screen.extra == 1 && (bills.get(i).status == 2 || bills.get(i).status == 4)) ||
-            (screen.extra == 2 && (bills.get(i).status == 3 || bills.get(i).status == 5)) ||
-            (screen.extra == 3 && (bills.get(i).status == 6)) ||
-            (screen.extra == 4 && (bills.get(i).status == 7))
-            ) {
-            if (mY > height/6+24*x+screen.scrollX && mY < height/6+24*x+screen.scrollX+24) {
-              screen.chosen = i;
-              screen.setScreen();
-              displayAll();
+        ArrayList<Bill> billList = new ArrayList<Bill>();
+        if (screen.extra == 0) {// committee
+          for (Committee c : houseCommittees) {
+            for (Bill b : c.cBills) {
+              billList.add(b);
             }
-            x++;
+          }
+          for (Committee c : senateCommittees) {
+            for (Bill b : c.cBills) {
+              billList.add(b);
+            }
+          }
+        }
+        else if (screen.extra == 1) {// House floor
+          billList = hBills;
+        }
+        else if (screen.extra == 2) {// Senate floor
+          billList = sBills;
+        }
+        else if (screen.extra == 3) {// Conference Committee
+          for (Committee c : conferenceComs) {
+            billList.add(c.cBills.get(0));
+          }
+        }
+        else if (screen.extra == 4) {// Your Desk
+          billList = yourDesk;
+        }
+
+        for (int i = 0; i < billList.size(); i++) {
+          if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
+            screen.chosen = i;
+            screen.setScreen();
+            displayAll();
           }
         }
       }
@@ -1220,7 +1291,6 @@ void newScreen(Button b) {
   else
     menuScreen.setScreen();
   println(screens);
-
 }
 
 // Returns whether int s is the current screen

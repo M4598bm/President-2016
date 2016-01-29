@@ -51,18 +51,12 @@ class Screen20 extends Screen {
       tempBill.addIdea(ideas.nameToInd(depIdeas.get(lastchosen-2)));
       screens.remove(screens.size()-2);
     }
-/*
-    for (int i = 0; i < sliders.length; i++) {
-      sliders[i].value = tempBill.percentages[2];
-      if (tempBill != null && tempBill.ideas[2] == -1)
-        sliders[0].visible = false;
-    }*/
   }
 
 
-    // Displays the screen
-    // Precondition: setScreen has been called for this screen, this is the current Screen
-    // Postcondition: this screen is displayed
+  // Displays the screen
+  // Precondition: setScreen has been called for this screen, this is the current Screen
+  // Postcondition: this screen is displayed
   void display() {
     super.display();
 

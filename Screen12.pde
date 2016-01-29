@@ -49,7 +49,7 @@ class Screen12 extends Screen {
   // Postcondition: actions are taken according to the int extra
   void extraActions() {
     tempBill = new Bill();
-    tempBill.status = extra;
+    tempBill.originChamber = extra;
     tempBill.presBacked = true;
   }
 
