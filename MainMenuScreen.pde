@@ -55,6 +55,15 @@ class MainMenuScreen extends Screen {
   void display() {
 
     super.display();
+
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(40);
+    text("President", width/2, height/4);
+    textSize(30);
+    text("Because Building America is Hard", width/2, height/4+40);
+
+
     fill(color(255, 0, 0));
     rect(0, height/2, width, 100);
 

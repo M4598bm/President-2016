@@ -3,6 +3,7 @@
 // Created 2015-2016
 
 
+
 // Static Variables
 static int daysPerTurn = 7;// not sure what this should be yet
 
@@ -90,12 +91,12 @@ String[] parties = {"Democratic", "Republican"};// only temporarily autoset
 // Postcondition: creates the game window
 void settings() {
   Table options = loadTable("options.csv", "header");
-  if (options.getRow(0).getString(1).equals("yes")) {// fullScreen
+  //if (options.getRow(0).getString(1).equals("yes")) {// fullScreen
     fullScreen();
-  }
-  else {// A smaller size setting
-    size(displayWidth, (int)(displayHeight*.8));// *.8 is temp
-  }
+  //}
+  //else {// A smaller size setting
+  //  size(displayWidth, (int)(displayHeight*.8));// *.8 is temp
+  //}
 }
 
 
@@ -111,15 +112,15 @@ void setup() {
   menuActions = new MenuActions();// always needed
 
   // This is the real code for this part but to write the game it needs to be tested
-  /*
+  //*
   mainMenu = true;
   screen = new MainMenuScreen();
   screen.setScreen();
   displayAll();
-  */
+  //*/
 
   // Temporary:
-  menuActions.newGame();
+  //menuActions.newGame();
 
 }
 
@@ -1322,7 +1323,14 @@ int[] wordWidths(String[] words, int s) {
 void nextTurn() {
   turn++;
 
-  setDay();
+  setDay(calendar);
+  setDay(houseCalendar);
+  setDay(senateCalendar);
+  for (Committee com : houseCommittees)
+    setDay(com.cCalendar);
+  for (Committee com : senateCommittees)
+    setDay(com.cCalendar);
+
 
   // React to speeches
   for (int i = 0; i < senate.length; i++)
@@ -1337,18 +1345,15 @@ void nextTurn() {
 // This moves time forward once each turn
 // Precondition: the current date, in calendar is outdated
 // Postcondition: the day, month, and year are up to date and forward daysPerTurn days
-void setDay() {
-  int daysPerTurn = 7; // this decides how many days is one turn.
-  // I don't really know what it should be yet, it depends on testing.
-
+void setDay(Calendar c) {
   for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
-    calendar.day++;
-    if (calendar.day > daysInMonth[calendar.cMonth-1]) {
-      calendar.day = 1;
-      calendar.cMonth++;
-      if (calendar.cMonth > 12) {
-        calendar.cMonth = 1;
-        calendar.cYear++;
+    c.day++;
+    if (c.day > daysInMonth[c.cMonth-1]) {
+      c.day = 1;
+      c.cMonth++;
+      if (c.cMonth > 12) {
+        c.cMonth = 1;
+        c.cYear++;
       }
     }
   }
@@ -1363,3 +1368,26 @@ void resetForTurn() {
     agH = new ArrayList<Integer>();
     agS = new ArrayList<Integer>();
 }
+
+
+
+
+
+/* THINGS TO DO CHECKLIST:
+
+  - Make Calendars display current date and events
+  - Back to Main Menu doesnt go all the way back
+  - What to display for Cabinet members?
+  - Hover over selection tables
+  - See more information for each selection in selection tables
+  - Selections disappear
+  - Fix states names
+  - Float Bills and Executive Orders to media
+
+  - Election Map
+  - UN
+  - War
+  - Intelligence
+  - Stats
+
+*/

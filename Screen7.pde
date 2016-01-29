@@ -125,9 +125,9 @@ class Screen7 extends Screen {
       else if (extra == 2)
         text("Senate Calendar", width/2, height/6);
       else if (extra < 3+houseCommittees.length)
-        text(Utils.returnCommas(houseCommittees[extra-3].name)+" Committee Calendar", width/2, height/6);
+        text("House "+Utils.returnCommas(houseCommittees[extra-3].name)+" Committee Calendar", width/2, height/6);
       else if (extra < 3+houseCommittees.length+senateCommittees.length)
-        text(Utils.returnCommas(senateCommittees[extra-houseCommittees.length-3].name)+" Committee Calendar", width/2, height/6);
+        text("Senate "+Utils.returnCommas(senateCommittees[extra-houseCommittees.length-3].name)+" Committee Calendar", width/2, height/6);
     }
     else {
       fill(255);

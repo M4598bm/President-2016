@@ -91,6 +91,7 @@ class Calendar {
     }
     if (yearCount%4 == 0) {
       dIM[1] = 29;
+      // We can't forget about Leap Day William!
     }
     return dIM;
   }
@@ -130,9 +131,15 @@ class Calendar {
     text(months[month-1] + " 20"+year, width/2, height/6-20);
     textAlign(CENTER, CENTER);
     while (yearCount != year || monthCount != month || dayCount < realDaysInMonth(yearCount)[month-1]) {
-      if (yearCount == year && monthCount == month)
+      if (yearCount == year && monthCount == month) {
+        if (yearCount == cYear && monthCount == cMonth && dayCount == day) {
+          fill(hLColor);
+          rect(width/6+width*2/21*col, (height/6+(height*2/3)*3/14+(height*2/3)*row/7)-height/21, width*2/21, height*2/21);
+        }
+        fill(0);
         text(dayCount, width/6+width/21+width*2/21*col, height/6+(height*2/3)*3/14+(height*2/3)*row/7);
         // ^ this needs to be cut down especially the 'y' part
+      }
       col++;
       if (col == 7) {
         row++;
@@ -149,6 +156,12 @@ class Calendar {
         }
       }
     }
+    // Repeats for the last day in the month
+    if (yearCount == cYear && monthCount == cMonth && dayCount == day) {
+      fill(hLColor);
+      rect(width/6+width*2/21*col, (height/6+(height*2/3)*3/14+(height*2/3)*row/7)-height/21, width*2/21, height*2/21);
+    }
+    fill(0);
     text(dayCount, width/6+width/21+width*2/21*col, height/6+(height*2/3)*3/14+(height*2/3)*row/7);
   }
 
