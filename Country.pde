@@ -27,10 +27,10 @@ class Country {
   //Constructor
   //Precondition:Countries that host country has relations with and their relationship ratings
   //Postcondition:Initializes relationships and relations array
-  void setRelations(String[] rel, int[] relation) {
+  void setRelations(String[] rel) {
   for (int i=0;i<relation.length();i++){
     relationships.add(rel[i]);
-    relations.add(relation[i]);}
+    relations.add(int(random(100)));}
 
   }
   void setRelations(String rel, int relation) {
