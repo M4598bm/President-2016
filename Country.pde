@@ -30,7 +30,16 @@ class Country {
   void setRelations(String[] rel, int[] relation) {
   for (int i=0;i<relation.length();i++){
     relationships.add(rel[i]);
-    relations.add(relation[i]);
+    relations.add(relation[i]);}
+
+  }
+  void setRelations(String rel, int relation) {
+  int i=-1;
+  for (int i=0;i<relationships.size();i++){
+    if(rel.equals(relationships.get(i))){
+    relations.set(i,relation);
+    }
+    }
 
   }
 
