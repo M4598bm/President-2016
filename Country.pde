@@ -1,8 +1,8 @@
 class Country {
 
   String name;
-  String[] relationships;//Country's relationships
-  int[] relations;//Parallel to relationships array.-10=Bad relations 10= good relations
+   ArrayList<String> relationships;//Country's relationships
+   ArrayList<Integer> relations;//Parallel to relationships array.-10=Bad relations 10= good relations
   int militarism;//Feeling towards military action.
   boolean isSecurity;//Is part of security counsel
   ArrayList<String> proidea;//Ideas they have approved of
@@ -28,8 +28,9 @@ class Country {
   //Precondition:Countries that host country has relations with and their relationship ratings
   //Postcondition:Initializes relationships and relations array
   void setRelations(String[] rel, int[] relation) {
-    relationships = rel;
-    relations = relation;
+  for (int i=0;i<relation.length();i++){
+    relationships.add(rel[i]);
+    relations.add(relation[i]);
 
   }
 
