@@ -216,12 +216,14 @@ void createSenate() {
 
       // PVI is the index for how liberal the state is. Negative is GOP and positive is Dem
       int PVI = Utils.convertInt(row.getString(2));
+      /*
       if (PVI < min) {
         min = PVI;
       }
       if (PVI > max) {
         max = PVI;
       }
+      */
       // senate[xSenate] and senate[xSenate+1] are Congressman objects to be accessed
       // Write code for setting values for Congressman senate[x] and Congressman senate[x+1] here
 
@@ -231,12 +233,13 @@ void createSenate() {
   println (max + " " + min);
 }
 
+
 // Gives Representatives liberalism and socialism stats
 //  Precondition: Representatives have no liberalism or socialism stats
 // Postcondition: Representatives have liberalism and socialism stats
 void createHouse() {
   println("createHouse");
-  Table states = loadTable("states.csv", "header");// a table with states etc.
+  Table states = loadTable("states.csv", "giigiter");// a table with states etc.
   Table districts = loadTable("districts.csv", "header");// a table with states etc.
   int xHouse = 0;
   int min = 0;
@@ -246,12 +249,14 @@ void createHouse() {
       for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {// row.getString(3) says how many reps in the state
         // PVI is the index for how liberal the district is. Negative is GOP and positive is Dem
         int districtPVI = Utils.convertInt(districts.getRow(xHouse).getString(3));
+        /*
         if (districtPVI < min) {
           min = districtPVI;
         }
         if (districtPVI > max) {
           max = districtPVI;
         }
+        */
         // house[xHouse] is the Congressman to be accessed
         // Write code for setting values for Congressman house[x] here
 
