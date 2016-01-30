@@ -18,7 +18,7 @@ class Country {
   //Constructor
   //Precondition:Name,militarism rating,isSecurity boolean
   //Postcondition:Creates an country with name,militarism, and isSecurity
-  void Country(String n, int mil, boolean iss) {
+  void setCountry(String n, int mil, boolean iss) {
     name = n;
     militarism = mil;
     isSecurity = iss;
