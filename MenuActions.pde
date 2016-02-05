@@ -27,7 +27,7 @@ class MenuActions {
   // Postcondition: all variables are preset
   void newGame() {
     turn = 0;
-    
+
     setPresParty(parties);// Default is that Democrat is the presParty
     createSingleClasses();
 
@@ -43,6 +43,13 @@ class MenuActions {
     loadImages();
 
     calcApproval();
+
+    // Temp
+    calendar.addEvent(31, 1, 17, "Bill1 goes to House floor");
+    calendar.addEvent(31, 1, 17, "Bill2 goes to Senate floor");
+    calendar.addEvent(12, 1, 17, "Bill3 goes to Senate floor");
+    calendar.addEvent(8, 1, 17, "Bill4 goes to Senate floor");
+
 
     displayAll();
   }

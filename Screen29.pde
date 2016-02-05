@@ -62,6 +62,10 @@ class Screen29 extends Screen {
         screens.remove(screens.size()-2);
       }
     }
+    // No repetition in the screens
+    if (screens.get(screens.size()-2).toString() == "29") {
+      screens.remove(screens.size()-2);
+    }
 
     chosen = 0;
 

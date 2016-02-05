@@ -64,6 +64,11 @@ class Screen7 extends Screen {
 
     }
 
+    // No repetition in the screens
+    if (screens.get(screens.size()-2).toString() == "7") {
+      screens.remove(screens.size()-2);
+    }
+
     extraActions();
 
     if (extra < 100) {
@@ -98,13 +103,6 @@ class Screen7 extends Screen {
     else if (extra < houseCommittees.length+senateCommittees.length+3) {
       currCalendar = senateCommittees[extra-3-houseCommittees.length].cCalendar;
     }
-    /* Calendars:
-        * all
-        * House
-        * Senate
-        * House committees
-        * Senate committees
-    */
   }
 
   // Displays the screen
@@ -132,6 +130,22 @@ class Screen7 extends Screen {
     else {
       fill(255);
       rect(width/6, height/6, width*2/3, height*2/3);
+    }
+
+    if (chosen != -1) {
+      fill(255);
+      rect(width/4, height/4, width/2, height/2);// Events box
+      ArrayList<String> events = currCalendar.getEventsOn(chosen+1, currCalendar.cMonth, currCalendar.cYear);
+      textSize(20);
+      fill(0);
+      textAlign(CENTER, TOP);
+      text(currCalendar.cMonth+"/"+(chosen+1)+"/"+currCalendar.cYear+" Events", width/2, height/4);
+      textAlign(LEFT, TOP);
+      for (int i = 0; i < events.size(); i++) {
+        text(" • "+events.get(i), width/4, height/4+20+20*i);
+      }
+      textAlign(RIGHT, TOP);
+      text("Close", width*3/4, height*3/4);
     }
 
     displayButtonsSliders();

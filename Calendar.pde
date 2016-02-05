@@ -55,7 +55,6 @@ class Calendar {
   void display() {
     displayBackground();
 
-    textAlign(RIGHT);
     String lMonth = "";
     String nMonth = "";
     int lYear, nYear;
@@ -100,7 +99,6 @@ class Calendar {
   // Precondition: There is an empty screen and the boxes need to be 6*7
   // Postcondition: There are boxes to put the days and weekday names on top
   void displayBackground() {
-    //println(2018%4 == 0);
     fill(255);
     rect(width/6, height/6, width*2/3, height*2/3);
     fill(0);
@@ -119,6 +117,7 @@ class Calendar {
   // Precondition: lMonth = last month, nMonth = next month, lYear = last month year, nYear = next month year
   // Postcondition: The days of the current month are displayed
   void displayDays(String lMonth, String nMonth, int lYear, int nYear) {
+    textAlign(RIGHT);
     text("<   "+lMonth+" 20"+(lYear), width/2-40, height/6-50);
     textAlign(LEFT);
     text(nMonth+" 20"+(nYear)+"   >", width/2+40, height/6-50);
@@ -132,13 +131,20 @@ class Calendar {
     textAlign(CENTER, CENTER);
     while (yearCount != year || monthCount != month || dayCount < realDaysInMonth(yearCount)[month-1]) {
       if (yearCount == year && monthCount == month) {
+        // Highlight the current date
         if (yearCount == cYear && monthCount == cMonth && dayCount == day) {
           fill(hLColor);
-          rect(width/6+width*2/21*col, (height/6+(height*2/3)*3/14+(height*2/3)*row/7)-height/21, width*2/21, height*2/21);
+          rect(width/6+width*2/21*col, height/6+height*2/21+height*2/21*row, width*2/21, height*2/21);
+        }
+        // Events on displayed days
+        if (getEventsOn(dayCount, monthCount, yearCount).size() != 0) {
+          fill(200, 0, 0);
+          textSize(40);
+          text("*", width/6+width/21+width*2/21*col, height/6-20+(height*2/3)*3/14+(height*2/3)*row/7);
+          textSize(20);
         }
         fill(0);
         text(dayCount, width/6+width/21+width*2/21*col, height/6+(height*2/3)*3/14+(height*2/3)*row/7);
-        // ^ this needs to be cut down especially the 'y' part
       }
       col++;
       if (col == 7) {
@@ -156,13 +162,20 @@ class Calendar {
         }
       }
     }
-    // Repeats for the last day in the month
+    // === Repeats for the last day in the month ===
     if (yearCount == cYear && monthCount == cMonth && dayCount == day) {
       fill(hLColor);
       rect(width/6+width*2/21*col, (height/6+(height*2/3)*3/14+(height*2/3)*row/7)-height/21, width*2/21, height*2/21);
     }
+    if (getEventsOn(dayCount, monthCount, yearCount).size() != 0) {
+      fill(200, 0, 0);
+      textSize(40);
+      text("*", width/6+width/21+width*2/21*col, height/6-20+(height*2/3)*3/14+(height*2/3)*row/7);
+      textSize(20);
+    }
     fill(0);
     text(dayCount, width/6+width/21+width*2/21*col, height/6+(height*2/3)*3/14+(height*2/3)*row/7);
+    // =============================================
   }
 
   // add an event
@@ -174,6 +187,18 @@ class Calendar {
     r.setInt("month", month);
     r.setInt("year", year);
     r.setString("event", event);
+  }
+  // returns what events there are on that Day
+  // Precondition: day month and year testing for
+  // Postcondition: ArrayList of events on that day
+  ArrayList<String> getEventsOn(int day, int month, int year) {
+    ArrayList<String> eventList = new ArrayList<String>();
+    for (TableRow r: events.rows()) {
+      if (r.getInt(0) == day && r.getInt(1) == month && r.getInt(2) == year) {
+        eventList.add(r.getString(3));
+      }
+    }
+    return eventList;
   }
 
   // Change the month if the buttons are clicked

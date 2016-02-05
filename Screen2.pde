@@ -38,6 +38,10 @@ class Screen2 extends Screen {
       buttons[i].variance = 1;
     }
 
+    // No repetition in the screens
+    if (screens.get(screens.size()-2).toString() == "2") {
+      screens.remove(screens.size()-2);
+    }
 
 
     for (int i = 0; i < buttons.length; i++)

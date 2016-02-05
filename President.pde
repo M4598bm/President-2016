@@ -92,10 +92,10 @@ String[] parties = {"Democratic", "Republican"};// only temporarily autoset
 void settings() {
   Table options = loadTable("options.csv", "header");
   //if (options.getRow(0).getString(1).equals("yes")) {// fullScreen
-    fullScreen();
+   // fullScreen();
   //}
   //else {// A smaller size setting
-  //  size(displayWidth, (int)(displayHeight*.8));// *.8 is temp
+    size(displayWidth, (int)(displayHeight*.8));// *.8 is temp
   //}
 }
 
@@ -112,15 +112,15 @@ void setup() {
   menuActions = new MenuActions();// always needed
 
   // This is the real code for this part but to write the game it needs to be tested
-  //*
+  /*
   mainMenu = true;
   screen = new MainMenuScreen();
   screen.setScreen();
   displayAll();
-  //*/
+  */
 
   // Temporary:
-  //menuActions.newGame();
+  menuActions.newGame();
 
 }
 
@@ -418,7 +418,12 @@ void mainButton() {
   textSize(16);
   textAlign(CENTER, TOP);
   fill(0);
-  text("Main Menu", width/10+10, height/10+30);
+  if (screens.size() == 2) {
+    text("Main Menu", width/10+10, height/10+30);
+  }
+  else {
+    text("Back", width/10+10, height/10+30);
+  }
 }
 
 
@@ -439,8 +444,7 @@ void mouseClicked() {
   if (!menuOpen) {
     mouseClickedButton(mX, mY);
     if (isCurrScreen(7)) {// Calendar Screen
-      if (screen.extra < 100)
-        ((Screen7)screen).currCalendar.clickMonth(mX, mY);
+      mouseClicked7(mX, mY);
     }
     else if (isCurrScreen(10) || isCurrScreen(11)) {// Speech Screens
       mouseClicked10and11(mX, mY);
@@ -543,28 +547,13 @@ void mouseMoved() {
 // Postcondition: The goal of the key pressed is fulfilled
 void keyPressed() {
 
-  if (isCurrScreen(17)) {
-    eM.stateCount++;
-    println(eM.stateCount);
-
-    if (keyCode == ENTER) {
-      Table t = new Table();
-      t.addColumn("state");
-      for (int i : eM.statePixels) {
-        TableRow tr = t.addRow();
-        tr.setInt("state", i);
-      }
-    }
-
-  }
-
-
   if (keyCode == ESC) {// this is really cool :D
     key = 0;// making sure it doesnt quit
     if (!mainMenu) {
       if (!isCurrScreen(0) && !menuOpen) {
-        newScreen(new Button(0));
-        screen.setScreen();
+        screens.remove(screens.size()-1);
+        int screenNum = Utils.convertInt(screens.get(screens.size()-1).toString());
+        screen = screens.get(screens.size()-1);
         displayAll();
       }
       else {
@@ -611,8 +600,9 @@ void mouseClickedButton(float mX, float mY) {
     textSize(16);
     float wordWidth = textWidth("Main Menu")/2;
     if (mX < width/10+10+wordWidth && mX > width/10+10-wordWidth && mY < height/10+46 && mY > height/10-15) {
-      newScreen(new Button(0));
-      //screen.setScreen();
+      screens.remove(screens.size()-1);
+      int screenNum = Utils.convertInt(screens.get(screens.size()-1).toString());
+      screen = screens.get(screens.size()-1);
       displayAll();
     }
   }
@@ -634,22 +624,63 @@ void mouseClickedButton(float mX, float mY) {
 // Precondition: The mouse is clicked
 // Postcondition: The menu is opened
 void mouseClickedMenu(float mX, float mY) {
-// text("|| Menu ||", width*3/4, 15);
-if (mX < width && mX > width*3/4 && mY < 30) {
-  menuOpen = !menuOpen;
-  displayAll();
-}
-// If menu buttons are clicked
-if (menuOpen) {
-  boolean done = false;
-  for (int i = 0; i < menuScreen.buttons.length && !done; i++)
-  if (menuScreen.buttons[i].isInside(mX, mY) && menuScreen.buttons[i].visible && menuScreen.buttons[i].clickable) {
-    done = true;
-    newScreen(menuScreen.buttons[i]);
-    // Do I need to display the menuScreen here?
+  // text("|| Menu ||", width*3/4, 15);
+  if (mX < width && mX > width*3/4 && mY < 30) {
+    menuOpen = !menuOpen;
+    displayAll();
+  }
+  // If menu buttons are clicked
+  if (menuOpen) {
+    boolean done = false;
+    for (int i = 0; i < menuScreen.buttons.length && !done; i++)
+      if (menuScreen.buttons[i].isInside(mX, mY) && menuScreen.buttons[i].visible && menuScreen.buttons[i].clickable) {
+        done = true;
+        newScreen(menuScreen.buttons[i]);
+        // Do I need to display the menuScreen here?
+      }
   }
 }
+
+// Screen 7
+// Precondition: The mouse is clicked
+// Postcondition: The events on the day are displayed
+void mouseClicked7(float mX, float mY) {
+  if (screen.extra < 100) {
+    ((Screen7)screen).currCalendar.clickMonth(mX, mY);
+    int col = 0;
+    int row = 0;
+    int dayCount = 1;
+    boolean done = false;
+    Calendar cal = ((Screen7)screen).currCalendar;
+    while (dayCount <= cal.realDaysInMonth(cal.cYear)[cal.cMonth-1] && !done) {
+      if (mX > width/6+width*2/21*col && mX < width/6+width*2/21*col+width*2/21) {
+        if (mY > height/6+height*2/21+height*2/21*row && mY < height/6+height*2/21+height*2/21*row+height*2/21) {
+          if (cal.getEventsOn(dayCount, cal.cMonth, cal.cYear).size() != 0) {
+            screen.chosen = dayCount-1;
+            done = true;
+            displayAll();
+          }
+        }
+      }
+      col++;
+      if (col == 7) {
+        row++;
+        col = 0;
+      }
+      dayCount++;
+    }
+    if (screen.chosen != 0) {
+      textSize(20);
+      if (mX > width*3/4-textWidth("Close") && mX < width*3/4) {
+        if (mY > height*3/4 && mY < height*3/4+20) {
+          screen.chosen = -1;
+          displayAll();
+        }
+      }
+    }
+  }
 }
+
 
 // Screen 10 and 11
 // Precondition: The mouse is clicked
@@ -758,22 +789,9 @@ void mouseClicked16(float mX, float mY) {
 
 // Screen 17
 // Precondition: The mouse is clicked
-// Postcondition: The entry clicked on has been chosen and is highlighted
+// Postcondition: Will click on states on the map
 void mouseClicked17(float mX, float mY) {
-  if (eM.stateCount != 0) {
-    eM.colorState((int)mX, (int)mY);
-    println(eM.statePixels[(int)(mY*width+mX)]);
-  }
-  else {
-    loadPixels();
-    for (int i = 0; i < pixels.length; i++) {
-      if (pixels[i] > color(200))
-        pixels[i] = color(255);
-      else
-        pixels[i] = color(0);
-    }
-    updatePixels();
-  }
+
 
 
 }
@@ -1375,8 +1393,6 @@ void resetForTurn() {
 
 /* THINGS TO DO CHECKLIST:
 
-  - Make Calendars display current date and events
-  - Back to Main Menu doesnt go all the way back
   - What to display for Cabinet members?
   - Hover over selection tables
   - See more information for each selection in selection tables

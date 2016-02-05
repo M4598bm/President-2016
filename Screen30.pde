@@ -47,6 +47,10 @@ class Screen30 extends Screen {
       buttons[5].setLabel("Close", 14, 255);
       buttons[5].extra = extra;
     }
+    // No repetition in the screens
+    if (screens.get(screens.size()-2).toString() == "30") {
+      screens.remove(screens.size()-2);
+    }
   }
 
   // Displays the screen
@@ -87,7 +91,7 @@ class Screen30 extends Screen {
     else if (extra == 4) {// Your Desk
       billList = yourDesk;
     }
-    
+
     for (int i = 0; i < billList.size(); i++) {
       if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
         if (i == chosen) {

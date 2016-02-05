@@ -20,6 +20,10 @@ class Screen28 extends Screen {
       buttons[0].setLabel("Close", 14, 255);
       buttons[0].extra = 0;
     }
+    // No repetition in the screens
+    if (screens.get(screens.size()-2).toString() == "28") {
+      screens.remove(screens.size()-2);
+    }
   }
 
   // Displays the screen
