@@ -5,6 +5,13 @@ class NationalCom {
   int[] statePresFunds;
   boolean administration;// if it's the president's party
 
+
+  /* Funding:
+    NC budget - http://www.fec.gov/disclosure/partySummary.do
+    Pres camp - http://www.washingtonpost.com/wp-srv/special/politics/campaign-finance/
+    
+  */
+
   // Constructor
   // Precondition: p is the party to make it the Republican National Committee or the Democratic National Committee
   // Postcondition: creates the Object
@@ -30,7 +37,7 @@ class NationalCom {
       - amount used for your campaign
       - avaliable funding
     */
-    
+
 
     /* needs to be split into something probably region:
         * New England:

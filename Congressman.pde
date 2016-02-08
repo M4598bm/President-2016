@@ -2,12 +2,14 @@ class Congressman {
   String name;
 
   // All are out of 100
-  int socialism;// 0 capitalist, 5 socialist
-  int liberalism;// 0 conservative, 5 liberal
+  int socialism;// 0 capitalist, 100 socialist
+  int liberalism;// 0 conservative, 100 socially liberal
   int approval;// home approval rating
   float youApproval;// approval of you
   int strength;// how they stand under pressure
+  int fundStrength;// how well they can raise funds
   int loyalty;// party loyalty
+  int ambition;// how much they want to get ahead
   int termsInOffice;// How many terms this Congressman has served in current house
 
   char party;// 'D' or 'R'
@@ -15,7 +17,7 @@ class Congressman {
   int district;// 0 is senator
   int nextElection;// 2018 and every 2 years for all house reps, split in threes for senators
   int ncFunds;// how much money they get from the (D/R)NC
-  int funding;// how much money they have for the next election
+  int funding;// how much money they have for the next election without NC funding
   int house;// 0 if house of reps, 1 if senate
   ArrayList<Integer> opinions;//each represents bill # index on the floor, less than 33 is nay, more than 66 is yea
 
@@ -26,7 +28,7 @@ class Congressman {
   boolean attackable;
 
   // Leaders are chosen after elections (democrats "caucus" republicans have a "conference")
-  int leadership;// 0 is none, 1 is leader, 2 is whip, 3 is speaker. 1 and 2 have majority or minority and senate or house
+  int leadership;// 0 is none, 1 is whip, 2 is leader, 3 is speaker. 1 and 2 have majority or minority and senate or house
 
   // Constructor
   // Precondition: n is name, s is state, h is house of congress
@@ -42,16 +44,106 @@ class Congressman {
     ncFunds = 100;
   }
 
+
   // Sets the political stance
-  // Precondition: socialism is economic liberalism, liberalism is social liberalism, party is 'd' or 'r'
-  // Postcondition: the values are set in this object
-  void setPolitics(int s, int l, char p,int loy) {//, int d) {
-    socialism = s;
-    liberalism = l;
-    party = p;
-    loyalty=loy;
-    //district = d;// I may not use district because of inaccuracies caused. Probably later
+  // Precondition: PVI is positive for liberal, negative for conservative
+  // Postcondition: the political values are set in this object
+  void setPolitics(int pvi) {
+    // party, liberalism, socialism, strength, loyalty, funding are set
+
+    //==== PARTY ====//
+    if (pvi > 0) {
+      party = 'd';
+      if ((int)random(pvi+2) == 0) {// The bigger the pvi the less of a chance it will differ
+        party = 'r';
+      }
+    }
+    else {// includes 0 bc there's a 50% chance it switches, bc of +2
+      party = 'r';
+      if ((int)abs(random(pvi+2)) == 0) {// The more negative the pvi the less of a chance it will differ
+        party = 'd';
+      }
+    }
+
+    //==== VALUES ====//
+    liberalism = constrain(pvi+50+(int)(random(10)+random(10)-10), 0, 100);
+    socialism = constrain(pvi+50+(int)(random(10)+random(10)-10), 0, 100);
+    if (random(20) < 1) {
+      liberalism = (int)(random(50)+random(50));
+    }// either the value is set normally or it's set randomly
+    if (random(20) < 1) {
+      socialism = (int)(random(50)+random(50));
+    }
+
+    //==== PERSONALITY ====//
+    strength = (int)(random(50)+random(50));
+    loyalty = (int)(random(50)+random(50));
+    ambition = (int)(random(50)+random(50));
+
+    //==== APPROVAL ====//
+    approval = constrain((int)(strength+random(10)+random(10)), 0, 100);
+    int dev = (int)((abs(liberalism-pvi)+abs(socialism-pvi))/2);
+    approval = max(approval-dev, 0);
+
+    if (party == presParty) {
+      youApproval = constrain(50+int(loyalty/2)+(int)(random(20)+random(20))-20, 0, 100);
+    }
+    else {// loyalty and party decide how much you are liked, then values is considered
+      youApproval = constrain(50-int(loyalty/2)+(int)(random(20)+random(20))-20, 0, 100);
+    }
+    dev = (int)((abs(liberalism-presLib)+abs(socialism-presSoc))/2);
+    youApproval = max(approval-dev, 0);
+
+    setFunding();
+    setTermsInOffice();
   }
+
+  // sets the funding based on values
+  // Precondition: setPolitics has been called and leadership has been chosen
+  // Postcondition: funding and ncFunds are set based on lib soc party fundStrength and PVI (how well it matches)
+  void setFunding() {
+    if (house == 0) {// avg 2,000,000 max 20,000,000
+      funding = (int)(1800*((fundStrength+approval)*.01))+(int)random(500);
+      funding += leadership*4000+(int)random(1000);
+      ncFunds = (int)(200*(loyalty*.02))+(int)random(100);
+      ncFunds += leadership*500+(int)random(300);
+    }
+    if (house == 1) {// avg 10,000,000 max 50,000,000
+      funding = (int)(8000*((fundStrength+approval)*.01))+(int)random(1000);
+      funding += leadership*10000+(int)random(5000);
+      ncFunds = (int)(2000*(loyalty*.02))+(int)random(500);
+      ncFunds += leadership*1000+(int)random(500);
+    }
+  }
+
+  // set terms in office
+  // Precondition: loyalty and approval are set
+  // Postcondition: terms in office are set
+  void setTermsInOffice() {
+    int yio = 0;// years in office
+    boolean inOffice = true;
+    for (int i = 0; i < 60 && inOffice; i++) {
+      if (random((fundStrength+approval)/2) < 5) {
+        inOffice = false;
+      }
+      yio++;
+    }
+
+    if (house == 0) {
+      termsInOffice = (int)(yio/2);
+    }
+    else {
+      termsInOffice = (int)(yio/6);
+    }
+  }
+
+  //===========================================//
+  //===========================================//
+  //=============Real Methods==================//
+  //===========================================//
+  //===========================================//
+
+
 
   // Listens and reacts to a speech that the president made about bills
   // Precondition: support and against are lists of bills to respond to, party is an important factor

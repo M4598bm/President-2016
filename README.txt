@@ -64,3 +64,11 @@ Gameplay:
       * In the House riders are not allowed but in the Senate they are, and sometimes filibusters destroy a bill
       * If it is passed it goes to the other house, and if the bills are different in each house it goes to the Conference Committee to merge both.
       * Then it goes to the president
+
+Choose your personality:
+  - Senator:
+      Bonus influence in Congress, you know how to navigate the chambers
+  - Governor:
+      Executive Orders are more effective. You've done them before.
+  - Businessman:
+      Extra funding of your campaign for a second term

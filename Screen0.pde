@@ -21,7 +21,7 @@ class Screen0 extends Screen {
     buttons[2] = new Button(width/2+120, height/2-110, 200, 60, color(255, 0, 0), 4);
     buttons[2].setLabel("Executive Orders", 14, 255);
     buttons[3] = new Button(width/2-320, height/2-30, 200, 60, color(255, 0, 0), 5);
-    buttons[3].setLabel(presParty+" National Committee", 12, 255);
+    buttons[3].setLabel(you.party+" National Committee", 12, 255);
     buttons[4] = new Button(width/2-100, height/2-30, 200, 60, color(255, 0, 0), 6);
     buttons[4].setLabel("United Nations Ambassador", 14, 255);
     buttons[5] = new Button(width/2+120, height/2-30, 200, 60, color(255, 0, 0), 7);
