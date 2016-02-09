@@ -22,7 +22,7 @@ int presSoc;// Player socialism
 boolean menuOpen;// True or false if the Menu is up
 int lastButtonInd;// the index of the last button pressed
 
-ArrayList<Screen> screens;
+ArrayList<Screen> screens;// In order of most recent, all the screens clicked on since home screen
 Screen screen;// Handles most display aspects
 MenuScreen menuScreen;// Displays if menuOpen
 Calendar calendar;// the calendar
@@ -237,8 +237,10 @@ void mouseClicked() {
   mouseClickedMenu(mX, mY);
 
   if (!menuOpen) {
-    mouseClickedButton(mX, mY);
-    if (isCurrScreen(7)) {// Calendar Screen
+    if (mouseClickedButton(mX, mY)) {
+      // placeholder to prevent other things
+    }
+    else if (isCurrScreen(7)) {// Calendar Screen
       mouseClicked7(mX, mY);
       if (screen.extra < 100) {
         ((Screen7)screen).currCalendar.clickMonth(mX, mY);
@@ -390,8 +392,9 @@ MouseClicked() Helpers
 // Checks whether a button is pressed and handles the action associated
 // Precondition: The mouse is clicked
 // Postcondition: The command of the button is fulfilled and a new screen is created
-void mouseClickedButton(float mX, float mY) {
+boolean mouseClickedButton(float mX, float mY) {
   // Main Menu Button
+  boolean done = false;
   if (Utils.convertInt(screen.toString()) < 100) {
     textSize(16);
     float wordWidth = textWidth("Main Menu")/2;
@@ -404,7 +407,6 @@ void mouseClickedButton(float mX, float mY) {
 
     // Normal buttons:
     if (screen.buttons != null) {
-      boolean done = false;
       for (int i = 0; i < screen.buttons.length && !done; i++)
       if (screen.buttons[i].isClicked(mX, mY)) {
         lastButtonInd = i;
@@ -414,6 +416,7 @@ void mouseClickedButton(float mX, float mY) {
       }
     }
   }
+  return done;
 }
 
 // Checks whether the Menu button was pressed and opens the menu
@@ -908,201 +911,212 @@ void newScreen(Button b) {
   int lastchosen = screen.chosen;
   switch (b.command) {
     case 0:
-    screen = new Screen0();
-    screens = new ArrayList<Screen>();
-    screens.add(screen);
-    break;
+      screen = new Screen0();
+      screens = new ArrayList<Screen>();
+      screens.add(screen);
+      break;
     case 1:
-    screen = new Screen1();
-    screens.add(screen);
-    break;
+      screen = new Screen1();
+      screens.add(screen);
+      break;
     case 2:
-    screen = new Screen2();
-    screens.add(screen);
-    break;
+      screen = new Screen2();
+      screens.add(screen);
+      break;
     case 3:
-    screen = new Screen3();
-    screens.add(screen);
-    break;
+      screen = new Screen3();
+      screens.add(screen);
+      break;
     case 4:
-    screen = new Screen4();
-    screens.add(screen);
-    break;
+      screen = new Screen4();
+      screens.add(screen);
+      break;
     case 5:
-    screen = new Screen5();
-    screens.add(screen);
-    break;
+      screen = new Screen5();
+      screens.add(screen);
+      break;
     case 6:
-    screen = new Screen6();
-    screens.add(screen);
-    break;
+      screen = new Screen6();
+      screens.add(screen);
+      break;
     case 7:
-    screen = new Screen7();
-    screens.add(screen);
-    break;
+      screen = new Screen7();
+      screens.add(screen);
+      break;
     case 8:
-    screen = new Screen8();
-    screens.add(screen);
-    break;
+      screen = new Screen8();
+      screens.add(screen);
+      break;
     case 9:
-    screen = new Screen9();
-    screens.add(screen);
-    break;
+      screen = new Screen9();
+      screens.add(screen);
+      break;
     case 10:
-    screen = new Screen10();
-    screens.add(screen);
-    break;
+      screen = new Screen10();
+      screens.add(screen);
+      break;
     case 11:
-    screen = new Screen11();
-    screens.add(screen);
-    break;
+      screen = new Screen11();
+      screens.add(screen);
+      break;
     case 12:
-    screen = new Screen12();
-    screens.add(screen);
-    break;
+      screen = new Screen12();
+      screens.add(screen);
+      break;
     case 13:
-    screen = new Screen13();
-    screens.add(screen);
-    break;
+      screen = new Screen13();
+      screens.add(screen);
+      break;
     case 14:
-    screen = new Screen14();
-    screens.add(screen);
-    break;
+      screen = new Screen14();
+      screens.add(screen);
+      break;
     case 15:
-    screen = new Screen15();
-    screens.add(screen);
-    break;
+      screen = new Screen15();
+      screens.add(screen);
+      break;
     case 16:
-    screen = new Screen16();
-    screens.add(screen);
-    break;
+      screen = new Screen16();
+      screens.add(screen);
+      break;
     case 17:
-    screen = new Screen17();
-    screens.add(screen);
-    break;
+      screen = new Screen17();
+      screens.add(screen);
+      break;
     case 18:
-    screen = new Screen18();
-    screens.add(screen);
-    break;
+      screen = new Screen18();
+      screens.add(screen);
+      break;
     case 19:
-    screen = new Screen19();
-    screens.add(screen);
-    break;
+      screen = new Screen19();
+      screens.add(screen);
+      break;
     case 20:
-    screen = new Screen20();
-    screens.add(screen);
-    break;
+      screen = new Screen20();
+      screens.add(screen);
+      break;
     case 21:
-    screen = new Screen21();
-    screens.add(screen);
-    break;
+      screen = new Screen21();
+      screens.add(screen);
+      break;
     case 22:
-    screen = new Screen22();
-    screens.add(screen);
-    break;
+      screen = new Screen22();
+      screens.add(screen);
+      break;
     case 23:
-    screen = new Screen23();
-    screens.add(screen);
-    break;
+      screen = new Screen23();
+      screens.add(screen);
+      break;
     case 24:
-    screen = new Screen24();
-    screens.add(screen);
-    break;
+      screen = new Screen24();
+      screens.add(screen);
+      break;
     case 25:
-    screen = new Screen25();
-    screens.add(screen);
-    break;
+      screen = new Screen25();
+      screens.add(screen);
+      break;
     case 26:
-    screen = new Screen26();
-    screens.add(screen);
-    break;
+      screen = new Screen26();
+      screens.add(screen);
+      break;
     case 27:
-    screen = new Screen27();
-    screens.add(screen);
-    break;
+      screen = new Screen27();
+      screens.add(screen);
+      break;
     case 28:
-    screen = new Screen28();
-    screens.add(screen);
-    break;
+      screen = new Screen28();
+      screens.add(screen);
+      break;
     case 29:
-    screen = new Screen29();
-    screens.add(screen);
-    break;
+      screen = new Screen29();
+      screens.add(screen);
+      break;
     case 30:
-    screen = new Screen30();
-    screens.add(screen);
-    break;
+      screen = new Screen30();
+      screens.add(screen);
+      break;
     case 31:
-    screen = new Screen31();
-    screens.add(screen);
-    break;
+      screen = new Screen31();
+      screens.add(screen);
+      break;
     case 32:
-    screen = new Screen32();
-    screens.add(screen);
-    break;
+      screen = new Screen32();
+      screens.add(screen);
+      break;
     case 33:
-    screen = new Screen33();
-    screens.add(screen);
-    break;
+      screen = new Screen33();
+      screens.add(screen);
+      break;
     case 34:
-    screen = new Screen34();
-    screens.add(screen);
-    break;
+      screen = new Screen34();
+      screens.add(screen);
+      break;
     case 35:
-    screen = new Screen35();
-    screens.add(screen);
-    break;
+      screen = new Screen35();
+      screens.add(screen);
+      break;
     case 36:
-    screen = new Screen36();
-    screens.add(screen);
-    break;
+      screen = new Screen36();
+      screens.add(screen);
+      break;
+    case 37:
+      screen = new Screen37();
+      screens.add(screen);
+      break;
 
     // MenuScreen Cases
     case 100:
-    menuScreen = new MenuScreen();
-    menuScreen.extra = 0;
-    break;
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 0;
+      break;
     case 101:
-    menuScreen = new MenuScreen();
-    menuScreen.extra = 1;
-    break;
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 1;
+      break;
     case 102:
-    menuScreen = new MenuScreen();
-    menuScreen.extra = 2;
-    break;
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 2;
+      break;
     case 103:
-    menuScreen = new MenuScreen();
-    menuScreen.extra = 3;
-    break;
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 3;
+      break;
     case 104:
-    menuScreen = new MenuScreen();
-    menuScreen.extra = 4;
-    break;
+      menuScreen = new MenuScreen();
+      menuScreen.extra = 4;
+      break;
 
     // MainMenuScreen Cases
     case 200:
-    screen = new MainMenuScreen();
-    break;
+      screen = new MainMenuScreen();
+      break;
     case 201:
-    screen = new MainMenuScreen1();
-    break;
+      screen = new MainMenuScreen1();
+      break;
     case 202:
-    screen = new MainMenuScreen2();
-    break;
+      screen = new MainMenuScreen2();
+      break;
     case 203:
-    screen = new MainMenuScreen3();
-    break;
+      screen = new MainMenuScreen3();
+      break;
+
+    // Briefing Cases
+    case 300:
+      screen = new BriefingScreen1();
   }
   screen.extra = b.extra;
   if (!mainMenu && screens.size() > 1) {
     screen.lastchosen = lastchosen;
     screen.d1 = screens.get(screens.size()-2).d1;
     screen.d2 = screens.get(screens.size()-2).d2;
+    screen.input = screens.get(screens.size()-2).input;
   }
-  if (!menuOpen)
-  screen.setScreen();
-  else
-  menuScreen.setScreen();
+  if (!menuOpen) {
+    screen.setScreen();
+  }
+  else {
+    menuScreen.setScreen();
+  }
   println(screens);
 }
 
@@ -1152,6 +1166,9 @@ void nextTurn() {
 
   resetForTurn();
 
+  // Set up the Briefing
+  newScreen(new Button(300));
+  displayAll();
 }
 
 // This moves time forward once each turn

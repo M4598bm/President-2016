@@ -1,10 +1,10 @@
-class Secretary {
+class Secretary extends Politician {
   // This class holds information for each member of your cabinet
   String title;
   String dep;
   int[] events;// events having to do with this dept
   int happiness;// current state of the dept (does it have the capital to be efficient?)
-  int funding;
+  int deptFunding;
 
   // Constructor
   // Precondition: d is department of the secretary and t is the title, both found in majordepartments.csv

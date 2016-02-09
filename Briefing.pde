@@ -1,13 +1,13 @@
-class Agenda {
-  ArrayList<Integer> events;
-  ArrayList<Bill> billsChangedStatus;
-  ArrayList<Bill> billsDenied;
-  ArrayList<Integer> nationsSpoke;
-  ArrayList<Integer> reminders;
+class Briefing {
+  ArrayList<Integer> events;// Any important events that occured
+  ArrayList<Bill> billsChangedStatus;// Any bills that changed status
+  ArrayList<Integer> nationsSpoke;// Nations that want to meet
+  ArrayList<Integer> reminders;// Elections coming up, budget, etc
   // Election details
   // Other election details
-  ArrayList<Integer> scDecisions;
-  ArrayList<Bill> billsOnDesk;
+  ArrayList<Integer> scDecisions;// Supreme court decisions
+  ArrayList<Integer> stateActions;// State level events
+  ArrayList<Bill> billsOnDesk;// Reminder that these bills are on your desk
 
     /* Examples of news include:
        * How a speech went
@@ -24,13 +24,13 @@ class Agenda {
   // Constructor
   // Precondition: tons of ArrayLists
   // Postcondition: creates the Object
-  Agenda() {
+  Briefing() {
     events = new ArrayList<Integer>();
     billsChangedStatus = new ArrayList<Bill>();
-    billsDenied = new ArrayList<Bill>();
     nationsSpoke = new ArrayList<Integer>();
     reminders = new ArrayList<Integer>();
     scDecisions = new ArrayList<Integer>();
+    stateActions = new ArrayList<Integer>();
     billsOnDesk = new ArrayList<Bill>();
   }
 

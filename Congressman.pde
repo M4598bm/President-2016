@@ -1,25 +1,15 @@
-class Congressman {
-  String name;
-
+class Congressman extends Politician {
   // All are out of 100
-  int socialism;// 0 capitalist, 100 socialist
-  int liberalism;// 0 conservative, 100 socially liberal
   int approval;// home approval rating
-  float youApproval;// approval of you
-  int strength;// how they stand under pressure
-  int fundStrength;// how well they can raise funds
-  int loyalty;// party loyalty
-  int ambition;// how much they want to get ahead
   int termsInOffice;// How many terms this Congressman has served in current house
 
-  char party;// 'D' or 'R'
-  String state;// "NY", "RI", "CA", "TN", "ME", etc.
-  int district;// 0 is senator
+  int[] polling;// [this percentage, opponent percentage]
+
   int nextElection;// 2018 and every 2 years for all house reps, split in threes for senators
   int ncFunds;// how much money they get from the (D/R)NC
-  int funding;// how much money they have for the next election without NC funding
   int house;// 0 if house of reps, 1 if senate
   ArrayList<Integer> opinions;//each represents bill # index on the floor, less than 33 is nay, more than 66 is yea
+  Politician opponent;// Who's running against them
 
   // Deal related
   ArrayList<Integer> mustVoteFor;//made a deal to vote for these
@@ -39,9 +29,15 @@ class Congressman {
     house = h;
     district = d;
     opinions = new ArrayList<Integer>();
+    polling = new int[2];
+  }
 
-    //Temporary
-    ncFunds = 100;
+  // Creates an opponent for this congressperson to run against
+  // Precondition: this is a fully set Congressperson and pvi is politics of the state
+  // Postcondition: opponent is a fully set Politician
+  void setOpponent(int pvi) {
+    opponent = new Politician();
+
   }
 
 
@@ -96,6 +92,7 @@ class Congressman {
 
     setFunding();
     setTermsInOffice();
+    setOpponent(pvi);
   }
 
   // sets the funding based on values

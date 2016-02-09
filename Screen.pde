@@ -9,7 +9,7 @@ class Screen {
    6: UN < 0
    7: Calendar < 0
    8: War < 0
-   9: Intel < 0
+   9: Agencies < 0
    10: House speech < 3
    11: Senate speech < 3
    12: New bill step 1 < 3
@@ -36,6 +36,11 @@ class Screen {
    33: Propose Resolution < 31
    34: Security Council Delegate < 26
    35: Propose Action < 34
+   36: [OTHER AGENCY THAT WILL EXIST] < 9
+   37: CIA < 9
+   38: Federal Reserve < 9
+   39: Intelligence < 37
+   40: Covert Ops < 37
 
    100: Menu Screen
 
@@ -44,6 +49,9 @@ class Screen {
    202: Load game
    203: Options
    204: Exit game
+
+   300: Briefing
+   301: Briefing Action
   */
 
   // Most used variables for basic structure

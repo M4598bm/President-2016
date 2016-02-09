@@ -1,8 +1,4 @@
-class SCJustice {
-  String name;
-  int socialism;// 0 capitalist, 100 socialist
-  int liberalism;// 0 conservative, 100 liberal
-  char party;
+class SCJustice extends Politician {
   boolean chief;
 
   // Constructor

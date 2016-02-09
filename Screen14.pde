@@ -51,7 +51,7 @@ class Screen14 extends Screen {
       buttons[2].setLabel("Close", 14, 255);
       buttons[2].extra = 0;
 
-      sliders[1] = new Slider(width/3+textWidth("Funding: "), height/3+30, cperson.ncFunds, width/6);
+      sliders[1] = new Slider(width/3+textWidth("Funding: "), height/3+60, cperson.ncFunds, width/6);
       sliders[1].units = "Thousand";
     }
   }
@@ -112,9 +112,48 @@ class Screen14 extends Screen {
       fill(0);
       textAlign(CENTER, TOP);
       textSize(20);
-      text(cperson.name+"("+cperson.party+","+cperson.state+")", width/2, height/3);
+      String title;
+      if (cperson.house == 0) {
+        title = "Rep. ";
+      }
+      else {
+        title = "Sen. ";
+      }
+      text(title+cperson.name+"("+cperson.party+","+cperson.state+")", width/2, height/3);
       textAlign(LEFT, TOP);
-      text("Funding: ", width/3, height/3+30);
+      int x = height/3+30;
+      if (cperson.leadership != 0) {
+        text(cperson.leadership, width/3, x);
+      }
+      x += 30;
+      if (cperson.party == presParty) {
+        text("Funding for him: ", width/3, x);
+      }
+      else {
+        text("Funding for opponent: ", width/3, x);
+      }
+      x += 20;
+      text(cperson.approval+"% approval", width/3, x);
+      x += 20;
+      text("Running against "+cperson.opponent.name+" ("+(cperson.opponent.party+"").toUpperCase()+")", width/3, x);
+      x += 20;
+      String msg = " (Winning!)";
+      if (cperson.polling[0] < cperson.polling[1]) {
+        msg = " (Losing!)";
+      }
+      else if (cperson.polling[0] == cperson.polling[1]) {
+        msg = " (Tied!)";
+      }
+      text("Polls: "+cperson.polling[0]+"-"+cperson.polling[1]+msg, width/3, x);
+
+      /* Rep. This Guy (D, NY)
+        Speaker of the House
+        Funding for [him] [opponent]: 0 -[ ]----- 2040 Thousand
+        57% approval
+        Running against Other Person (R)
+        Polls: 46-40 (Winning!)
+      */
+
     }
   }
 }

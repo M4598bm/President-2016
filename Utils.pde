@@ -37,28 +37,6 @@ static class Utils {
     return s;
   }
 
-  // number of democratic Senators from a state
-  // precondtion: int rating of how liberal a state from 0-5, and a float r random number from 0-5
-  // postCondition: number of Democratic Senators from the state with rating rating
-  static int findDems(int rating, float r) {
-    int dems = 0;
-    if (rating == 2 && r < 2)
-      dems = 1;
-    else if (rating == 3) {
-      if (r < 2)
-        dems = 1;
-      else if (r < 4)
-        dems = 2;
-    }
-    else if (rating == 4) {
-      dems = 1;
-      if (r < 2)
-        dems = 2;
-    }
-    else if (rating == 5)
-      dems = 2;
-    return dems;
-  }
 
   // Used for CSV file reading to replace commas
   // Precondition: The String s may have a comma in it marked by its HTML number, &#44;
@@ -110,10 +88,10 @@ static class Utils {
 
       // * party search:
         if (s.equals("d") || s.equals("democrat"))
-          if (con[i].party == 'D')
+          if (con[i].party == 'd')
             satisf = true;
         if (s.equals("r") || s.equals("republican"))
-          if (con[i].party == 'R')
+          if (con[i].party == 'r')
             satisf = true;
 
       // * position search:
@@ -121,10 +99,9 @@ static class Utils {
           satisf = true;
         if (s.equals("whip") && con[i].leadership == 2)
           satisf = true;
-        if (s.equals("speaker") && con[i].leadership == 1)
+        if (s.equals("speaker") && con[i].leadership == 3)
           satisf = true;
 
-      // 0 is none, 1 is leader, 2 is whip, 3 is speaker. 1 and 2 have majority or minority and senate or house
 
 
         if (!satisf)

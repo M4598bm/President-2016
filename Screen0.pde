@@ -31,7 +31,7 @@ class Screen0 extends Screen {
     buttons[7] = new Button(width/2-100, height/2+50, 200, 60, color(255, 0, 0), 8);
     buttons[7].setLabel("War Room", 14, 255);
     buttons[8] = new Button(width/2+120, height/2+50, 200, 60, color(255, 0, 0), 9);
-    buttons[8].setLabel("Intellegence", 14, 255);
+    buttons[8].setLabel("Agencies", 14, 255);
     for (int i = 0; i < buttons.length-1; i++)
       buttons[i].scrollCol = color(200, 0, 0);
     buttons[9] = new Button(width/2-100, height/2+130, 200, 60, color(0, 0, 255), 0);

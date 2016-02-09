@@ -1,22 +1,18 @@
-class Screen9 extends Screen {
-  // Agencies
+class BriefingScreen1 extends Screen {
+  // Briefing each turn
 
   // toString method
   // Precondition: none
   // Postcondition: returns screen number
   String toString() {
-    return "9";
+    return "briefing";
   }
 
   // Sets the screen when it is first created
   // Precondition: This is the current Screen, buttons and sliders are arrays
   // Postcondition: The screen is prepared to be displayed
   void setScreen() {
-    buttons = new Button[1];
-    buttons[0] = new Button(width/2-220, height/2-60, 200, 60, color(255, 0, 0), 37);
-    buttons[0].setLabel("Central Intelligence", 14, 255);
-    buttons[0] = new Button(width/2+20, height/2-60, 200, 60, color(255, 0, 0), 38);
-    buttons[0].setLabel("Federal Reserve", 14, 255);
+    buttons = new Button[0];
   }
 
   // Displays the screen
@@ -26,7 +22,6 @@ class Screen9 extends Screen {
     super.display();
 
 
-    displayButtonsSliders();
   }
 
 }
