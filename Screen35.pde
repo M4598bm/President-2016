@@ -1,6 +1,12 @@
 class Screen35 extends Screen {
   // Propose Security Council Action
 
+/*
+  Basically Screen33. Maybe you can use Resolution for these. Don't worry about actual content.
+
+*/
+
+
   // toString method
   // Precondition: none
   // Postcondition: returns screen number

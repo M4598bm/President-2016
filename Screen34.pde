@@ -1,6 +1,11 @@
 class Screen34 extends Screen {
   // Security Council Delegate
 
+  /*
+      Similar to Screen31. Better make a GADelegate and SCDelegate in President.
+      Also, those aren't well chosen names, maybe rethink them.
+  */
+
   // toString method
   // Precondition: none
   // Postcondition: returns screen number

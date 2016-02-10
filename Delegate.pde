@@ -1,0 +1,4 @@
+class Delegate extends Politician {
+
+
+}

@@ -1,6 +1,18 @@
 class Screen33 extends Screen {
   // Propose Resolution
 
+/*
+    Again, basically Screen18. Replace the obvious differences. tempBill is replaced by tempResolution
+    which you put underneath tempBill in the President class.
+
+    Only difference is that there is a bunch of Buttons on the top. Don't worry about those for now.
+
+    You should've written the Resolution class so those are the things you need to set. dw about name for now.
+
+    Not much else to tell you about here, if you need help tell me.
+*/
+
+
   // toString method
   // Precondition: none
   // Postcondition: returns screen number
