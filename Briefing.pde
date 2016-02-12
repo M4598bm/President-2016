@@ -1,4 +1,8 @@
 class Briefing {
+  Table news;// Holds all news to be told for this briefing
+  
+
+  // I'm probably not going to use any of this
   ArrayList<Integer> events;// Any important events that occured
   ArrayList<Bill> billsChangedStatus;// Any bills that changed status
   ArrayList<Integer> nationsSpoke;// Nations that want to meet

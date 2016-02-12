@@ -25,7 +25,7 @@ int lastButtonInd;// the index of the last button pressed
 ArrayList<Screen> screens;// In order of most recent, all the screens clicked on since home screen
 Screen screen;// Handles most display aspects
 MenuScreen menuScreen;// Displays if menuOpen
-Calendar calendar;// the calendar
+Calendar calendar;// the President's calendar
 Calendar houseCalendar;// calendar for the house floor
 Calendar senateCalendar;// calendar for the senate floor
 FedBudget fedBudget;// Handles the budget
