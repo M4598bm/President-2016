@@ -5,9 +5,11 @@
 
 
 // Static Variables
-static int daysPerTurn = 7;// not sure what this should be yet
+static int DAYS_PER_TURN = 7;// not sure what this should be yet
 
-static color hLColor = #FFFF14;// Highlighted text box color
+static final chambers = {"House", "Senate"};
+
+static final color hLColor = #FFFF14;// Highlighted text box color
 
 
 
@@ -64,6 +66,8 @@ ExecutiveOrder tempOrder;// current ExecutiveOrder being drafted and floated
 Bill tempBill;// current bill that you're having drafted (only stored here because it has to be global)
 Slider currSlider;// The slider that was just clicked on and is being dragged
 
+Briefing briefing;// News to show next turn that cumulates during this turn
+
 // Images
 ElectoralMap eM;// this is also tentative, it draws an electoral map, handle it later prob
 
@@ -72,12 +76,13 @@ ElectoralMap eM;// this is also tentative, it draws an electoral map, handle it 
 int[] mustSpeakFor;// you made a deal to speak in favor of these
 int[] mustSpeakAgainst;// you made a deal to speak against these
 
-// Other
+// Speeches
 ArrayList<Integer> suppS;// these are slightly complicated and not useful for really anything other than
 ArrayList<Integer> agS;//   what I already wrote anyway, so don't worry about it. But if you want to know
 ArrayList<Integer> suppH;// what these are, they're basically so that each turn the senate and house speeches
 ArrayList<Integer> agH;//   the player made in the turn are processed. It holds those.
-
+ArrayList<Integer> suppUN;
+ArrayList<Integer> agUN;
 
 // menuActions
 MenuActions menuActions;// controls all aspects of the game setup
@@ -404,15 +409,17 @@ boolean mouseClickedButton(float mX, float mY) {
       screen = screens.get(screens.size()-1);
       displayAll();
     }
-
+  }
+  if (Utils.convertInt(screen.toString()) < 100 || screen.toString().equals("briefing")) {
     // Normal buttons:
     if (screen.buttons != null) {
-      for (int i = 0; i < screen.buttons.length && !done; i++)
-      if (screen.buttons[i].isClicked(mX, mY)) {
-        lastButtonInd = i;
-        done = true;
-        newScreen(screen.buttons[i]);
-        displayAll();
+      for (int i = 0; i < screen.buttons.length && !done; i++) {
+        if (screen.buttons[i].isClicked(mX, mY)) {
+          lastButtonInd = i;
+          done = true;
+          newScreen(screen.buttons[i]);
+          displayAll();
+        }
       }
     }
   }
@@ -1102,7 +1109,8 @@ void newScreen(Button b) {
 
     // Briefing Cases
     case 300:
-      screen = new BriefingScreen1();
+      screen = new BriefingScreen();
+      break;
   }
   screen.extra = b.extra;
   if (!mainMenu && screens.size() > 1) {
@@ -1118,6 +1126,7 @@ void newScreen(Button b) {
     menuScreen.setScreen();
   }
   println(screens);
+  println(screen.extra);
 }
 
 // Returns whether int s is the current screen
@@ -1139,7 +1148,7 @@ int[] wordWidths(String[] words, int s) {
 }
 //===================================================//
 //===================================================//
-//================ Next Turn Method =================//
+//================ Next Turn Methods ================//
 //===================================================//
 //===================================================//
 
@@ -1148,22 +1157,16 @@ int[] wordWidths(String[] words, int s) {
 // Postcondition: Values are reset and the events of the turn are set
 void nextTurn() {
   turn++;
+  briefing = new Briefing();
 
-  setDay(calendar);
-  setDay(houseCalendar);
-  setDay(senateCalendar);
-  for (Committee com : houseCommittees)
-  setDay(com.cCalendar);
-  for (Committee com : senateCommittees)
-  setDay(com.cCalendar);
+  setCalendars();
+
+  reactToSpeeches();
+
+  moveBills();
 
 
-  // React to speeches
-  for (int i = 0; i < senate.length; i++)
-  senate[i].listenToSpeech(suppS, agS);
-  for (int i = 0; i < house.length; i++)
-  house[i].listenToSpeech(suppH, agH);
-
+  // reset values for the next turn
   resetForTurn();
 
   // Set up the Briefing
@@ -1172,18 +1175,112 @@ void nextTurn() {
 }
 
 // This moves time forward once each turn
-// Precondition: the current date, in calendar is outdated
-// Postcondition: the day, month, and year are up to date and forward daysPerTurn days
-void setDay(Calendar c) {
-  for (int i = 0; i < daysPerTurn; i++) {// uses the above variable (will be a constant)
-    c.day++;
-    if (c.day > daysInMonth[c.cMonth-1]) {
-      c.day = 1;
-      c.cMonth++;
-      if (c.cMonth > 12) {
-        c.cMonth = 1;
-        c.cYear++;
+// Precondition: The calendars are outdated
+// Postcondition: the day, month, and year are up to date and forward DAYS_PER_TURN days
+void setCalendars(Calendar c) {
+  calendar.setDay();
+  houseCalendar.setDay();
+  senateCalendar.setDay();
+  for (Committee com : houseCommittees) {
+    com.cCalendar.setDay();
+  }
+  for (Committee com : senateCommittees) {
+    com.cCalendar.setDay();
+  }
+}
+
+// React to speeches
+// Precondition: congressmen are set
+// Postcondition: speech reactions are set and a report is made to the briefing
+void reactToSpeeches() {
+  // Senate
+  int balance = 0;
+  for (int i = 0; i < senate.length; i++) {
+    balance += senate[i].listenToSpeech(suppS, agS);
+  }
+  String msg = "Your speech to the Senate was "+getReaction(balance);
+  briefing.addNews(0, msg);
+
+  // House of reps
+  balance = 0;
+  for (int i = 0; i < house.length; i++) {
+    balance += house[i].listenToSpeech(suppH, agH);
+  }
+  msg = "Your speech to the House was "+getReaction(balance);
+  briefing.addNews(0, msg);
+
+  // UN
+
+}
+// returns the reaction given
+// Precondition: no precondition
+// Postcondition: The string that should be added
+String getReaction(int val) {
+  if (val > 10) {
+    return "hugely successful!";
+  }
+  else if (val > 0) {
+    return "mildly successful.";
+  }
+  else if (val < -10) {
+    return "hugely unsuccessful!";
+  }
+  else if (val < 0) {
+    return "mildly unsucessful.";
+  }
+  return "";
+}
+
+// deal with bills each time
+// Precondition: Bills exist
+// Postcondition: All bills have progressed if they had an event and a report is made
+void moveBills() {
+  /* Places for a bill to be:
+      * Bills
+      * houseCommittees[i].cBills - markup, vote
+      * senateCommittees[i].cBills - markup, vote
+      * confrenceComs[i].cBills - markup, vote
+      * hBills - markup, vote
+      * sBills - markup, vote
+      * yourDesk - sign
+      * vetoBills - vote
+  */
+
+  Committee[] coms = {houseCommittees, senateCommittees, conferenceComs};
+
+  for (int i = 0; i < coms.length; i++) {
+    for (Committee c : coms[i]) {
+      for (Bill b : c.cBills) {
+        if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+          // Committee bills:
+          b.committeeVote(i, c.members);
+
+        }
       }
+    }
+  }
+
+  Bill[][] houses = {hBills, sBills};
+
+  for (int i = 0; i < houses.length; i++) {
+    for (Bill b : houses[i]) {
+      if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+        // Chamber bills:
+        b.vote(i, c.members);
+      }
+    }
+  }
+
+  for (Bill b : yourDesk) {
+    if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+      // On your desk bills:
+      briefing.addNews(1, "A bill, called "+b.name+
+      " has passed in Congress and made it to your desk. Decide whether to sign it into law or veto it:");
+    }
+  }
+  for (Bill b : vetoBills) {
+    if (Utils.dateInInterval(bill.date, DAYS_PER_TURN)) {
+      // Vetoed bills:
     }
   }
 }

@@ -14,19 +14,7 @@ static class Utils {
       n += ((int)num.charAt(num.length()-1-i)-(int)'0')*pow(10, i);
     return n*negate;
   }
-  // converts numbers from int to string
-  // precondition: an int num
-  // postcondition: returns a String version of int num
-  static String convertIntToString(int num) {
-    if (num == 0)
-      return "0";
-    String s = "";
-    while (num > 0) {
-      s += num%10;
-      num /= 10;
-    }
-    return reverseString(s);
-  }
+
   // reverses a String
   // precondition: String str
   // postcondition: String str reversed
@@ -37,6 +25,19 @@ static class Utils {
     return s;
   }
 
+  // returns if the date is in the interval given
+  // Precondition: a date in int[] form and an interval in days
+  // Postcondition: returns whether it is in the next interval
+  static boolean dateInInterval(int[] date, int interval) {
+    Calendar c = new Calendar(date[0], date[1], date[2]);
+    for (i = 0; i < interval; i++) {
+      c.setNextDay();
+      if (c.getDate() == date) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // Used for CSV file reading to replace commas
   // Precondition: The String s may have a comma in it marked by its HTML number, &#44;

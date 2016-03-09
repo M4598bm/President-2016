@@ -8,8 +8,11 @@ class Congressman extends Politician {
   int nextElection;// 2018 and every 2 years for all house reps, split in threes for senators
   int ncFunds;// how much money they get from the (D/R)NC
   int house;// 0 if house of reps, 1 if senate
-  ArrayList<Integer> opinions;//each represents bill # index on the floor, less than 33 is nay, more than 66 is yea
   Politician opponent;// Who's running against them
+
+  ArrayList<Integer> opinions;//each represents bill # index on the floor, less than 33 is nay, more than 66 is yea
+  ArrayList<Bill> votedFor;// all bills this congressman has ever voted for
+  ArrayList<Bill> votedAgainst;// all bills this congressman has ever voted against
 
   // Deal related
   ArrayList<Integer> mustVoteFor;//made a deal to vote for these
@@ -145,20 +148,38 @@ class Congressman extends Politician {
   // Listens and reacts to a speech that the president made about bills
   // Precondition: support and against are lists of bills to respond to, party is an important factor
   // Postcondition: If the Congressman likes the president it will align itself, else it will follow the opposite
-  void listenToSpeech(ArrayList<Integer> support, ArrayList<Integer> against) {
+  int listenToSpeech(ArrayList<Integer> support, ArrayList<Integer> against) {
     /*  if you like the pres you like his bills
         if you don't like the pres you don't like his bills
         if you don't like his bills you like him less
         if you like his bills you like him more
     */
-    if (support.size() > 0)
+    int total = 0;
+    int divisor = 0;
+    if (support.size() > 0) {
+      int b4 = opinions.get(support.get(0));
       opinions.set(support.get(0), (int)(opinions.get(support.get(0))+(youApproval-50)/2));
-    if (support.size() > 1)
+      total += opinions.get(support.get(0)) - b4;
+      divisor++;
+    }
+    if (support.size() > 1) {
+      int b4 = opinions.get(support.get(1));
       opinions.set(support.get(1), (int)(opinions.get(support.get(1))+(youApproval-50)/2));
-    if (against.size() > 0)
+      total += opinions.get(support.get(1)) - b4;
+      divisor++;
+    }
+    if (against.size() > 0) {
+      int b4 = opinions.get(against.get(0));
       opinions.set(against.get(0), (int)(opinions.get(against.get(0))-(youApproval-50)/2));
-    if (against.size() > 1)
+      total += b4 - opinions.get(against.get(0));
+      divisor++;
+    }
+    if (against.size() > 1) {
+      int b4 = opinions.get(against.get(1));
       opinions.set(against.get(1), (int)(opinions.get(against.get(1))-(youApproval-50)/2));
+      total += b4 - opinions.get(against.get(1));
+      divisor++;
+    }
 
     if (support.size() > 0) {// if this.soc = 70 and bill.avgsoc = 100 it should start to go down
       youApproval -= pow(abs(socialism - bills.get(support.get(0)).avgSoc())*.01, 2)*5-.45;
@@ -176,6 +197,9 @@ class Congressman extends Politician {
       youApproval += pow(abs(socialism - bills.get(against.get(1)).avgSoc())*.01, 2)*5-.45;
       youApproval += pow(abs(liberalism - bills.get(against.get(1)).avgLib())*.01, 2)*5-.45;
     }
+
+    // return the average
+    return total/divisor;
   }
 
   // Vote on a bill

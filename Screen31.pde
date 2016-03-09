@@ -73,10 +73,6 @@ class Screen31 extends Screen {
       */
 
 
-
-
-    */
-
   // toString method
   // Precondition: none
   // Postcondition: returns screen number

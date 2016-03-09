@@ -6,8 +6,7 @@ class Bill {
   int[] constitutional;// Each idea has constitutional safety, 0-100
   int[] percentages;// amount of force put on each one
   String name;
-  String billNumberH;
-  String billNumberS;
+  String[] billNumbers;// [0] is House, [1] is Senate
   int committee;
   Congressman sponsor;
   boolean presBacked;// The president created this bill
@@ -49,6 +48,7 @@ class Bill {
   - In the House riders are not allowed but in the Senate they are, and sometimes filibusters destroy a bill
   - If it is passed it goes to the other house, and if the bills are different in each house it goes to the Conference Committee to merge both.
   - Then it goes to the president
+  - If it's vetoed it gets an override vote of 2/3rds
 
   */
 
@@ -180,21 +180,48 @@ class Bill {
     laws.add(this);
   }
 
-
-  void markup(int chamber) {
-
+  // Precondition: chamber - 0 is house, 1 is senate, 2 is conference committee
+  // Postcondition: edits the bill slightly in committee and returns the result described in a String
+  String markup(int chamber, Congressman[] members) {
+    return "";
   }
-  void committeeVote(int chamber) {
 
+  String committeeVote(int chamber, Congressman[] members) {
+    markup(chamber, members);
+    return "";
   }
-  void amend(int chamber) {
-
+  String amend(int chamber) {
+    return "";
   }
-  void vote(int chamber) {
 
+  // holds a vote in a chamber of Congress
+  // Precondition: chamber of the house the vote is in, members voting
+  // Postcondition: the bill is either passed or voted down, and returns a String response
+  String vote(int chamber, Congressman[] members) {
+    String[] names = {"HR", "S"};
+    String[] result = {" passed", " was voted down"};
+    markup(chamber, members);
+    int yea = 0;
+    int nay = 0;
+    for (Congressman c : members) {
+      if (true/*they are present*/) {
+        if (true/*they vote for it*/) {
+          yea++;
+          c.votedFor.add(this);
+        }
+        else if (true/*they vote against it*/) {
+          nay++;
+          c.votedAgainst.add(this);
+        }
+      }
+    }
+    return
+    names[chamber]+billNumbers[chamber]+": "+name+result[constrain(nay-yea, 0, 1)]+" in the "+chambers[chamber]+" with a vote of "+yea+"-"+nay".";
   }
-  void overrideVeto() {
 
+  
+  String overrideVote() {
+    return "";
   }
 
 

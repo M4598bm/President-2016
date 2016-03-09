@@ -218,6 +218,18 @@ class MenuActions {
     }
   }
 
+  // Chooses leadership based on qualifications
+  // Precondition: This is temp
+  // Postcondition: Leadership set based on loyalty and age
+  void setLeadershipSorting() {
+
+    // Sort by age, then choose the people in order randomly based on loyalty
+
+    // if (random(100-loyalty) < 1 && party is right && leadership != 0) { set the leadership }
+
+  }
+
+
   // Chooses the leadership in Congress
   // Precondition: Congress is otherwise set
   // Postcondition: Speaker, whips, majority leader and minority leader set

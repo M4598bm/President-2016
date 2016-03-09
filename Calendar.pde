@@ -1,5 +1,5 @@
-static String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-static String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+static String[] DAYS = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 static int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 class Calendar {
@@ -19,6 +19,21 @@ class Calendar {
     year = cYear = 17;// year is the display year, cYear is game current year
     month = cMonth = 1;
     day = 22;
+
+    events = new Table();
+    events.addColumn("day");
+    events.addColumn("month");
+    events.addColumn("year");
+    events.addColumn("event");
+  }
+
+  // Constructor
+  // Precondition: year month and day to make the first of the calendar
+  // Postcondition: creates the object and sets year month and day
+  Calendar(int y, int m, int d) {
+    year = cYear = y;// year is the display year, cYear is game current year
+    month = cMonth = m;
+    day = d;
 
     events = new Table();
     events.addColumn("day");
@@ -71,8 +86,8 @@ class Calendar {
       nYear = year+1;
     }
     else {
-      lMonth = months[month-2];
-      nMonth = months[month];
+      lMonth = MONTHS[month-2];
+      nMonth = MONTHS[month];
       lYear = nYear = year;
     }
 
@@ -109,7 +124,7 @@ class Calendar {
     for (int i = 1; i <= 7; i++) {
       if (i != 7)
         line(width/6+width*2/21*i, height/6, width/6+width*2/21*i, height*5/6);
-      text(days[i-1], width/6-width/21+width*2/21*i, height/6+height/21);
+      text(DAYS[i-1], width/6-width/21+width*2/21*i, height/6+height/21);
     }
   }
 
@@ -127,7 +142,7 @@ class Calendar {
     int monthCount = 1;
     int dayCount = 1;
     textAlign(CENTER, BOTTOM);
-    text(months[month-1] + " 20"+year, width/2, height/6-20);
+    text(MONTHS[month-1] + " 20"+year, width/2, height/6-20);
     textAlign(CENTER, CENTER);
     while (yearCount != year || monthCount != month || dayCount < realDaysInMonth(yearCount)[month-1]) {
       if (yearCount == year && monthCount == month) {
@@ -178,6 +193,39 @@ class Calendar {
     // =============================================
   }
 
+  // get the next day after the one inputed
+  // Precondition: the day inputed is a real day
+  // Postcondition: the next day exists (exception for doomsday?)
+  int[] getNextDay(int day, int month, int year) {
+    day++;
+    if (day > realDaysInMonth(year)[month-1]) {
+      day = 1;
+      month++;
+      if (month > 12) {
+        month = 1;
+        year++;
+      }
+    }
+    int[] date = {day, month, year};
+    return date;
+  }
+
+  // sets to the next day
+  // Precondition: no precondition
+  // Postcondition: the calendar contains the next day
+  void setNextDay() {
+    int[] nDay = getNextDay(day, month, year);
+    day = nDay[0];
+    month = cMonth = nDay[1];
+    year = cYear = nDay[2];
+  }
+  // returns the current date
+  // Precondition: no precondition
+  // Postcondition: the current day in an array
+  int[] getDate() {
+    return {day, month, year};
+  }
+
   // add an event
   // Precondition: day month year is the date, and the event is a string that will be displayed
   // Postcondition: the date and event is stored in a table
@@ -213,5 +261,22 @@ class Calendar {
         changeMonth(1);
     }
     displayAll();
+  }
+
+  // This moves time forward once each turn
+  // Precondition: the current date is outdated
+  // Postcondition: the day, month, and year are up to date and forward DAYS_PER_TURN days
+  void setDay() {
+    for (int i = 0; i < DAYS_PER_TURN; i++) {// uses the above variable (will be a constant)
+      day++;
+      if (day > daysInMonth[cMonth-1]) {
+        day = 1;
+        cMonth++;// this may be the wrong thing being set...
+        if (cMonth > 12) {
+          cMonth = 1;
+          cYear++;
+        }
+      }
+    }
   }
 }

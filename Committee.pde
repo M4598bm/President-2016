@@ -48,7 +48,7 @@ class Committee {
   // puts a bill on the calendar
   // Precondition: Bill b is being considered.
   // Postcondition: The committee chairperson and ranking member set it on the calendar
-  void putOnCalendar(Bill b) {
+  boolean putOnCalendar(Bill b, String activity) {
     float soc = b.avgSoc();
     float lib = b.avgLib();
     // Things that can happen:
@@ -64,11 +64,25 @@ class Committee {
     if (/* the chairperson wants it */true) {
       if (/* ranking member wants it*/true) {
         if (/* no background deals */true) {
-          //cCalendar;
+
+          int[] date = {cCalendar.day, cCalendar.month, cCalendar.year};
+          for (int i = 0; i < DAYS_PER_TURN; i++) {
+            date = cCalendar.getNextDay(date[0], date[1], date[2]);
+          }
+          boolean done = false;
+          while (!done) {
+            if (/*Congress is in session*/true) {
+              if (/* more likely the more the people want it*/true) {
+                cCalendar.addEvent(date[0], date[1], date[2], b.name+" "+activity);
+                return true;
+              }
+              date = cCalendar.getNextDay(date[0], date[1], date[2]);
+            }
+          }
         }
       }
     }
-
+    return false;
 
   }
 
