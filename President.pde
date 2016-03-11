@@ -7,7 +7,7 @@
 // Static Variables
 static int DAYS_PER_TURN = 7;// not sure what this should be yet
 
-static final chambers = {"House", "Senate"};
+static final String[] chambers = {"House", "Senate", "Conference Committee"};
 
 static final color hLColor = #FFFF14;// Highlighted text box color
 
@@ -47,19 +47,21 @@ int approval;// national polling approval of you
 boolean houseSpeech;// have you made a speech to the house this turn?
 boolean senateSpeech;// have you made a speech to the senate this turn?
 
-ArrayList<ExecutiveOrder> executiveOrders;// all executive orders signed
+ExecutiveOrder[] executiveOrders;// all executive orders signed
 ArrayList<Bill> bills;// all bills created at the moment
-ArrayList<Bill> hBills;// bills in the house
-ArrayList<Bill> sBills;// bills in the senate
-ArrayList<Bill> yourDesk;// bills on your desk
-ArrayList<Bill> laws;// all laws passed
+Bill[] hBills;// bills in the house
+Bill[] sBills;// bills in the senate
+Bill[] yourDesk;// bills on your desk
+Bill[] vetoBills;// bills ready for override in congress
+Bill[] deadBills;// bills that died somehow, stored here
+Bill[] laws;// all laws passed
 Congressman[] house;// array of congressmen in the house
 Congressman[] senate;// array of congressmen in the senate
 Committee[] houseCommittees;// array of committees in the house
 Committee[] senateCommittees;// array of committees in the senate
-ArrayList<Committee> conferenceComs;// conference committee that finalizes bills
+Committee[] conferenceComs;// conference committees that finalize bills
 Secretary[] cabinet;// array of secretaries in your cabinet
-SCJustice[] scotus;// array of justices in the Supreme Court (will I need this at alL?)
+SCJustice[] scotus;// array of justices in the Supreme Court
 
 // Temporary things
 ExecutiveOrder tempOrder;// current ExecutiveOrder being drafted and floated
@@ -679,7 +681,7 @@ void mouseClicked28(float mX, float mY) {
   if (screen.extra == 0) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height*5/6) {
-        for (int i = 0; i < executiveOrders.size(); i++)
+        for (int i = 0; i < executiveOrders.length; i++)
         if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
           screen.chosen = i;
           screen.extra = 1;
@@ -733,16 +735,16 @@ void mouseClicked30(float mX, float mY) {
   if (screen.chosen == -1) {
     if (mX > width/6 && mX < width*5/6) {
       if (mY > height/6 && mY < height*5/6) {
-        ArrayList<Bill> billList = new ArrayList<Bill>();
+        Bill[] billList = new Bill[0];
         if (screen.extra == 0) {// committee
           for (Committee c : houseCommittees) {
             for (Bill b : c.cBills) {
-              billList.add(b);
+              billList = (Bill[])append(billList, b);
             }
           }
           for (Committee c : senateCommittees) {
             for (Bill b : c.cBills) {
-              billList.add(b);
+              billList = (Bill[])append(billList, b);
             }
           }
         }
@@ -754,14 +756,14 @@ void mouseClicked30(float mX, float mY) {
         }
         else if (screen.extra == 3) {// Conference Committee
           for (Committee c : conferenceComs) {
-            billList.add(c.cBills.get(0));
+            billList = (Bill[])append(billList, c.cBills.get(0));
           }
         }
         else if (screen.extra == 4) {// Your Desk
           billList = yourDesk;
         }
 
-        for (int i = 0; i < billList.size(); i++) {
+        for (int i = 0; i < billList.length; i++) {
           if (mY > height/6+24*i+screen.scrollX && mY < height/6+24*i+screen.scrollX+24) {
             screen.chosen = i;
             screen.setScreen();
@@ -1133,7 +1135,7 @@ void newScreen(Button b) {
 // Precondition: An int to test if it's the currentScreen
 // Postcondition: A boolean true of false whether it is
 boolean isCurrScreen(int s) {
-  return screen.toString().equals(Utils.convertIntToString(s));
+  return screen.toString().equals(str(s));
 }
 
 // Returns an array with the widths of words in String[] words
@@ -1177,7 +1179,7 @@ void nextTurn() {
 // This moves time forward once each turn
 // Precondition: The calendars are outdated
 // Postcondition: the day, month, and year are up to date and forward DAYS_PER_TURN days
-void setCalendars(Calendar c) {
+void setCalendars() {
   calendar.setDay();
   houseCalendar.setDay();
   senateCalendar.setDay();
@@ -1246,27 +1248,29 @@ void moveBills() {
       * vetoBills - vote
   */
 
-  Committee[] coms = {houseCommittees, senateCommittees, conferenceComs};
+  Committee[][] comArrays = {houseCommittees, senateCommittees, conferenceComs};
 
-  for (int i = 0; i < coms.length; i++) {
-    for (Committee c : coms[i]) {
-      for (Bill b : c.cBills) {
-        if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
-          // Committee bills:
-          b.committeeVote(i, c.members);
-
+  for (int i = 0; i < comArrays.length; i++) {
+  //  for (Committee[] coms : comArrays[i]) {
+      for (Committee c : comArrays[i]) {
+        for (Bill b : c.cBills) {
+          if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+            // Committee bills:
+            briefing.addNews(1, b.vote(i, c.name, c.members));
+  //        }
         }
       }
     }
   }
 
   Bill[][] houses = {hBills, sBills};
+  Congressman[][] congress = {house, senate};
 
   for (int i = 0; i < houses.length; i++) {
     for (Bill b : houses[i]) {
       if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
         // Chamber bills:
-        b.vote(i, c.members);
+        briefing.addNews(1, b.vote(i, null, congress[i]));
       }
     }
   }
@@ -1274,13 +1278,15 @@ void moveBills() {
   for (Bill b : yourDesk) {
     if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
       // On your desk bills:
-      briefing.addNews(1, "A bill, called "+b.name+
-      " has passed in Congress and made it to your desk. Decide whether to sign it into law or veto it:");
+      briefing.addNews(1, "A bill, "+b.name+
+      ", has passed in Congress and made it to your desk. Decide whether to sign it into law or veto it:");
     }
   }
   for (Bill b : vetoBills) {
-    if (Utils.dateInInterval(bill.date, DAYS_PER_TURN)) {
+    if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
       // Vetoed bills:
+      briefing.addNews(1, "A bill, "+b.name+
+      ", ");
     }
   }
 }

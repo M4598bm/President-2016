@@ -196,17 +196,17 @@ class Calendar {
   // get the next day after the one inputed
   // Precondition: the day inputed is a real day
   // Postcondition: the next day exists (exception for doomsday?)
-  int[] getNextDay(int day, int month, int year) {
-    day++;
-    if (day > realDaysInMonth(year)[month-1]) {
-      day = 1;
-      month++;
-      if (month > 12) {
-        month = 1;
-        year++;
+  int[] getNextDay(int d, int m, int y) {
+    d++;
+    if (d > realDaysInMonth(y)[m-1]) {
+      d = 1;
+      m++;
+      if (m > 12) {
+        m = 1;
+        y++;
       }
     }
-    int[] date = {day, month, year};
+    int[] date = {d, m, y};
     return date;
   }
 
@@ -223,7 +223,8 @@ class Calendar {
   // Precondition: no precondition
   // Postcondition: the current day in an array
   int[] getDate() {
-    return {day, month, year};
+    int[] date = {day, month, year};
+    return date;
   }
 
   // add an event
