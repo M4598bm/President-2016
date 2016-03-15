@@ -64,16 +64,16 @@ class Screen30 extends Screen {
     textAlign(LEFT, TOP);
     fill(0);
     int x = 0;
-    ArrayList<Bill> billList = new ArrayList<Bill>();
+    Bill[] billList = new Bill[0];
     if (extra == 0) {// committee
       for (Committee c : houseCommittees) {
         for (Bill b : c.cBills) {
-          billList.add(b);
+          billList = (Bill[])append(billList, b);
         }
       }
       for (Committee c : senateCommittees) {
         for (Bill b : c.cBills) {
-          billList.add(b);
+          billList = (Bill[])append(billList, b);
         }
       }
     }
@@ -85,27 +85,27 @@ class Screen30 extends Screen {
     }
     else if (extra == 3) {// Conference Committee
       for (Committee c : conferenceComs) {
-        billList.add(c.cBills.get(0));
+          billList = (Bill[])append(billList, c.cBills.get(0));
       }
     }
     else if (extra == 4) {// Your Desk
       billList = yourDesk;
     }
 
-    for (int i = 0; i < billList.size(); i++) {
+    for (int i = 0; i < billList.length; i++) {
       if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
         if (i == chosen) {
           fill(hLColor);
           rect(width/6, height/6+24*i+scrollX, width*4/6, 24);
           fill(0);
         }
-        text(billList.get(i).name, width/6+5, height/6+24*i+scrollX);
+        text(billList[i].name, width/6+5, height/6+24*i+scrollX);
       }
       if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
         line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
     }
 
-    displayScrollBar(billList.size(), height*2/3);
+    displayScrollBar(billList.length, height*2/3);
     popUpWindow();
     displayButtonsSliders();
   }

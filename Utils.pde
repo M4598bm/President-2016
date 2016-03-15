@@ -25,19 +25,6 @@ static class Utils {
     return s;
   }
 
-  // returns if the date is in the interval given
-  // Precondition: a date in int[] form and an interval in days
-  // Postcondition: returns whether it is in the next interval
-  static boolean dateInInterval(int[] date, int interval) {
-    Calendar c = new Calendar(date[0], date[1], date[2]);
-    for (i = 0; i < interval; i++) {
-      c.setNextDay();
-      if (c.getDate() == date) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   // Used for CSV file reading to replace commas
   // Precondition: The String s may have a comma in it marked by its HTML number, &#44;

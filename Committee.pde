@@ -1,3 +1,8 @@
+final static String[] committeeEvents = {
+  " markupvote",
+
+};
+
 class Committee {
   String name;
   Congressman[] members;
@@ -46,9 +51,9 @@ class Committee {
   }
 
   // puts a bill on the calendar
-  // Precondition: Bill b is being considered.
+  // Precondition: Bill b is being considered
   // Postcondition: The committee chairperson and ranking member set it on the calendar
-  boolean putOnCalendar(Bill b, String activity) {
+  boolean putOnCalendar(Bill b) {
     float soc = b.avgSoc();
     float lib = b.avgLib();
     // Things that can happen:
@@ -73,9 +78,12 @@ class Committee {
           while (!done) {
             if (/*Congress is in session*/true) {
               if (/* more likely the more the people want it*/true) {
-                cCalendar.addEvent(date[0], date[1], date[2], b.name+" "+activity);
+                // All the stuff that each alive bill needs to have:
+                b.addOpinions();
+                cBills.add(b);// the bill made it!
+                cCalendar.addEvent(date[0], date[1], date[2], b.name+committeeEvents);
                 return true;
-              }
+              }// else {
               date = cCalendar.getNextDay(date[0], date[1], date[2]);
             }
           }

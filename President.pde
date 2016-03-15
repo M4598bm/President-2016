@@ -8,7 +8,11 @@
 static int DAYS_PER_TURN = 7;// not sure what this should be yet
 
 static final String[] chambers = {"House", "Senate", "Conference Committee"};
+static final String[] congrEvents = {
+  " markupvote",
+}
 
+// Colors
 static final color hLColor = #FFFF14;// Highlighted text box color
 
 
@@ -1148,6 +1152,19 @@ int[] wordWidths(String[] words, int s) {
   ls[i] = (int)textWidth(words[i]);
   return ls;
 }
+// returns if the date is in the interval given
+// Precondition: a date in int[] form and an interval in days
+// Postcondition: returns whether it is in the next interval
+boolean dateInInterval(int[] date, int interval) {
+  Calendar c = new Calendar(date[0], date[1], date[2]);
+  for (int i = 0; i < interval; i++) {
+    c.setNextDay();
+    if (c.getDate() == date) {
+      return true;
+    }
+  }
+  return false;
+}
 //===================================================//
 //===================================================//
 //================ Next Turn Methods ================//
@@ -1180,14 +1197,14 @@ void nextTurn() {
 // Precondition: The calendars are outdated
 // Postcondition: the day, month, and year are up to date and forward DAYS_PER_TURN days
 void setCalendars() {
-  calendar.setDay();
-  houseCalendar.setDay();
-  senateCalendar.setDay();
+  calendar.setDayNewTurn();
+  houseCalendar.setDayNewTurn();
+  senateCalendar.setDayNewTurn();
   for (Committee com : houseCommittees) {
-    com.cCalendar.setDay();
+    com.cCalendar.setDayNewTurn();
   }
   for (Committee com : senateCommittees) {
-    com.cCalendar.setDay();
+    com.cCalendar.setDayNewTurn();
   }
 }
 
@@ -1196,20 +1213,23 @@ void setCalendars() {
 // Postcondition: speech reactions are set and a report is made to the briefing
 void reactToSpeeches() {
   // Senate
-  int balance = 0;
-  for (int i = 0; i < senate.length; i++) {
-    balance += senate[i].listenToSpeech(suppS, agS);
+  if (suppS.size() != 0 && agS.size() != 0) {
+    int balance = 0;
+    for (int i = 0; i < senate.length; i++) {
+      balance += senate[i].listenToSpeech(suppS, agS);
+    }
+    String msg = "Your speech to the Senate was "+getReaction(balance);
+    briefing.addNews(0, msg);
   }
-  String msg = "Your speech to the Senate was "+getReaction(balance);
-  briefing.addNews(0, msg);
-
   // House of reps
-  balance = 0;
-  for (int i = 0; i < house.length; i++) {
-    balance += house[i].listenToSpeech(suppH, agH);
+  if (suppH.size() != 0 && agH.size() != 0) {
+    int balance = 0;
+    for (int i = 0; i < house.length; i++) {
+      balance += house[i].listenToSpeech(suppH, agH);
+    }
+    String msg = "Your speech to the House was "+getReaction(balance);
+    briefing.addNews(0, msg);
   }
-  msg = "Your speech to the House was "+getReaction(balance);
-  briefing.addNews(0, msg);
 
   // UN
 
@@ -1251,13 +1271,11 @@ void moveBills() {
   Committee[][] comArrays = {houseCommittees, senateCommittees, conferenceComs};
 
   for (int i = 0; i < comArrays.length; i++) {
-  //  for (Committee[] coms : comArrays[i]) {
-      for (Committee c : comArrays[i]) {
-        for (Bill b : c.cBills) {
-          if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
-            // Committee bills:
-            briefing.addNews(1, b.vote(i, c.name, c.members));
-  //        }
+    for (Committee c : comArrays[i]) {
+      for (Bill b : c.cBills) {
+        if (dateInInterval(b.date, DAYS_PER_TURN)) {
+          // Committee bills:
+          briefing.addNews(1, b.vote(i, c.name, c.members));
         }
       }
     }
@@ -1268,7 +1286,7 @@ void moveBills() {
 
   for (int i = 0; i < houses.length; i++) {
     for (Bill b : houses[i]) {
-      if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+      if (dateInInterval(b.date, DAYS_PER_TURN)) {
         // Chamber bills:
         briefing.addNews(1, b.vote(i, null, congress[i]));
       }
@@ -1276,14 +1294,14 @@ void moveBills() {
   }
 
   for (Bill b : yourDesk) {
-    if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+    if (dateInInterval(b.date, DAYS_PER_TURN)) {
       // On your desk bills:
       briefing.addNews(1, "A bill, "+b.name+
       ", has passed in Congress and made it to your desk. Decide whether to sign it into law or veto it:");
     }
   }
   for (Bill b : vetoBills) {
-    if (Utils.dateInInterval(b.date, DAYS_PER_TURN)) {
+    if (dateInInterval(b.date, DAYS_PER_TURN)) {
       // Vetoed bills:
       briefing.addNews(1, "A bill, "+b.name+
       ", ");
@@ -1291,10 +1309,31 @@ void moveBills() {
   }
 }
 
+// handles the new bills that come into play this turn
+// Precondition: new turn
+// Postcondition: the tempBill is dealt with and the computer creates new bills
+void newBills() {
+  // do something with tempBill
+  boolean onCalendar = false;
+  if (tempBill.originChamber == 0) {
+    onCalendar = houseCommittees[tempBill.committee].putOnCalendar(tempBill);
+  }
+  else /** (originChamber == 1) */ {
+    onCalendar = senateCommittees[tempBill.committee].putOnCalendar(tempBill);
+  }
+
+  if (onCalendar) {
+    
+  }
+}
+
+
 // handles any resetting required in a new turn
 // Precondition: new turn
 // Postcondition: values are reset
 void resetForTurn() {
+  tempBill = null;
+
   suppH = new ArrayList<Integer>();
   suppS = new ArrayList<Integer>();
   agH = new ArrayList<Integer>();

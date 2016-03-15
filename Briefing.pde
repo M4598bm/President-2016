@@ -72,8 +72,8 @@ class Briefing {
   boolean addNews(int t, String msg) {
     if (t >= 0 && t < titles.length) {
       TableRow r = news.addRow();
-      r.addString("type", titles[t]);
-      r.addString("message", msg);
+      r.setString("type", titles[t]);
+      r.setString("message", msg);
       return true;
     }
     return false;

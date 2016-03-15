@@ -230,20 +230,20 @@ class Calendar {
   // add an event
   // Precondition: day month year is the date, and the event is a string that will be displayed
   // Postcondition: the date and event is stored in a table
-  void addEvent(int day, int month, int year, String event) {
+  void addEvent(int d, int m, int y, String event) {
     TableRow r = events.addRow();
-    r.setInt("day", day);
-    r.setInt("month", month);
-    r.setInt("year", year);
+    r.setInt("day", d);
+    r.setInt("month", m);
+    r.setInt("year", y);
     r.setString("event", event);
   }
   // returns what events there are on that Day
   // Precondition: day month and year testing for
   // Postcondition: ArrayList of events on that day
-  ArrayList<String> getEventsOn(int day, int month, int year) {
+  ArrayList<String> getEventsOn(int d, int m, int y) {
     ArrayList<String> eventList = new ArrayList<String>();
     for (TableRow r: events.rows()) {
-      if (r.getInt(0) == day && r.getInt(1) == month && r.getInt(2) == year) {
+      if (r.getInt(0) == d && r.getInt(1) == m && r.getInt(2) == y) {
         eventList.add(r.getString(3));
       }
     }
@@ -267,17 +267,40 @@ class Calendar {
   // This moves time forward once each turn
   // Precondition: the current date is outdated
   // Postcondition: the day, month, and year are up to date and forward DAYS_PER_TURN days
-  void setDay() {
+  void setDayNewTurn() {
     for (int i = 0; i < DAYS_PER_TURN; i++) {// uses the above variable (will be a constant)
       day++;
       if (day > daysInMonth[cMonth-1]) {
         day = 1;
-        cMonth++;// this may be the wrong thing being set...
+        cMonth++;
         if (cMonth > 12) {
           cMonth = 1;
           cYear++;
         }
       }
     }
+  }
+
+  // adds the events on one calendar to this one
+  // Precondition: Calendar c
+  // Postcondition: Calendar c's events are added to this one if they don't exist here
+  void syncFrom(Calendar c) {
+    Table e = c.events;
+    Table newE = events;
+    for (TableRow oth : e) {
+      boolean notThere = true;
+      for (TableRow th : events) {
+        if (oth.getInt(0) == th.getInt(0)
+          && oth.getInt(1) == th.getInt(1)
+          && oth.getInt(2) == th.getInt(2)
+          && oth.getString(3) == th.getString(3)) {
+          notThere = false;
+        }
+      }
+      if (notThere) {
+        newE.addRow(oth);
+      }
+    }
+    events = newE;
   }
 }

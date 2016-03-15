@@ -147,7 +147,7 @@ class Congressman extends Politician {
 
   // Listens and reacts to a speech that the president made about bills
   // Precondition: support and against are lists of bills to respond to, party is an important factor
-  // Postcondition: If the Congressman likes the president it will align itself, else it will follow the opposite
+  // Postcondition: Returns average reaction to the speech overall, positive or negative.
   int listenToSpeech(ArrayList<Integer> support, ArrayList<Integer> against) {
     /*  if you like the pres you like his bills
         if you don't like the pres you don't like his bills
@@ -199,7 +199,10 @@ class Congressman extends Politician {
     }
 
     // return the average
-    return total/divisor;
+    if (divisor != 0) {
+      return total/divisor;
+    }
+    return 0;
   }
 
   // Vote on a bill

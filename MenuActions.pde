@@ -46,6 +46,8 @@ class MenuActions {
 
     calcApproval();
 
+    setNewScreen();
+
     // Temp
     //calendar.addEvent(31, 1, 17, "Bill1 goes to House floor");
     //calendar.addEvent(31, 1, 17, "Bill2 goes to Senate floor");
@@ -83,8 +85,6 @@ class MenuActions {
   void createSingleClasses() {
     println("createSingleClasses");
     // one of each class things
-    screen = new Screen0();
-    screen.setScreen();
     menuScreen = new MenuScreen();
     calendar = new Calendar();
     houseCalendar = new Calendar();
@@ -92,20 +92,19 @@ class MenuActions {
     fedBudget = new FedBudget();
     ideas = new Ideas();
 
-    executiveOrders = new ArrayList<ExecutiveOrder>();
+    executiveOrders = new ExecutiveOrder[0];
     bills = new ArrayList<Bill>();
-    hBills = new ArrayList<Bill>();
-    sBills = new ArrayList<Bill>();
-    yourDesk = new ArrayList<Bill>();
-    laws = new ArrayList<Bill>();
+    hBills = new Bill[0];
+    sBills = new Bill[0];
+    yourDesk = new Bill[0];
+    vetoBills = new Bill[0];
+    deadBills = new Bill[0];
+    laws = new Bill[0];
     house = new Congressman[435];
     senate = new Congressman[100];
 
     cabinet = new Secretary[15];
     scotus = new SCJustice[9];
-
-    screens = new ArrayList<Screen>();
-    screens.add(screen);
   }
 
   // Sets other values that need to be set
@@ -408,7 +407,7 @@ class MenuActions {
     Table h = loadTable("housecommittees.csv", "header");
     Table s = loadTable("senatecommittees.csv", "header");
 
-    conferenceComs = new ArrayList<Committee>();
+    conferenceComs = new Committee[0];
     houseCommittees = new Committee[h.getRowCount()];
     senateCommittees = new Committee[s.getRowCount()];
 
@@ -449,6 +448,20 @@ class MenuActions {
   void calcApproval() {
     println("calcApproval");
     approval = 50;// Temporary, eventually there will be a calculation here.
+  }
+
+  // Creates the starting screen in the game
+  // Precondition: The whole new game is set up
+  // Poscondition: The screen is set to a new game screen
+  void setNewScreen() {
+    // Default screen that it starts with atm
+    screen = new Screen0();
+    // ======================================
+
+    screen.setScreen();
+
+    screens = new ArrayList<Screen>();
+    screens.add(screen);
   }
 
 }

@@ -61,7 +61,7 @@ class Screen12 extends Screen {
 
     textSize(30);
     textAlign(CENTER, CENTER);
-    text("Find a department for most of the bill", width/2, height/6+25);
+    text("Find a committee for the bill", width/2, height/6+25);
 
   }
 

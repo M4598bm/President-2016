@@ -1,6 +1,7 @@
 class Screen0 extends Screen {
-
   // Main Screen of the game //
+
+  String msg = "";
 
   // toString method
   // Precondition: none
@@ -47,22 +48,20 @@ class Screen0 extends Screen {
   void extraActions() {
     if (extra == 1) {// new turn
       nextTurn();
+      msg = "Turn "+turn+": "+MONTHS[calendar.cMonth]+" "+calendar.day+", "+calendar.cYear;
     }
     else if (extra == 2) {// federal budget
-      for (int i = 0; i < sliders.length; i++)
+      for (int i = 0; i < sliders.length; i++) {
         fedBudget.proposedFunding[i] = sliders[i].value;
+      }
       fedBudget.updatePropExpense();
+      msg = "Federal budget updated";
     }
     else if (extra == 3) {// new bill
       bills.add(tempBill);
-      if (tempBill.originChamber == 0) {
-        houseCommittees[tempBill.committee].cBills.add(tempBill);
-      }
-      else {
-        senateCommittees[tempBill.committee].cBills.add(tempBill);
-      }
-      tempBill.addOpinions();
-      tempBill = null;
+      Table t = loadTable("newssources.csv", "header");
+      String s = t.getRow((int)random(t.getRowCount())).getString(0);
+      msg = s+" reports: 'New bill, "+tempBill.name+", is supported by the President. A draft of the bill is expected next week.'";
     }
     else if (extra == 4) {// party budget
 
@@ -71,16 +70,21 @@ class Screen0 extends Screen {
     else if (extra == 10) {// speechwriting house
       suppH = d1;
       agH = d2;
+      msg = "Policy speech to the House updated.";
     }
     else if (extra == 11) {// speechwriting senate
       suppS = d1;
       agS = d2;
+      msg = "Policy speech to the Senate updated.";
     }
 
     else if (extra == 29) {// new executive order
-      executiveOrders.add(tempOrder);
+      executiveOrders = (ExecutiveOrder[])append(executiveOrders, tempOrder);
       tempOrder = new ExecutiveOrder();
       tempOrder.president = "you";
+      Table t = loadTable("newssources.csv", "header");
+      String s = t.getRow((int)random(t.getRowCount())).getString(0);
+      msg = s+" reports: 'New Executive Order, "+tempOrder.name+", expected to be signed next week.'";
     }
     // ============================
     // ============================

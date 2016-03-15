@@ -41,14 +41,14 @@ class Screen28 extends Screen {
       textAlign(LEFT, TOP);
       fill(0);
       textSize(20);
-      for (int i = 0; i < executiveOrders.size(); i++) {
+      for (int i = 0; i < executiveOrders.length; i++) {
         if (height/6+24*i+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6) {
-          text(executiveOrders.get(i).name, width/6+5, height/6+24*i+scrollX);
+          text(executiveOrders[i].name, width/6+5, height/6+24*i+scrollX);
         }
         if (height/6+24*(i+1)+scrollX >= height/6 && height/6+24*(i+1)+scrollX <= height*5/6)
           line(width/6, height/6+24*(i+1)+scrollX, width*5/6, height/6+24*(i+1)+scrollX);
       }
-      displayScrollBar(executiveOrders.size(), height*5/6);
+      displayScrollBar(executiveOrders.length, height*5/6);
     }
     else {// extra = 1
       fill(255);
@@ -56,7 +56,7 @@ class Screen28 extends Screen {
       fill(0);
       textAlign(CENTER, TOP);
       textSize(20);
-      text(executiveOrders.get(chosen).name, width/2, height/6);
+      text(executiveOrders[chosen].name, width/2, height/6);
     }
   }
 
