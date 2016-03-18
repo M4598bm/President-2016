@@ -10,7 +10,7 @@ static int DAYS_PER_TURN = 7;// not sure what this should be yet
 static final String[] chambers = {"House", "Senate", "Conference Committee"};
 static final String[] congrEvents = {
   " markupvote",
-}
+};
 
 // Colors
 static final color hLColor = #FFFF14;// Highlighted text box color
@@ -429,6 +429,7 @@ boolean mouseClickedButton(float mX, float mY) {
       }
     }
   }
+
   return done;
 }
 
@@ -1165,180 +1166,21 @@ boolean dateInInterval(int[] date, int interval) {
   }
   return false;
 }
-//===================================================//
-//===================================================//
-//================ Next Turn Methods ================//
-//===================================================//
-//===================================================//
 
 // This method progresses the game by setting up the next turn.
 // Precondition: The Next Turn button has been pressed, and values need to be reset
 // Postcondition: Values are reset and the events of the turn are set
 void nextTurn() {
-  turn++;
-  briefing = new Briefing();
+    turn++;
+    briefing = new Briefing();
 
-  setCalendars();
+    briefing.nextTurn();
 
-  reactToSpeeches();
-
-  moveBills();
-
-
-  // reset values for the next turn
-  resetForTurn();
-
-  // Set up the Briefing
-  newScreen(new Button(300));
-  displayAll();
+    // Set up the Briefing
+    newScreen(new Button(300));
+    displayAll();
 }
 
-// This moves time forward once each turn
-// Precondition: The calendars are outdated
-// Postcondition: the day, month, and year are up to date and forward DAYS_PER_TURN days
-void setCalendars() {
-  calendar.setDayNewTurn();
-  houseCalendar.setDayNewTurn();
-  senateCalendar.setDayNewTurn();
-  for (Committee com : houseCommittees) {
-    com.cCalendar.setDayNewTurn();
-  }
-  for (Committee com : senateCommittees) {
-    com.cCalendar.setDayNewTurn();
-  }
-}
-
-// React to speeches
-// Precondition: congressmen are set
-// Postcondition: speech reactions are set and a report is made to the briefing
-void reactToSpeeches() {
-  // Senate
-  if (suppS.size() != 0 && agS.size() != 0) {
-    int balance = 0;
-    for (int i = 0; i < senate.length; i++) {
-      balance += senate[i].listenToSpeech(suppS, agS);
-    }
-    String msg = "Your speech to the Senate was "+getReaction(balance);
-    briefing.addNews(0, msg);
-  }
-  // House of reps
-  if (suppH.size() != 0 && agH.size() != 0) {
-    int balance = 0;
-    for (int i = 0; i < house.length; i++) {
-      balance += house[i].listenToSpeech(suppH, agH);
-    }
-    String msg = "Your speech to the House was "+getReaction(balance);
-    briefing.addNews(0, msg);
-  }
-
-  // UN
-
-}
-// returns the reaction given
-// Precondition: no precondition
-// Postcondition: The string that should be added
-String getReaction(int val) {
-  if (val > 10) {
-    return "hugely successful!";
-  }
-  else if (val > 0) {
-    return "mildly successful.";
-  }
-  else if (val < -10) {
-    return "hugely unsuccessful!";
-  }
-  else if (val < 0) {
-    return "mildly unsucessful.";
-  }
-  return "";
-}
-
-// deal with bills each time
-// Precondition: Bills exist
-// Postcondition: All bills have progressed if they had an event and a report is made
-void moveBills() {
-  /* Places for a bill to be:
-      * Bills
-      * houseCommittees[i].cBills - markup, vote
-      * senateCommittees[i].cBills - markup, vote
-      * confrenceComs[i].cBills - markup, vote
-      * hBills - markup, vote
-      * sBills - markup, vote
-      * yourDesk - sign
-      * vetoBills - vote
-  */
-
-  Committee[][] comArrays = {houseCommittees, senateCommittees, conferenceComs};
-
-  for (int i = 0; i < comArrays.length; i++) {
-    for (Committee c : comArrays[i]) {
-      for (Bill b : c.cBills) {
-        if (dateInInterval(b.date, DAYS_PER_TURN)) {
-          // Committee bills:
-          briefing.addNews(1, b.vote(i, c.name, c.members));
-        }
-      }
-    }
-  }
-
-  Bill[][] houses = {hBills, sBills};
-  Congressman[][] congress = {house, senate};
-
-  for (int i = 0; i < houses.length; i++) {
-    for (Bill b : houses[i]) {
-      if (dateInInterval(b.date, DAYS_PER_TURN)) {
-        // Chamber bills:
-        briefing.addNews(1, b.vote(i, null, congress[i]));
-      }
-    }
-  }
-
-  for (Bill b : yourDesk) {
-    if (dateInInterval(b.date, DAYS_PER_TURN)) {
-      // On your desk bills:
-      briefing.addNews(1, "A bill, "+b.name+
-      ", has passed in Congress and made it to your desk. Decide whether to sign it into law or veto it:");
-    }
-  }
-  for (Bill b : vetoBills) {
-    if (dateInInterval(b.date, DAYS_PER_TURN)) {
-      // Vetoed bills:
-      briefing.addNews(1, "A bill, "+b.name+
-      ", ");
-    }
-  }
-}
-
-// handles the new bills that come into play this turn
-// Precondition: new turn
-// Postcondition: the tempBill is dealt with and the computer creates new bills
-void newBills() {
-  // do something with tempBill
-  boolean onCalendar = false;
-  if (tempBill.originChamber == 0) {
-    onCalendar = houseCommittees[tempBill.committee].putOnCalendar(tempBill);
-  }
-  else /** (originChamber == 1) */ {
-    onCalendar = senateCommittees[tempBill.committee].putOnCalendar(tempBill);
-  }
-
-  if (onCalendar) {
-    
-  }
-}
-
-
-// handles any resetting required in a new turn
-// Precondition: new turn
-// Postcondition: values are reset
-void resetForTurn() {
-  tempBill = null;
-
-  suppH = new ArrayList<Integer>();
-  suppS = new ArrayList<Integer>();
-  agH = new ArrayList<Integer>();
-  agS = new ArrayList<Integer>();
-}
 
 
 

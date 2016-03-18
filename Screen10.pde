@@ -31,6 +31,7 @@ class Screen10 extends Screen {
     for (int i = 0; i < buttons.length; i++)
       buttons[i].scrollCol = color(0, 0, 200);
     buttons[0].scrollCol = color(200, 0, 0);
+    println("Size: "+d1.size());
   }
 
   // Does the extra actions

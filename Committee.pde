@@ -80,8 +80,9 @@ class Committee {
               if (/* more likely the more the people want it*/true) {
                 // All the stuff that each alive bill needs to have:
                 b.addOpinions();
+                cCalendar.addEvent(date[0], date[1], date[2], b.name+committeeEvents[0]);
+                b.date = date;
                 cBills.add(b);// the bill made it!
-                cCalendar.addEvent(date[0], date[1], date[2], b.name+committeeEvents);
                 return true;
               }// else {
               date = cCalendar.getNextDay(date[0], date[1], date[2]);
@@ -115,10 +116,4 @@ class Committee {
 
   }
 
-  // puts a bill on the committee calendar
-  // Precondition: a bill doesnt have a Date
-  // Postcondition: returns if it was placed at all
-  boolean setBillOnCalendar(Bill b) {
-    return true;
-  }
 }

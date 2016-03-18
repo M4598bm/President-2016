@@ -285,11 +285,12 @@ class Calendar {
   // Precondition: Calendar c
   // Postcondition: Calendar c's events are added to this one if they don't exist here
   void syncFrom(Calendar c) {
-    Table e = c.events;
     Table newE = events;
-    for (TableRow oth : e) {
+    for (int i = 0; i < c.events.getRowCount(); i++) {
+      TableRow oth = c.events.getRow(i);
       boolean notThere = true;
-      for (TableRow th : events) {
+      for (int j = 0; j < events.getRowCount(); j++) {
+        TableRow th = events.getRow(j);
         if (oth.getInt(0) == th.getInt(0)
           && oth.getInt(1) == th.getInt(1)
           && oth.getInt(2) == th.getInt(2)

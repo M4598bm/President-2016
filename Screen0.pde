@@ -68,6 +68,7 @@ class Screen0 extends Screen {
     }
 
     else if (extra == 10) {// speechwriting house
+      println("Size: "+d1.size());
       suppH = d1;
       agH = d2;
       msg = "Policy speech to the House updated.";

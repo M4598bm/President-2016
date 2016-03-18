@@ -100,4 +100,11 @@ static class Utils {
     }
     return r;
   }
+
+  // Creates text into a box to fit everything
+  // Precondition: x, y: top left corner, maxWidth: width it is constraining to, s is the string
+  // Postcondition: Text is written, returns height of the box
+  int wrapText(int x, int y, int maxWidth, int textSize, String s) {
+    return textSize;
+  }
 }
