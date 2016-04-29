@@ -1,52 +1,52 @@
-state,abbreviation,Cook Partisan Voting Index (PVI),num. of districts
-Alabama,AL,-14,7,
-Alaska,AK,-12,1,
-Arizona,AZ,-7,9,
-Arkansas,AR,14,4,
-California,CA,9,53,
-Colorado,CO,1,7,
-Connecticut,CT,7,5,
-Delaware,DE,8,1,
-District of Columbia,DC,40,0,
-Florida,FL,-2,27,
-Georgia,GA,-6,14,
-Hawaii,HI,20,2,
-Idaho,ID,-18,2,
-Illinois,IL,8,18,
-Indiana,IN,-5,9,
-Iowa,IA,1,4,
-Kansas,KS,-12,4,
-Kentucky,KY,-13,6,
-Louisiana,LA,-12,6,
-Maine,ME,6,2,
-Maryland,MD,10,8,
-Massachusetts,MA,10,9,
-Michigan,MI,4,14,
-Minnesota,MN,2,8,
-Mississippi,MS,-9,4,
-Missouri,MO,-5,8,
-Montana,MT,-7,1,
-Nebraska,NE,-12,3,
-Nevada,NV,2,4,
-New Hampshire,NH,1,2,
-New Jersey,NJ,6,12,
-New Mexico,NM,4,3,
-New York,NY,11,27,
-North Carolina,NC,-3,13,
-North Dakota,ND,-10,1,
-Ohio,OH,-1,16,
-Oklahoma,OK,-19,5,
-Oregon,OR,5,5,
-Pennsylvania,PA,1,18,
-Rhode Island,RI,11,2,
-South Carolina,SC,-8,7,
-South Dakota,SD,-10,1,
-Tennessee,TN,-12,9,
-Texas,TX,-10,36,
-Utah,UT,-22,4,
-Vermont,VT,16,1,
-Virginia,VA,0,11,
-Washington,WA,5,10,
-West Virginia,WV,-13,3,
-Wisconsin,WI,2,8,
-Wyoming,WY,-22,1,
+state,abbreviation,Cook Partisan Voting Index (PVI),num. of districts,population (thousands)
+Alabama,AL,-14,7,4859
+Alaska,AK,-12,1,738
+Arizona,AZ,-7,9,6828
+Arkansas,AR,14,4,2978
+California,CA,9,53,39145
+Colorado,CO,1,7,5456
+Connecticut,CT,7,5,3591
+Delaware,DE,8,1,946
+District of Columbia,DC,40,0,672
+Florida,FL,-2,27,20271
+Georgia,GA,-6,14,10215
+Hawaii,HI,20,2,1432
+Idaho,ID,-18,2,1655
+Illinois,IL,8,18,12860
+Indiana,IN,-5,9,6620
+Iowa,IA,1,4,3124
+Kansas,KS,-12,4,2912
+Kentucky,KY,-13,6,4425
+Louisiana,LA,-12,6,4671
+Maine,ME,6,2,1329
+Maryland,MD,10,8,6006
+Massachusetts,MA,10,9,6794
+Michigan,MI,4,14,9922
+Minnesota,MN,2,8,5489
+Mississippi,MS,-9,4,2992
+Missouri,MO,-5,8,6084
+Montana,MT,-7,1,1033
+Nebraska,NE,-12,3,1896
+Nevada,NV,2,4,2891
+New Hampshire,NH,1,2,1331
+New Jersey,NJ,6,12,8958
+New Mexico,NM,4,3,2085
+New York,NY,11,27,19796
+North Carolina,NC,-3,13,10043
+North Dakota,ND,-10,1,757
+Ohio,OH,-1,16,11613
+Oklahoma,OK,-19,5,3911
+Oregon,OR,5,5,4029
+Pennsylvania,PA,1,18,12803
+Rhode Island,RI,11,2,1056
+South Carolina,SC,-8,7,4896
+South Dakota,SD,-10,1,858
+Tennessee,TN,-12,9,6600
+Texas,TX,-10,36,27469
+Utah,UT,-22,4,2996
+Vermont,VT,16,1,626
+Virginia,VA,0,11,8383
+Washington,WA,5,10,7170
+West Virginia,WV,-13,3,1844
+Wisconsin,WI,2,8,5771
+Wyoming,WY,-22,1,586

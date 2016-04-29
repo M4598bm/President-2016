@@ -25,6 +25,9 @@ char presParty;// Player party (Set at start later)
 int presLib;// Player liberalism
 int presSoc;// Player socialism
 
+int turn;// number of turns so far (starting from 0 at setup to 1 at first turn)
+int session;// number of this congress (starts with 115th Session)
+
 boolean menuOpen;// True or false if the Menu is up
 int lastButtonInd;// the index of the last button pressed
 
@@ -40,10 +43,8 @@ Ideas ideas;// Handles the 'ideas', Bills are made of up to 3 of ideas held in t
 NationalCom you;// Your party's national committee
 NationalCom them;// Opposing party's national committee
 
-int turn;// number of turns so far (starting from 0 at setup to 1 at first turn)
-int session;// number of this congress (starts with )
-int houseNumber;// number of bills presented to the floor
-int senateNumber;// number of bills presented to the floor
+int houseNumber;// number of bills presented to the floor this session
+int senateNumber;// number of bills presented to the floor this session
 char houseMajority;// who has a majority in the house
 char senateMajority;// who has a majority in the senate
 
@@ -66,6 +67,8 @@ Committee[] senateCommittees;// array of committees in the senate
 Committee[] conferenceComs;// conference committees that finalize bills
 Secretary[] cabinet;// array of secretaries in your cabinet
 SCJustice[] scotus;// array of justices in the Supreme Court
+
+State[] states;// array of the 50 states
 
 // Temporary things
 ExecutiveOrder tempOrder;// current ExecutiveOrder being drafted and floated
@@ -1153,6 +1156,7 @@ int[] wordWidths(String[] words, int s) {
   ls[i] = (int)textWidth(words[i]);
   return ls;
 }
+
 // returns if the date is in the interval given
 // Precondition: a date in int[] form and an interval in days
 // Postcondition: returns whether it is in the next interval
@@ -1166,6 +1170,28 @@ boolean dateInInterval(int[] date, int interval) {
   }
   return false;
 }
+
+// finds amount of democrats and republicans in each house
+// Precondition: c is the chamber of congress to look through (0 house, 1 senate), successor is whether to count successor or current person
+// Postcondition: an array with # of congresspeople in presparty, and # in opposing party
+int[] congressPartyCount(int c, boolean successor) {
+  Congressman[][] chambers = {house, senate};
+  int[] count = new int[2];
+  for (Congressman c : chambers[c]) {
+    if (successor && c.successor != null) {
+      c = c.successor;
+    }
+    if (c.party == presParty) {
+      count[0]++;
+    }
+    else {
+      count[1]++;
+    }
+  }
+  return count;
+}
+
+
 
 // This method progresses the game by setting up the next turn.
 // Precondition: The Next Turn button has been pressed, and values need to be reset

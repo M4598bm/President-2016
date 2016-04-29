@@ -10,6 +10,7 @@ class Secretary extends Politician {
   // Precondition: d is department of the secretary and t is the title, both found in majordepartments.csv
   // Postcondition: creates the Object
   Secretary(String d, String t) {
+    super("", 0);
     dep = d;
     title = t;
     happiness = 90;

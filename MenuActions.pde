@@ -40,7 +40,8 @@ class MenuActions {
     createCommittees();
     createCabinet();
     createCourt();
-    createOther();
+    createStates();
+    setOtherValues();
 
     loadImages();
 
@@ -110,7 +111,7 @@ class MenuActions {
   // Sets other values that need to be set
   // Precondition: no precondition
   // Postcondition: The variables are set
-  void createOther() {
+  void setOtherValues() {
     // Needs to happen somewhere, don't worry about it.
     suppH = new ArrayList<Integer>();
     suppS = new ArrayList<Integer>();
@@ -340,7 +341,7 @@ class MenuActions {
         for (int i = 0; i < Utils.convertInt(row.getString(3)); i++) {
           n = firstNames.remove((int)random(firstNames.size()))+" "+lastNames.remove((int)random(lastNames.size()));
           house[xHouse] = new Congressman(n, row.getString(0), 0, Utils.convertInt(districts.getRow(xHouse).getString(1)));
-          house[xHouse].party = 'D';
+          house[xHouse].party = 'd';// why does this happen???
           xHouse++;
         }
       }
@@ -428,6 +429,18 @@ class MenuActions {
       // ^ ^ Temp ^ ^
     }
   }
+
+  // Creates the states with statistics
+  // Precondition: states.csv has info, states is an array of State objects
+  // Postcondition: all State objects are initialized
+  void createStates() {
+    println("createStates");
+    states = new State[50];
+    for (int i = 0; i < states.length; i++) {
+      states[i] = new State(i);
+    }
+  }
+
 
   // Loads all images necessary to the game
   // Precondition: any images needed for the whole game are stored as variables

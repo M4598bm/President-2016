@@ -315,11 +315,51 @@ class Briefing {
   }
 
   void createReminders() {
-
+    /* Reminds of:
+        * election coming up
+        *
+    */
   }
 
-  void holdElections() {
-
+  // hold elections for a house of Congress
+  // Precondition: c is chamber of congress (0 house, 1 senate)
+  // Postcondition: finds winners for each race and adds a briefing entry
+  void holdCongressElections(int ch) {
+    if (/*it's election day*/true) {// election day is the Tuesday after the first Monday in November (how do I test that...)
+      Congressman[][] chambers = {house, senate};
+      int partyWins = 0;
+      int partyLoss = 0;
+      for (Congressman c : chambers[ch]) {
+        if (c.nextElection == calendar.cYear) {
+          int[] results = c.reelection();
+          if (c.party == presParty) {
+            if (results[0] > results[1]) {
+              partyWins++;
+            }
+            else {
+              partyLoss++;
+            }
+          }
+          else {
+            if (results[0] > results[1]) {
+              partyLoss++;
+            }
+            else {
+              partyWins++;
+            }
+          }
+        }
+      }// election briefing
+      String[] cNames = {"Congressional", "Senatorial"};
+      String[] houses = {"House", "Senate"}
+      String msg = "This week, "+cNames[ch]+" elections were held. ";
+      if (partyWins > partyLoss) {
+        msg += "Your party won more seats than it lost in the "+houses[ch]+", losing "+partyLoss+" but gaining "+partyWins+". ";
+        msg += "The "+presParty+" party will have a "+congressPartyCount(ch, true)[0]-congressPartyCount(ch, true)[1]
+        +"person advantage in the "+houses[ch]+" in the next session, which begins in January.";// Give exact date
+      }
+      briefing.addNews(7, msg);
+    }
   }
 
   void createRandomEvents() {

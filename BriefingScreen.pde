@@ -47,7 +47,7 @@ class BriefingScreen extends Screen {
       textSize(20);
       ArrayList<String> news = briefing.getNews();
       for (int i = 0; i < news.size(); i++) {
-        text(news.get(i), width/6, height/6+(i+1)*20);
+        text(news.get(i), width/6, height/6+(i+1)*25);
       }
     }
     else {
